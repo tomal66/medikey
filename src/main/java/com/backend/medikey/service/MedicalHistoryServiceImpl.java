@@ -10,8 +10,8 @@ import java.util.Optional;
 @Service
 public class MedicalHistoryServiceImpl implements MedicalHistoryService {
     @Autowired
-    private final MedicalHistoryRepository medicalHistoryRepository;
-
+    //private final MedicalHistoryRepository medicalHistoryRepository;
+    //private final MedicalHistory medicalHistory;
 
     @Override
     public MedicalHistory save(MedicalHistory medicalHistory) {
