@@ -1,15 +1,23 @@
 package com.backend.medikey.model;
 
 import jakarta.persistence.*;
-
 import java.util.Date;
+import lombok.*;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "medical_history")
 public class MedicalHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long medical_history_Id;
+
+    @OneToOne
+    @JoinColumn(name = "userId", referencedColumnName = "userId")
+    private User user;
 
     @Column(name = "diagnosis")
     private String diagnosis;
@@ -51,4 +59,5 @@ public class MedicalHistory {
     @Column(name = "attachments")
     private String attachments;
 
+    // Getters and setters
 }

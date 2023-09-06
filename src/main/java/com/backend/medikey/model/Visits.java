@@ -2,7 +2,12 @@ package com.backend.medikey.model;
 
 import jakarta.persistence.*;
 import java.util.Date;
+import lombok.*;
 
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "visits")
 public class Visits {
@@ -10,6 +15,10 @@ public class Visits {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long visitId;
+
+    @OneToOne
+    @JoinColumn(name = "userId", referencedColumnName = "userId")
+    private User user;
 
     @Column(name = "visit_date", nullable = false)
     @Temporal(TemporalType.DATE)
@@ -43,5 +52,4 @@ public class Visits {
     @Temporal(TemporalType.DATE)
     private Date followUpDate;
 
-    // Getters and Setters
 }
