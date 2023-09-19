@@ -17,43 +17,36 @@ public class TestsServiceImpl implements TestsService {
 
     @Override
     public Tests createTest(Tests test) {
-        // Implement logic to create a new test
-        // Example: return testsRepository.save(test);
+
         return null;
     }
 
     @Override
     public Tests getTestById(Long testId) {
-        // Implement logic to retrieve a test by its ID
-        // Example: return testsRepository.findById(testId).orElse(null);
-        return null;
+        return (Tests) testsRepository.findById(testId).orElse(null);
     }
 
     @Override
     public List<Tests> getTestsByUserId(Long userId) {
-        // Implement logic to retrieve tests for a specific user
-        // Example: return testsRepository.findByUserId(userId);
-        return null;
+        return testsRepository.findByUserId(userId); // 200 OK, body contains list of tests
     }
 
     @Override
     public Tests updateTest(Long testId, Tests updatedTest) {
-        // Implement logic to update a test
-        // Example:
-        // Optional<Tests> existingTest = testsRepository.findById(testId);
-        // if (existingTest.isPresent()) {
-        //     Tests testToUpdate = existingTest.get();
-        //     // Update the fields of testToUpdate with values from updatedTest
-        //     // Save the updated test to the repository
-        //     return testsRepository.save(testToUpdate);
-        // }
-        // return null;
+
+        Optional<Object> existingTest = testsRepository.findById(testId);
+         if (existingTest.isPresent()) {
+             Tests testToUpdate = (Tests) existingTest.get();
+             // Update the fields of testToUpdate with values from updatedTest
+            // Save the updated test to the repository
+             return testsRepository.save(testToUpdate);
+         }
+
         return null;
     }
 
     @Override
     public void deleteTest(Long testId) {
-        // Implement logic to delete a test by its ID
-        // Example: testsRepository.deleteById(testId);
+        testsRepository.deleteById(testId);
     }
 }
