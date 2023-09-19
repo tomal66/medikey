@@ -1,9 +1,8 @@
 package com.backend.medikey.service;
 
-import com.backend.medikey.model.Tests;
-import com.backend.medikey.repository.TestsRepository;
+import com.backend.medikey.model.Test;
+import com.backend.medikey.repository.TestRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,32 +10,32 @@ import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor // creates a constructor for all final fields
-public class TestsServiceImpl implements TestsService {
+public class TestServiceImpl implements TestService {
 
-    private final TestsRepository testsRepository;
+    private final TestRepository testsRepository;
 
     @Override
-    public Tests createTest(Tests test) {
+    public Test createTest(Test test) {
 
         return null;
     }
 
     @Override
-    public Tests getTestById(Long testId) {
-        return (Tests) testsRepository.findById(testId).orElse(null);
+    public Test getTestById(Long testId) {
+        return (Test) testsRepository.findById(testId).orElse(null);
     }
 
     @Override
-    public List<Tests> getTestsByUserId(Long userId) {
+    public List<Test> getTestsByUserId(Long userId) {
         return testsRepository.findByUserId(userId); // 200 OK, body contains list of tests
     }
 
     @Override
-    public Tests updateTest(Long testId, Tests updatedTest) {
+    public Test updateTest(Long testId, Test updatedTest) {
 
         Optional<Object> existingTest = testsRepository.findById(testId);
          if (existingTest.isPresent()) {
-             Tests testToUpdate = (Tests) existingTest.get();
+             Test testToUpdate = (Test) existingTest.get();
              // Update the fields of testToUpdate with values from updatedTest
             // Save the updated test to the repository
              return testsRepository.save(testToUpdate);

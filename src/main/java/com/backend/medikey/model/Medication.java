@@ -7,10 +7,10 @@ import lombok.Setter;
 import java.util.Date;
 
 @Entity
-@Table(name = "medications")
+@Table(name = "medication")
 @Getter
 @Setter
-public class Medications {
+public class Medication {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long medicationId;
