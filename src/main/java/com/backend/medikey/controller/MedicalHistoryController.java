@@ -7,39 +7,74 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/medical-history")
+@RequestMapping("/api/medicalHistories")
 public class MedicalHistoryController {
 
     @Autowired
     private MedicalHistoryService medicalHistoryService;
 
-    @PostMapping("/create")
-    public ResponseEntity<MedicalHistory> createMedicalHistory(@RequestBody MedicalHistory medicalHistory) {
-        MedicalHistory newMedicalHistory = medicalHistoryService.save(medicalHistory);
-        return new ResponseEntity<>(newMedicalHistory, HttpStatus.CREATED);
+    // Get all medical histories
+    @GetMapping
+    public ResponseEntity<List<MedicalHistory>> getAllMedicalHistories() {
+        return new ResponseEntity<>(medicalHistoryService.getAllMedicalHistories(), HttpStatus.OK);
     }
 
+    // Get a specific medical history by ID
     @GetMapping("/{id}")
     public ResponseEntity<MedicalHistory> getMedicalHistoryById(@PathVariable Long id) {
-        Optional<MedicalHistory> medicalHistory = medicalHistoryService.findById(id);
-        return medicalHistory.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        return medicalHistoryService.getMedicalHistoryById(id)
+                .map(medicalHistory -> new ResponseEntity<>(medicalHistory, HttpStatus.OK))
+                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @GetMapping("/all")
-    public ResponseEntity<List<MedicalHistory>> getAllMedicalHistories() {
-        List<MedicalHistory> medicalHistories = medicalHistoryService.getMedicalHistory();
-        return new ResponseEntity<>(medicalHistories, HttpStatus.OK);
+    // Get all medical histories for a specific user
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<MedicalHistory>> getMedicalHistoriesByUserId(@PathVariable Long userId) {
+        return new ResponseEntity<>(medicalHistoryService.getMedicalHistoriesByUserId(userId), HttpStatus.OK);
     }
 
+    // Get all medical histories with a specific diagnosis
+    @GetMapping("/diagnosis/{diagnosis}")
+    public ResponseEntity<List<MedicalHistory>> getMedicalHistoriesByDiagnosis(@PathVariable String diagnosis) {
+        return new ResponseEntity<>(medicalHistoryService.getMedicalHistoriesByDiagnosis(diagnosis), HttpStatus.OK);
+    }
+
+    // Get all medical histories recorded on a specific date
+    @GetMapping("/date/{dateRecorded}")
+    public ResponseEntity<List<MedicalHistory>> getMedicalHistoriesByDateRecorded(@PathVariable Date dateRecorded) {
+        return new ResponseEntity<>(medicalHistoryService.getMedicalHistoriesByDateRecorded(dateRecorded), HttpStatus.OK);
+    }
+
+    // Get all medical histories recorded by a specific person/doctor
+    @GetMapping("/recordedBy/{recordedBy}")
+    public ResponseEntity<List<MedicalHistory>> getMedicalHistoriesByRecordedBy(@PathVariable String recordedBy) {
+        return new ResponseEntity<>(medicalHistoryService.getMedicalHistoriesByRecordedBy(recordedBy), HttpStatus.OK);
+    }
+
+    // Add a new medical history
+    @PostMapping
+    public ResponseEntity<MedicalHistory> addMedicalHistory(@RequestBody MedicalHistory medicalHistory) {
+        return new ResponseEntity<>(medicalHistoryService.addMedicalHistory(medicalHistory), HttpStatus.CREATED);
+    }
+
+    // Update an existing medical history
+    @PutMapping("/{id}")
+    public ResponseEntity<MedicalHistory> updateMedicalHistory(@PathVariable Long id, @RequestBody MedicalHistory medicalHistory) {
+        // Ensure the ID from the path matches the ID of the medical history object
+        if (!id.equals(medicalHistory.getMedical_history_Id())) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+        return new ResponseEntity<>(medicalHistoryService.updateMedicalHistory(medicalHistory), HttpStatus.OK);
+    }
+
+    // Delete a medical history by ID
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteMedicalHistory(@PathVariable Long id) {
-        medicalHistoryService.deleteById(id);
+        medicalHistoryService.deleteMedicalHistory(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
-
