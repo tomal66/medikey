@@ -14,6 +14,10 @@ public class MedicalHistory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long medical_history_Id;
+    @ManyToOne
+    private User patient;
+    @OneToOne(mappedBy = "medicalHistory")
+    private Visit visit;
 
     @OneToOne
     @JoinColumn(name = "userId", referencedColumnName = "userId")

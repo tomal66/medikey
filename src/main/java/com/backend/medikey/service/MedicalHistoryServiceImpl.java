@@ -2,6 +2,7 @@ package com.backend.medikey.service;
 
 import com.backend.medikey.model.MedicalHistory;
 import com.backend.medikey.repository.MedicalHistoryRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -10,6 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@RequiredArgsConstructor
 public class MedicalHistoryServiceImpl implements MedicalHistoryService {
 
     @Autowired
@@ -30,6 +32,7 @@ public class MedicalHistoryServiceImpl implements MedicalHistoryService {
         return medicalHistoryRepository.findByUser_UserId(userId);
     }
 
+    private final MedicalHistoryRepository medicalHistoryRepository;
     @Override
     public List<MedicalHistory> getMedicalHistoriesByDiagnosis(String diagnosis) {
         return medicalHistoryRepository.findByDiagnosisContainingIgnoreCase(diagnosis);

@@ -2,6 +2,8 @@ package com.backend.medikey.model;
 
 import jakarta.persistence.*;
 import java.util.Date;
+import java.util.List;
+
 import lombok.*;
 
 @Getter
@@ -15,38 +17,32 @@ public class Visit {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long visitId;
-
+    @ManyToOne
+    private User doctor;
+    @ManyToOne
+    private User patient;
     @OneToOne
-    @JoinColumn(name = "userId", referencedColumnName = "userId")
-    private User user;
-
+    private MedicalHistory medicalHistory;
+    @OneToMany(mappedBy = "visit")
+    private List<Medication> medications;
     @Column(name = "visit_date", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date visitDate;
 
-    @Column(name = "arrival_time", nullable = false)
+    @Column(name = "arrival_time")
     @Temporal(TemporalType.TIME)
     private Date arrivalTime;
 
-    @Column(name = "checking_time", nullable = false)
+    @Column(name = "checking_time")
     @Temporal(TemporalType.TIME)
     private Date checkingTime;
 
-    @Column(name = "history_taken_by", nullable = false)
-    private String historyTakenBy;
-
-    @Column(name = "hospital", nullable = false)
-    private String hospital;
-
-    @Column(name = "doctor", nullable = false)
-    private String doctor;
+    @ManyToOne
+    private Hospital hospital;
 
     @Column(name = "reason", nullable = false)
     private String reason;
-
-    // Additional fields
-    @Column(name = "prescription")
-    private String prescription;
+    private String tests;
 
     @Column(name = "follow_up_date")
     @Temporal(TemporalType.DATE)
