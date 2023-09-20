@@ -1,4 +1,4 @@
 package com.backend.medikey.service;
 
-public class VisitsServiceImpl {
+public class VisitServiceImpl {
 }

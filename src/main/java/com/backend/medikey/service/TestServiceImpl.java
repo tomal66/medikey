@@ -1,7 +1,9 @@
 package com.backend.medikey.service;
 
 import com.backend.medikey.model.Test;
+import com.backend.medikey.model.User;
 import com.backend.medikey.repository.TestRepository;
+import com.backend.medikey.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,6 +15,7 @@ import java.util.Optional;
 public class TestServiceImpl implements TestService {
 
     private final TestRepository testsRepository;
+    private final UserRepository userRepository;
 
     @Override
     public Test createTest(Test test) {
@@ -27,13 +30,14 @@ public class TestServiceImpl implements TestService {
 
     @Override
     public List<Test> getTestsByUserId(Long userId) {
-        return testsRepository.findByUserId(userId); // 200 OK, body contains list of tests
+        Optional<User> user = userRepository.findUserByUserId(userId);
+        return testsRepository.findByUser(user); // 200 OK, body contains list of tests
     }
 
     @Override
     public Test updateTest(Long testId, Test updatedTest) {
 
-        Optional<Object> existingTest = testsRepository.findById(testId);
+        Optional<Test> existingTest = testsRepository.findById(testId);
          if (existingTest.isPresent()) {
              Test testToUpdate = (Test) existingTest.get();
              // Update the fields of testToUpdate with values from updatedTest

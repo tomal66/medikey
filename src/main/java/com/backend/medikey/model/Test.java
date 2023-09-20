@@ -15,9 +15,8 @@ public class Test {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long testsId;
 
-    @OneToOne
-    @JoinColumn(name = "userId", referencedColumnName = "userId")
-    private User user;
+    @ManyToOne
+    private User patient;
 
     @Column(name = "date_recorded", nullable = false)
     @Temporal(TemporalType.DATE)

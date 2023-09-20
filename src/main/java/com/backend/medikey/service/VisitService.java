@@ -1,4 +1,4 @@
 package com.backend.medikey.service;
 
-public interface VisitsService {
+public interface VisitService {
 }

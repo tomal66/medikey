@@ -1,4 +1,4 @@
 package com.backend.medikey.controller;
 
-public class VisitsController {
+public class VisitController {
 }

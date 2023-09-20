@@ -1,14 +1,13 @@
 package com.backend.medikey.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.NaturalId;
+
+import java.util.List;
 
 @Getter
 @Setter
@@ -28,4 +27,22 @@ public class User {
     private String password;
     private String role;
     private boolean isEnabled = false;
+
+    //For Doctors
+    private String specialization;
+    @ManyToMany(mappedBy = "doctors")
+    private List<Hospital> hospitals;
+    @OneToMany(mappedBy = "doctor")
+    private List<Visit> doctorVisits;
+
+    //Patient
+    @OneToMany(mappedBy = "patient")
+    private List<Visit> patientVisits;
+    @OneToMany(mappedBy = "patient")
+    private List<MedicalHistory> medicalHistories;
+    @OneToMany(mappedBy = "patient")
+    private List<Test> tests;
+    @OneToMany(mappedBy = "patient")
+    private List<Medication> medications;
+
 }

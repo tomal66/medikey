@@ -15,10 +15,11 @@ public class Medication {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long medicationId;
 
-    @OneToOne
-    @JoinColumn(name = "userId", referencedColumnName = "userId")
-    private User user;
+    @ManyToOne
+    private User patient;
 
+    @ManyToOne
+    private Visit visit;
     @Column(name = "date_prescribed", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date datePrescribed;
