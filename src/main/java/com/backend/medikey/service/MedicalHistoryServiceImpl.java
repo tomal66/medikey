@@ -31,8 +31,6 @@ public class MedicalHistoryServiceImpl implements MedicalHistoryService {
     public List<MedicalHistory> getMedicalHistoriesByUserId(Long userId) {
         return medicalHistoryRepository.findByUser_UserId(userId);
     }
-
-    private final MedicalHistoryRepository medicalHistoryRepository;
     @Override
     public List<MedicalHistory> getMedicalHistoriesByDiagnosis(String diagnosis) {
         return medicalHistoryRepository.findByDiagnosisContainingIgnoreCase(diagnosis);
