@@ -1,5 +1,5 @@
 server:
-  port: 8561
+  port: 8560
 spring:
   datasource:
     url: jdbc:mysql://localhost:3306/medikey
