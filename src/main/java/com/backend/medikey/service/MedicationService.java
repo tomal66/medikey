@@ -14,8 +14,6 @@ public interface MedicationService {
 
     List<Medication> getMedicationsByUserId(Long userId);
 
-    List<Medication> getActiveMedicationsByUserId(Long userId, String status);
-
     List<Medication> getMedicationsByDatePrescribed(Date datePrescribed);
 
     Medication addMedication(Medication medication);
