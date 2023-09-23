@@ -1,7 +1,10 @@
 package com.backend.medikey.service;
 
+import com.backend.medikey.model.Medication;
 import com.backend.medikey.model.TimeSlot;
+import com.backend.medikey.model.User;
 import com.backend.medikey.repository.TimeSlotRepository;
+import com.backend.medikey.repository.UserRepository;
 import com.backend.medikey.service.TimeSlotService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,6 +19,8 @@ public class TimeSlotServiceImpl implements TimeSlotService {
 
     @Autowired
     private TimeSlotRepository timeSlotRepository;
+
+    private UserRepository userRepository;
 
     @Override
     public TimeSlot save(TimeSlot timeSlot) {
@@ -38,10 +43,10 @@ public class TimeSlotServiceImpl implements TimeSlotService {
     }
 
     @Override
-    public List<TimeSlot> findByDoctorId(Long doctorId) {
-        return timeSlotRepository.findByDoctor_Id(doctorId);
+    public List<TimeSlot> getTimeSlotByUserId(Long userId) {
+        Optional<User> doctor = userRepository.findUserByUserId(userId);
+        return timeSlotRepository.findByDoctor(doctor);
     }
-
     @Override
     public List<TimeSlot> findByHospitalId(Long hospitalId) {
         return timeSlotRepository.findByHospital_HospitalId(hospitalId);

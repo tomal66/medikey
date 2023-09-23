@@ -1,11 +1,8 @@
 package com.backend.medikey.repository;
 
-import com.backend.medikey.model.Medication;
 import com.backend.medikey.model.User;
 import com.backend.medikey.model.Visit;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Query;
-import org.springframework.stereotype.Repository;
 
 import java.util.Date;
 import java.util.List;
@@ -24,13 +21,10 @@ public interface VisitRepository extends JpaRepository<Visit, Long> {
     List<Visit> findByVisitDateBetween(Date startDate, Date endDate);
 
     // Find all visits to a specific hospital
-    List<Visit> findByHospital(String hospital);
+    //List<Visit> findByHospital(String hospital);
 
     // Find all visits to a specific doctor
-    List<Visit> findByDoctor(String doctor);
-
-    // Find all visits where a specific doctor took the history
-    List<Visit> findByHistoryTakenBy(String historyTakenBy);
+   // List<Visit> findByDoctor(String doctor);
 
     // Find all visits with a specific reason
     List<Visit> findByReason(String reason);

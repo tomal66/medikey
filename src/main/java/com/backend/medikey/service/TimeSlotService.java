@@ -15,8 +15,10 @@ public interface TimeSlotService {
     Optional<TimeSlot> findById(Long id);
     void delete(Long id);
 
+    List<TimeSlot> getTimeSlotByUserId(Long userId);
+
     // Custom query methods
-    List<TimeSlot> findByDoctorId(Long doctorId);
+    //List<TimeSlot> findByDoctorId(Long doctorId);
     List<TimeSlot> findByHospitalId(Long hospitalId);
     List<TimeSlot> findByDay(DayOfWeek day);
     List<TimeSlot> findByStartTime(LocalTime startTime);

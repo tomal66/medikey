@@ -40,15 +40,16 @@ public class VisitServiceImpl implements VisitService {
         return visitRepository.findByVisitDate(visitDate);
     }
 
-    @Override
-    public List<Visit> getVisitsByHospital(String hospital) {
-        return visitRepository.findByHospital(hospital);
-    }
+   // @Override
+    //public List<Visit> getVisitsByHospital(String hospital) {
+    //    return visitRepository.findByHospital(hospital);
+   // }
 
-    @Override
-    public List<Visit> getVisitsByDoctor(String doctor) {
-        return visitRepository.findByDoctor(doctor);
-    }
+    //@Override
+   // public List<Visit> getVisitsByDoctor(String doctor) {
+        //Optional<User> doctor = userRepository.findUserByUserId(userId);
+   //     return visitRepository.findByDoctor(doctor);
+  //  }
 
     @Override
     public Visit addVisit(Visit visit) {

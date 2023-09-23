@@ -16,10 +16,10 @@ public interface VisitService {
 
     List<Visit> getVisitsByVisitDate(Date visitDate);
 
-    List<Visit> getVisitsByHospital(String hospital);
+    //List<Visit> getVisitsByHospital(String hospital);
 
-    List<Visit> getVisitsByDoctor(String doctor);
-
+    //List<Visit> getVisitsByDoctor(String doctor); getting errors related findByDoctor method
+//
     Visit addVisit(Visit visit);
 
     Visit updateVisit(Visit visit);
