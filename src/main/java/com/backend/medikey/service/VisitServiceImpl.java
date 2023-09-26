@@ -1,6 +1,8 @@
 package com.backend.medikey.service;
 
+import com.backend.medikey.model.User;
 import com.backend.medikey.model.Visit;
+import com.backend.medikey.repository.UserRepository;
 import com.backend.medikey.repository.VisitRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -15,6 +17,8 @@ public class VisitServiceImpl implements VisitService {
     @Autowired
     private VisitRepository visitRepository;
 
+    private UserRepository userRepository;
+
     @Override
     public List<Visit> getAllVisits() {
         return visitRepository.findAll();
@@ -27,7 +31,8 @@ public class VisitServiceImpl implements VisitService {
 
     @Override
     public List<Visit> getVisitsByUserId(Long userId) {
-        return visitRepository.findByUser_UserId(userId);
+        Optional<User> patient = userRepository.findUserByUserId(userId);
+        return visitRepository.findByPatient(patient);
     }
 
     @Override
@@ -35,15 +40,16 @@ public class VisitServiceImpl implements VisitService {
         return visitRepository.findByVisitDate(visitDate);
     }
 
-    @Override
-    public List<Visit> getVisitsByHospital(String hospital) {
-        return visitRepository.findByHospital(hospital);
-    }
+   // @Override
+    //public List<Visit> getVisitsByHospital(String hospital) {
+    //    return visitRepository.findByHospital(hospital);
+   // }
 
-    @Override
-    public List<Visit> getVisitsByDoctor(String doctor) {
-        return visitRepository.findByDoctor(doctor);
-    }
+    //@Override
+   // public List<Visit> getVisitsByDoctor(String doctor) {
+        //Optional<User> doctor = userRepository.findUserByUserId(userId);
+   //     return visitRepository.findByDoctor(doctor);
+  //  }
 
     @Override
     public Visit addVisit(Visit visit) {

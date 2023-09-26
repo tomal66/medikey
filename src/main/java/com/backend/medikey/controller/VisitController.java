@@ -44,16 +44,16 @@ public class VisitController {
     }
 
     // Get all visits to a specific hospital
-    @GetMapping("/hospital/{hospital}")
-    public ResponseEntity<List<Visit>> getVisitsByHospital(@PathVariable String hospital) {
-        return new ResponseEntity<>(visitService.getVisitsByHospital(hospital), HttpStatus.OK);
-    }
+    //@GetMapping("/hospital/{hospital}")
+    //public ResponseEntity<List<Visit>> getVisitsByHospital(@PathVariable String hospital) {
+    //    return new ResponseEntity<>(visitService.getVisitsByHospital(hospital), HttpStatus.OK);
+   // }
 
     // Get all visits to a specific doctor
-    @GetMapping("/doctor/{doctor}")
-    public ResponseEntity<List<Visit>> getVisitsByDoctor(@PathVariable String doctor) {
-        return new ResponseEntity<>(visitService.getVisitsByDoctor(doctor), HttpStatus.OK);
-    }
+  //  @GetMapping("/doctor/{doctor}")
+  //  public ResponseEntity<List<Visit>> getVisitsByDoctor(@PathVariable String doctor) {
+  //      return new ResponseEntity<>(visitService.getVisitsByDoctor(doctor), HttpStatus.OK);
+   //  }
 
     // Add a new visit
     @PostMapping

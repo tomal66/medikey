@@ -30,8 +30,8 @@ public class TestServiceImpl implements TestService {
 
     @Override
     public List<Test> getTestsByUserId(Long userId) {
-        Optional<User> user = userRepository.findUserByUserId(userId);
-        return testsRepository.findByUser(user); // 200 OK, body contains list of tests
+        Optional<User> patient = userRepository.findUserByUserId(userId);
+        return testsRepository.findByPatient(patient); // 200 OK, body contains list of tests
     }
 
     @Override

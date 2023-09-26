@@ -16,9 +16,6 @@ public interface MedicationRepository extends JpaRepository<Medication, Long> {
     // Find all medications by a specific user
     List<Medication> findByPatient(Optional<User> patient);
 
-    // Find all active medications for a user
-    //List<Medication> findByUser_UserIdAndStatus(Long userId, String status);
-
     // Find all medications prescribed on a specific date
     List<Medication> findByDatePrescribed(Date datePrescribed);
 

@@ -35,11 +35,6 @@ public class MedicationServiceImpl implements MedicationService {
     }
 
     @Override
-    public List<Medication> getActiveMedicationsByUserId(Long userId, String status) {
-        return medicationRepository.findByUser_UserIdAndStatus(userId, status);
-    }
-
-    @Override
     public List<Medication> getMedicationsByDatePrescribed(Date datePrescribed) {
         return medicationRepository.findByDatePrescribed(datePrescribed);
     }

@@ -1,7 +1,9 @@
 package com.backend.medikey.service;
 
 import com.backend.medikey.model.MedicalHistory;
+import com.backend.medikey.model.User;
 import com.backend.medikey.repository.MedicalHistoryRepository;
+import com.backend.medikey.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -14,8 +16,10 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class MedicalHistoryServiceImpl implements MedicalHistoryService {
 
+
     @Autowired
     private MedicalHistoryRepository medicalHistoryRepository;
+    private UserRepository userRepository;
 
     @Override
     public List<MedicalHistory> getAllMedicalHistories() {
@@ -29,7 +33,8 @@ public class MedicalHistoryServiceImpl implements MedicalHistoryService {
 
     @Override
     public List<MedicalHistory> getMedicalHistoriesByUserId(Long userId) {
-        return medicalHistoryRepository.findByUser_UserId(userId);
+        Optional<User> patient = userRepository.findUserByUserId(userId);
+            return medicalHistoryRepository.findByPatient(patient);
     }
     @Override
     public List<MedicalHistory> getMedicalHistoriesByDiagnosis(String diagnosis) {
