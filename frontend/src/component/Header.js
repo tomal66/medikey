@@ -11,7 +11,7 @@ const Header = () => {
   return (
     <MainHeader>
       <NavLink to="/">
-        <img src="./images/logo.png" alt="2mins2goods" />
+        <img src="./Medikey_Logo 1.png" alt="MediKey" className='logo' />
       </NavLink>
       <Nav />
       {/* {role === 'ROLE_SELLER' ? (
@@ -36,6 +36,8 @@ const MainHeader = styled.header`
 
   .logo {
     height: 5rem;
+    width: 5rem;
+    margin-left: 10rem;
   }
 `;
 

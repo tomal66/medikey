@@ -1,40 +1,40 @@
-import React from 'react';
+import React, { useEffect, useContext, useState } from 'react';
+import { ChatbotContext } from './context/ChatBotContext'; // Import the ChatbotContext
 import HeroSection from './component/HeroSection';
-//import HomeCategories from './components/HomeCategories';
-//import HomeSeller from './components/HomeSeller';
-//import FeaturedProducts from './components/FeaturedProducts';
-import { useEffect } from 'react';
-//import { useAuthContext } from './context/auth_context';
 import { useNavigate } from 'react-router-dom';
+import Chatbot from 'react-chatbot-kit';
+import 'react-chatbot-kit/build/main.css';
+import config from './bot/config.js';
+import MessageParser from './bot/MessageParser.js';
+import ActionProvider from './bot/ActionProvider.js';
 
 const Home = () => {
-  //const { isAuthenticated, role } = useAuthContext();
   const nav = useNavigate();
-  //const location = useGeoLocation();
   const isAuthenticated = false;
   const role = "";
-  
+  const { response, sendMessage } = useContext(ChatbotContext); // Use the ChatbotContext
+  const [message, setMessage] = useState(''); // Local state to handle message input
+
   useEffect(() => {
     document.title = "MediKey";
   }, []);
 
   useEffect(() => {
     if (isAuthenticated) {
-      if(role==="ROLE_SELLER")
-      {
+      if(role==="ROLE_SELLER") {
         nav("/seller-dashboard");
-      }
-      else if(role==="ROLE_ADMIN"){
+      } else if(role==="ROLE_ADMIN"){
         nav("/admin-dashboard");
-      }
-      else{
+      } else{
         nav("/");
       }
-
     }
-  }, [isAuthenticated, nav]);
+  }, [isAuthenticated, nav, role]);
 
-
+  const handleSend = () => {
+    sendMessage(message); // Send the message when handleSend is called
+    setMessage(''); // Clear the message input field
+  };
 
   const data = {
     name: "MediKey",
@@ -42,10 +42,12 @@ const Home = () => {
 
   return (
     <>
-      <HeroSection myData={data} />
-      {/* <FeaturedProducts />
-      <HomeCategories />
-      {!isAuthenticated && <HomeSeller />} */}
+      <HeroSection myData={data} />     
+      <Chatbot
+        config={config}
+        messageParser={MessageParser}
+        actionProvider={ActionProvider}
+      />
     </>
   );
 };

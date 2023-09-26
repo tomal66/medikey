@@ -21,11 +21,11 @@ public class UserRegistrationSecurityConfig {
         return http.cors()
                 .and().csrf().disable()
                 .authorizeHttpRequests()
-                .requestMatchers("/api/register/**")
+                .requestMatchers("/api/**")
                 .permitAll()
                 .and()
                 .authorizeHttpRequests()
-                .requestMatchers("/api/users/**")
+                .requestMatchers("/users/**")
                 .hasAnyAuthority("USER", "ADMIN")
                 .and().formLogin().and().build();
     }
