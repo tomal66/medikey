@@ -1,6 +1,7 @@
 // in config.js
 import { createChatBotMessage } from 'react-chatbot-kit';
 
+
 const botName = 'MediKeyBot';
 
 const config = {
@@ -14,6 +15,12 @@ const config = {
       backgroundColor: '#3D96FF',
     },
   },
+  customComponents: {
+    header: () => <div className="react-chatbot-kit-chat-header">MediKey Appointment Assistant</div>,
+    botAvatar: (props) => <img alt="chatbot" className="react-chatbot-kit-chat-bot-avatar-container"
+        src="images/botlogo.png" width="40px" height="40px" />,
+
+},
 };
 
 export default config;

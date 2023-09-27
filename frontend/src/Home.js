@@ -2,11 +2,6 @@ import React, { useEffect, useContext, useState } from 'react';
 import { ChatbotContext } from './context/ChatBotContext'; // Import the ChatbotContext
 import HeroSection from './component/HeroSection';
 import { useNavigate } from 'react-router-dom';
-import Chatbot from 'react-chatbot-kit';
-import 'react-chatbot-kit/build/main.css';
-import config from './bot/config.js';
-import MessageParser from './bot/MessageParser.js';
-import ActionProvider from './bot/ActionProvider.js';
 
 const Home = () => {
   const nav = useNavigate();
@@ -43,11 +38,6 @@ const Home = () => {
   return (
     <>
       <HeroSection myData={data} />     
-      <Chatbot
-        config={config}
-        messageParser={MessageParser}
-        actionProvider={ActionProvider}
-      />
     </>
   );
 };

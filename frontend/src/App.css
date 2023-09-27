@@ -1,3 +1,128 @@
+.chatbot {
+  position: fixed;
+  bottom: 70px;
+  right: 40px;
+  transform-origin: bottom; /* ensures the scaling is from the bottom */
+  transform: scaleY(0);
+  transition: transform 0.2s ease-in-out;
+}
+
+.chatbot.active {
+  transform: scaleY(1);
+}
+
+
+
+.help-block{
+  color:rgb(240, 12, 12);
+}
+
+
+.react-chatbot-kit-user-avatar-container {
+  display: none !important;
+}
+
+
+.react-chatbot-kit-chat-container{
+  width:350px !important;
+  border-radius: 20px !important;
+}
+.react-chatbot-kit-chat-bot-message{
+  margin-left:0px !important;
+  width:fit-content !important;
+  font-size: 1.5rem !important;
+}
+.react-chatbot-kit-chat-message-container{
+  background:rgb(255, 255, 255) !important;
+  overflow-x: hidden !important;
+  
+}
+.react-chatbot-kit-chat-message-container::-webkit-scrollbar {
+  display: none !important;
+}
+.react-chatbot-kit-user-chat-message{
+  border-radius:30px 30px 0px 30px !important;
+  font-size: 1.5rem !important;
+}
+.react-chatbot-kit-user-chat-message-arrow{
+  border:0px !important;
+}
+.react-chatbot-kit-chat-bot-message{
+  border-radius:0px 20px 20px 20px !important;
+}
+.react-chatbot-kit-chat-bot-message-arrow{
+  border:0px !important;
+}
+
+/* Adjust the font size of the input field */
+.react-chatbot-kit-chat-input {
+  font-size: 1.5rem !important;
+  text-transform: none !important;
+}
+
+/* Remove the border on focus */
+.react-chatbot-kit-chat-input:focus {
+  outline: none !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Modify the placeholder text if needed */
+.react-chatbot-kit-chat-input::placeholder {
+  font-size: 1.5rem !important;
+  text-transform: none !important;
+}
+
+.react-chatbot-kit-chat-header{
+   
+    background-color: #efefef;
+    font-family: Arial;
+    display: flex;
+    align-items: center;
+    font-size: 1.5rem !important;
+    color: #514f4f;
+    padding: 12.5px;
+    font-weight: bold;
+}
+
+.bot-btn{
+  position: fixed;
+  box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    bottom:10px;
+    right:40px;
+    height:50px;
+    width:50px;
+    border-radius:50%;
+    background-image:url("../public/images/botlogo.png");
+    background-position: center;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+/* Add a glowing effect on hover */
+.bot-btn:hover {
+  box-shadow: 0 0 15px #3D96FF; /* Green glow */
+  transition: box-shadow 0.3s ease-in-out; /* Smooth transition */
+}
+
+/* Add a different glowing effect on click */
+.bot-btn:active {
+  box-shadow: 0 0 25px #ff0000; /* Red glow */
+  transition: box-shadow 0.1s ease-in-out; /* Smooth transition */
+}
+
+
+
+.clear-btn{
+  background-color: #090a0a !important;
+  position: fixed;
+    bottom:10px;
+    right: 100px;
+    height:40px;
+    border-radius:30%;
+}
+
+
 .App {
   text-align: center;
 }

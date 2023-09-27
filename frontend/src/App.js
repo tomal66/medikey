@@ -6,9 +6,14 @@ import { GlobalStyle } from './GlobalStyle';
 import { ThemeProvider } from 'styled-components';
 import Header from './component/Header';
 import Footer from './component/Footer';
-
+import config from './bot/config.js';
+import MessageParser from './bot/MessageParser.js';
+import ActionProvider from './bot/ActionProvider.js';
+import Chatbot from 'react-chatbot-kit';
+import 'react-chatbot-kit/build/main.css';
 import Layout from './component/Layout';
-
+import Button from 'react-bootstrap/Button';
+import React, { useState, useEffect } from 'react';
 
 
 function App() {
@@ -38,6 +43,30 @@ function App() {
     },
   };
 
+  const [chatbotActive, setChatbotActive] = useState(false);
+
+  const toggleChatbot = () => {
+    setChatbotActive(!chatbotActive);
+  };
+
+  const handleClickOutside = event => {
+    const chatbot = document.querySelector('.chatbot');
+    const botBtn = document.querySelector('.bot-btn');
+    if (chatbot && !chatbot.contains(event.target) && !botBtn.contains(event.target)) {
+      setChatbotActive(false);
+    }
+  };
+  
+
+  useEffect(() => {
+    // Add an event listener to listen for clicks on the page
+    document.addEventListener('mousedown', handleClickOutside);
+
+    // Clean up the event listener on component unmount
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
   return ( 
     <ThemeProvider theme={theme}>
@@ -80,6 +109,16 @@ function App() {
         </Route>
           
         </Routes>
+        <div className={`chatbot ${chatbotActive ? 'active' : ''}`}>
+          {chatbotActive && (
+            <Chatbot
+              config={config}
+              messageParser={MessageParser}
+              actionProvider={ActionProvider}
+            />
+          )}
+        </div>
+        <Button className="bot-btn" onClick={toggleChatbot}>&nbsp;</Button>
         <Footer/>
       </Router>
     </ThemeProvider>

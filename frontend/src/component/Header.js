@@ -11,7 +11,7 @@ const Header = () => {
   return (
     <MainHeader>
       <NavLink to="/">
-        <img src="./Medikey_Logo 1.png" alt="MediKey" className='logo' />
+        <img src="./Medikey_Logo.png" alt="MediKey" className='logo' />
       </NavLink>
       <Nav />
       {/* {role === 'ROLE_SELLER' ? (
