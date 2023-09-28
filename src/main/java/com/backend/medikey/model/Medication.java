@@ -1,54 +1,43 @@
 package com.backend.medikey.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.util.Date;
 
-@Entity
-@Table(name = "medication")
 @Getter
 @Setter
+@Entity
+@NoArgsConstructor
+@AllArgsConstructor
 public class Medication {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long medicationId;
-
     @ManyToOne
-    private User patient;
-
+    private Patient patient;
+    @ManyToOne
+    private Doctor prescribedBy;
     @ManyToOne
     private Visit visit;
     @Column(name = "date_prescribed", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date datePrescribed;
-
     @Column(name = "medication_name", nullable = false)
     private String medicationName;
-
     @Column(name = "dosage", nullable = false)
     private String dosage;
-
     @Column(name = "frequency", nullable = false)
     private String frequency;
-    //How many times medication taken a day
-
     @Column(name = "duration", nullable = false)
     private String duration;
-    //How many days medication taken
-
-    @Column(name = "prescribed_by", nullable = false)
-    private String prescribedBy;
-    //Doctor who prescribed medication or hospital
-
     @Column(name = "status")
     private String status; // Active, Completed, Discontinued
-
     @Column(name = "side_effects")
     private String sideEffects;
-
     @Column(name = "notes", length = 2000)
     private String notes;
-    // Additional fields as needed
 }

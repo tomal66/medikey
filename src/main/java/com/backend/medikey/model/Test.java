@@ -1,44 +1,34 @@
 package com.backend.medikey.model;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.print.Doc;
 import java.util.Date;
 
-@Entity
-@Table(name = "test")
 @Getter
 @Setter
+@Entity
+@NoArgsConstructor
+@AllArgsConstructor
 public class Test {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long testsId;
-
     @ManyToOne
-    private User patient;
-
+    private Patient patient;
     @Column(name = "date_recorded", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date dateRecorded; // date of test
-
-    @Column(name = "test_location", nullable = false)
-    private String testLocation; // hospital or clinic
-
-    @Column(name = "test_type", nullable = false)
+    @ManyToOne
+    private Hospital testLocation; // hospital or clinic
     private String testType; // blood test, urine test, etc
-
-    @Column(name = "test_results", nullable = false)
     private String testResults;
-
-    @Column(name = "follow_up_action", nullable = false)
     private String followUpAction; // medication, surgery, etc
-
-    @Column(name = "test_reference", nullable = false)
-    private String testReference; // test referenced by doctor or hospital
-
-    @Column(name = "cost", nullable = false)
-    private Double cost;
-    @Column(name = "notes", length = 2000)
+    @ManyToOne
+    private Doctor doctorReferred; // test referenced by doctor or hospital
     private String notes;
 }

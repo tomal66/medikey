@@ -1,5 +1,4 @@
 package com.backend.medikey.model;
-
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -14,26 +13,22 @@ import java.util.List;
 @Entity
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+public class Doctor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long userId;
-    private String username;
-    private String password;
-    private String role;
-
-    @OneToOne(mappedBy = "user")
-    private Doctor doctor;
-
-    @OneToOne(mappedBy = "user")
-    private MedicalProfessional medicalProfessional;
-
-    @OneToOne(mappedBy = "user")
+    private Long doctorId;
+    private String firstName;
+    private String lastName;
+    @NaturalId(mutable = true)
+    private String email;
+    @NaturalId(mutable = true)
+    private String phone;
+    private String department;
+    @OneToOne
+    private User user;
+    @OneToOne
     private Hospital hospital;
-
-    @OneToOne(mappedBy = "user")
-    private Patient patient;
-
-
+    @OneToMany(mappedBy = "doctor")
+    private List<Visit> doctorVisits;
 
 }

@@ -8,19 +8,17 @@ import lombok.*;
 
 @Getter
 @Setter
+@Entity
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "visit")
 public class Visit {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long visitId;
     @ManyToOne
-    private User doctor;
+    private Doctor doctor;
     @ManyToOne
-    private User patient;
+    private Patient patient;
     @OneToOne
     private MedicalHistory medicalHistory;
     @OneToMany(mappedBy = "visit")
@@ -28,22 +26,17 @@ public class Visit {
     @Column(name = "visit_date", nullable = false)
     @Temporal(TemporalType.DATE)
     private Date visitDate;
-
     @Column(name = "arrival_time")
     @Temporal(TemporalType.TIME)
     private Date arrivalTime;
-
     @Column(name = "checking_time")
     @Temporal(TemporalType.TIME)
     private Date checkingTime;
-
     @ManyToOne
     private Hospital hospital;
-
     @Column(name = "reason", nullable = false)
     private String reason;
     private String tests;
-
     @Column(name = "follow_up_date")
     @Temporal(TemporalType.DATE)
     private Date followUpDate;
