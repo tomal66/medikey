@@ -1,5 +1,6 @@
 package com.backend.medikey.dto;
 
+import com.backend.medikey.model.MedicalProfessional;
 import lombok.Data;
 
 import java.util.Date;

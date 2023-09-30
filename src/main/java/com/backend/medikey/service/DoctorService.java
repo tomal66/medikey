@@ -9,7 +9,7 @@ public interface DoctorService {
 
     List<DoctorDto> getAllDoctors();
 
-    Optional<DoctorDto> getDoctorById(Long id);
+    Doctor getDoctorById(Long id);
 
     DoctorDto createDoctor(DoctorDto doctorDto);
 

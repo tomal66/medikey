@@ -10,7 +10,7 @@ public interface HospitalService {
     // Basic CRUD operations
     Hospital save(Hospital hospital);
     List<Hospital> findAll();
-    Optional<Hospital> findById(Long id);
+    Hospital findByHospitalId(Long hospitalId);
     void delete(Long id);
 
     // Custom query methods

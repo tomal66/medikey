@@ -12,7 +12,9 @@ public interface VisitService {
 
     Optional<Visit> getVisitById(Long id);
 
-    List<Visit> getVisitsByUserId(Long userId);
+    //List<Visit> getVisitsByUserId(Long userId);
+
+    List<Visit> getVisitsByUsername(String username);
 
     List<Visit> getVisitsByVisitDate(Date visitDate);
 
@@ -25,6 +27,7 @@ public interface VisitService {
     Visit updateVisit(Visit visit);
 
     void deleteVisit(Long id);
+
 
 
 }

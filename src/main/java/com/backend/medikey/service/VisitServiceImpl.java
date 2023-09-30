@@ -17,6 +17,7 @@ public class VisitServiceImpl implements VisitService {
     @Autowired
     private VisitRepository visitRepository;
 
+
     private UserRepository userRepository;
 
     @Override
@@ -30,9 +31,8 @@ public class VisitServiceImpl implements VisitService {
     }
 
     @Override
-    public List<Visit> getVisitsByUserId(Long userId) {
-        Optional<User> patient = userRepository.findUserByUserId(userId);
-        return visitRepository.findByPatient(patient);
+    public List<Visit> getVisitsByUsername(String username) {
+        return visitRepository.findByPatient_User_Username(username); // 200 OK, body contains list of visits
     }
 
     @Override
@@ -40,7 +40,7 @@ public class VisitServiceImpl implements VisitService {
         return visitRepository.findByVisitDate(visitDate);
     }
 
-   // @Override
+    // @Override
     //public List<Visit> getVisitsByHospital(String hospital) {
     //    return visitRepository.findByHospital(hospital);
    // }

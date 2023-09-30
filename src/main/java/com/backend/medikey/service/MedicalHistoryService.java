@@ -10,7 +10,7 @@ public interface MedicalHistoryService {
 
     List<MedicalHistory> getAllMedicalHistories();
 
-    Optional<MedicalHistory> getMedicalHistoryById(Long id);
+    List<MedicalHistory> getMedicalHistoryById(Long id);
 
     List<MedicalHistory> getMedicalHistoriesByUserId(Long userId);
 

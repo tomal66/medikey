@@ -5,6 +5,7 @@ import com.backend.medikey.model.Patient;
 import com.backend.medikey.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
 import java.util.Date;
@@ -27,4 +28,7 @@ public interface MedicationRepository extends JpaRepository<Medication, Long> {
     // Custom query to find medications based on side effects
     @Query("SELECT m FROM Medication m WHERE m.sideEffects LIKE %?1%")
     List<Medication> findBySideEffectsContaining(String sideEffect);
+
+    @Query("SELECT m FROM Medication m JOIN m.patient p JOIN p.user u WHERE u.username = :username")
+    List<Medication> findMedicationsByUsername(@Param("username") String username);
 }

@@ -1,14 +1,18 @@
 package com.backend.medikey.controller;
 
+import com.backend.medikey.dto.VisitDto;
+import com.backend.medikey.model.MedicalHistory;
 import com.backend.medikey.model.Visit;
-import com.backend.medikey.service.VisitService;
+import com.backend.medikey.repository.MedicalHistoryRepository;
+import com.backend.medikey.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/visits")
@@ -16,59 +20,90 @@ public class VisitController {
 
     @Autowired
     private VisitService visitService;
+    @Autowired
+    private MedicalHistoryRepository medicalHistoryRepository;
+
+    @Autowired
+    private DoctorService doctorService;
+
+    @Autowired
+    private PatientService patientService;
+
+    @Autowired
+    private MedicalHistoryService medicalHistoryService;
+
+    @Autowired
+    private HospitalService hospitalService;
+    // Convert entity to DTO
+    // Convert entity to DTO
+    private VisitDto convertToDto(Visit visit) {
+        VisitDto dto = new VisitDto();
+        dto.setVisitId(visit.getVisitId());
+        dto.setDoctorId(visit.getDoctor().getDoctorId());
+        dto.setPatientId(visit.getPatient().getPatientId());
+        dto.setPatientName(visit.getPatient().getFirstName() + " " + visit.getPatient().getLastName());
+        dto.setMedicalHistoryId(visit.getMedicalHistory().getMedicalHistoryId()); // Assuming MedicalHistory has a getMedicalHistoryId method
+        dto.setHospitalId(visit.getHospital().getHospitalId());
+        dto.setVisitDate(visit.getVisitDate());
+        dto.setArrivalTime(visit.getArrivalTime());
+        dto.setCheckingTime(visit.getCheckingTime());
+        dto.setReason(visit.getReason());
+        dto.setTests(visit.getTests());
+        dto.setFollowUpDate(visit.getFollowUpDate());
+        return dto;
+    }
+
+    // Convert DTO to entity
+    private Visit convertToEntity(VisitDto dto) {
+        Visit visit = new Visit();
+        visit.setVisitId(dto.getVisitId());
+        visit.setDoctor(doctorService.getDoctorById(dto.getDoctorId()));
+        visit.setPatient(patientService.getPatientById(dto.getPatientId()));
+        visit.setMedicalHistory(medicalHistoryService.getMedicalHistoriesByUserId(dto.getuserId())); // Assuming you have a findMedicalHistoryById method
+        visit.setHospital(hospitalService.findByHospitalId(dto.getHospitalId()));
+        visit.setVisitDate(dto.getVisitDate());
+        visit.setArrivalTime(dto.getArrivalTime());
+        visit.setCheckingTime(dto.getCheckingTime());
+        visit.setReason(dto.getReason());
+        visit.setTests(dto.getTests());
+        visit.setFollowUpDate(dto.getFollowUpDate());
+        return visit;
+    }
+
 
     // Get all visits
     @GetMapping
-    public ResponseEntity<List<Visit>> getAllVisits() {
-        return new ResponseEntity<>(visitService.getAllVisits(), HttpStatus.OK);
+    public ResponseEntity<List<VisitDto>> getAllVisits() {
+        List<Visit> visits = visitService.getAllVisits();
+        List<VisitDto> visitDtos = visits.stream().map(this::convertToDto).collect(Collectors.toList());
+        return new ResponseEntity<>(visitDtos, HttpStatus.OK);
     }
 
     // Get a specific visit by ID
     @GetMapping("/{id}")
-    public ResponseEntity<Visit> getVisitById(@PathVariable Long id) {
-        return visitService.getVisitById(id)
-                .map(visit -> new ResponseEntity<>(visit, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    public ResponseEntity<VisitDto> getVisitById(@PathVariable Long id) {
+        Optional<Visit> visit = visitService.getVisitById(id);
+        return visit.map(value -> new ResponseEntity<>(convertToDto(value), HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
-
-    // Get all visits for a specific user
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<List<Visit>> getVisitsByUserId(@PathVariable Long userId) {
-        return new ResponseEntity<>(visitService.getVisitsByUserId(userId), HttpStatus.OK);
-    }
-
-    // Get all visits on a specific date
-    @GetMapping("/date/{visitDate}")
-    public ResponseEntity<List<Visit>> getVisitsByVisitDate(@PathVariable Date visitDate) {
-        return new ResponseEntity<>(visitService.getVisitsByVisitDate(visitDate), HttpStatus.OK);
-    }
-
-    // Get all visits to a specific hospital
-    //@GetMapping("/hospital/{hospital}")
-    //public ResponseEntity<List<Visit>> getVisitsByHospital(@PathVariable String hospital) {
-    //    return new ResponseEntity<>(visitService.getVisitsByHospital(hospital), HttpStatus.OK);
-   // }
-
-    // Get all visits to a specific doctor
-  //  @GetMapping("/doctor/{doctor}")
-  //  public ResponseEntity<List<Visit>> getVisitsByDoctor(@PathVariable String doctor) {
-  //      return new ResponseEntity<>(visitService.getVisitsByDoctor(doctor), HttpStatus.OK);
-   //  }
 
     // Add a new visit
     @PostMapping
-    public ResponseEntity<Visit> addVisit(@RequestBody Visit visit) {
-        return new ResponseEntity<>(visitService.addVisit(visit), HttpStatus.CREATED);
+    public ResponseEntity<VisitDto> addVisit(@RequestBody VisitDto visitDto) {
+        Visit visit = convertToEntity(visitDto);
+        Visit savedVisit = visitService.addVisit(visit);
+        return new ResponseEntity<>(convertToDto(savedVisit), HttpStatus.CREATED);
     }
 
     // Update an existing visit
     @PutMapping("/{id}")
-    public ResponseEntity<Visit> updateVisit(@PathVariable Long id, @RequestBody Visit visit) {
-        // Ensure the ID from the path matches the ID of the visit object
-        if (!id.equals(visit.getVisitId())) {
+    public ResponseEntity<VisitDto> updateVisit(@PathVariable Long id, @RequestBody VisitDto visitDto) {
+        if (!id.equals(visitDto.getVisitId())) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(visitService.updateVisit(visit), HttpStatus.OK);
+        Visit visit = convertToEntity(visitDto);
+        Visit updatedVisit = visitService.updateVisit(visit);
+        return new ResponseEntity<>(convertToDto(updatedVisit), HttpStatus.OK);
     }
 
     // Delete a visit by ID
@@ -77,6 +112,4 @@ public class VisitController {
         visitService.deleteVisit(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-
-
 }

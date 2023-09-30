@@ -1,8 +1,10 @@
 package com.backend.medikey.service;
 
 import com.backend.medikey.model.Medication;
+import com.backend.medikey.model.Patient;
 import com.backend.medikey.model.User;
 import com.backend.medikey.repository.MedicationRepository;
+import com.backend.medikey.repository.PatientRepository;
 import com.backend.medikey.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -16,7 +18,8 @@ public class MedicationServiceImpl implements MedicationService {
 
     @Autowired
     private MedicationRepository medicationRepository;
-    private UserRepository userRepository;
+    @Autowired
+    private PatientRepository patientRepository;
 
     @Override
     public List<Medication> getAllMedications() {
@@ -29,9 +32,8 @@ public class MedicationServiceImpl implements MedicationService {
     }
 
     @Override
-    public List<Medication> getMedicationsByUserId(Long userId) {
-        Optional<User> patient = userRepository.findUserByUserId(userId);
-        return medicationRepository.findByPatient(patient);
+    public List<Medication> getMedicationsByUsername(String username) {
+        return medicationRepository.findMedicationsByUsername(username);
     }
 
     @Override

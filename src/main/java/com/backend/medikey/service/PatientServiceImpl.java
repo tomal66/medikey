@@ -113,6 +113,8 @@ public class PatientServiceImpl implements PatientService {
         if(patient.getHospital() != null) {
             dto.setHospitalId(patient.getHospital().getHospitalId());
         }
+
+        Patient patient = patientRepository.findByPatientId(patientId);
         dto.setPatientVisitIds(patient.getPatientVisitIds());
         dto.setMedicalHistoryIds(patient.getMedicalHistoryIds());
         dto.setTestIds(patient.getTestIds());

@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.backend.medikey.model.Visit;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,7 +20,7 @@ public class DoctorController {
     @Autowired
     private DoctorService doctorService;
 
-    @GetMapping("/")
+    /*@GetMapping("/")
     public ResponseEntity<List<DoctorDto>> getAllDoctors() {
         List<DoctorDto> doctors = doctorService.getAllDoctors();
         List<DoctorDto> doctorDtos = doctors.stream()
@@ -27,12 +28,18 @@ public class DoctorController {
                 .collect(Collectors.toList());
         return new ResponseEntity<>(doctorDtos, HttpStatus.OK);
     }
+*/
+    @GetMapping("/")
+    public ResponseEntity<List<DoctorDto>> getAllDoctors() {
+        List<DoctorDto> doctorDtos = doctorService.getAllDoctors();
+        return new ResponseEntity<>(doctorDtos, HttpStatus.OK);
+    }
+
 
     @GetMapping("/{id}")
     public ResponseEntity<DoctorDto> getDoctorById(@PathVariable Long id) {
-        Optional<DoctorDto> doctor = doctorService.getDoctorById(id);
-        return doctor.map(value -> new ResponseEntity<>(convertToDto(value), HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        Doctor doctor = doctorService.getDoctorById(id);
+        return new ResponseEntity<>(convertToDto(doctor), HttpStatus.OK);
     }
 
     @PostMapping("/")
@@ -54,7 +61,7 @@ public class DoctorController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    private DoctorDto convertToDto(DoctorDto doctor) {
+    private DoctorDto convertToDto(Doctor doctor) {
         DoctorDto doctorDto = new DoctorDto();
         doctorDto.setDoctorId(doctor.getDoctorId());
         doctorDto.setFirstName(doctor.getFirstName());
@@ -62,9 +69,13 @@ public class DoctorController {
         doctorDto.setEmail(doctor.getEmail());
         doctorDto.setPhone(doctor.getPhone());
         doctorDto.setDepartment(doctor.getDepartment());
-        doctorDto.setUserId(doctor.getUserId());
-        doctorDto.setHospitalId(doctor.getHospitalId());
-        doctorDto.setDoctorVisitIds(doctor.getDoctorVisitIds());
+        doctorDto.setUserId(doctor.getUser().getUserId());
+        doctorDto.setHospitalId(doctor.getHospital().getHospitalId());
+        List<Long> doctorVisitIds = doctor.getDoctorVisits().stream()
+                .map(Visit::getVisitId)
+                .collect(Collectors.toList());
+
+        doctorDto.setDoctorVisitIds(doctorVisitIds);
         return doctorDto;
     }
 

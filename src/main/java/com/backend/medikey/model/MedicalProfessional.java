@@ -31,4 +31,8 @@ public class MedicalProfessional {
 
     @OneToMany(mappedBy = "medicalProfessional")
     private List<MedicalHistory> takenHistories;
+
+    public Object getMedicalProfessionalId() {
+        return this.mpId;
+    }
 }

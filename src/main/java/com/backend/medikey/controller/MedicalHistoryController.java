@@ -167,15 +167,15 @@ public class MedicalHistoryController {
     private MedicalHistory convertToEntity(MedicalHistoryDto medicalHistoryDto) {
         MedicalHistory medicalHistory = new MedicalHistory();
         medicalHistory.setMedicalHistoryId(medicalHistoryDto.getMedicalHistoryId());
-        medicalHistory.setPatient(medicalHistoryDto.getPatientId());
-        medicalHistory.setVisit(medicalHistoryDto.getVisitId());
+        medicalHistory.setPatient(medicalHistoryDto.getPatient().findByUserId());
+        medicalHistory.setVisit(medicalHistoryDto.getVisit().findByVisitId());
         medicalHistory.setDiagnosis(medicalHistoryDto.getDiagnosis());
         medicalHistory.setSymptoms(medicalHistoryDto.getSymptoms());
         medicalHistory.setAllergies(medicalHistoryDto.getAllergies());
         medicalHistory.setChronicDiseases(medicalHistoryDto.getChronicDiseases());
         medicalHistory.setFamilyHistory(medicalHistoryDto.getFamilyHistory());
         medicalHistory.setDateRecorded(medicalHistoryDto.getDateRecorded());
-        medicalHistory.setRecordedBy(medicalHistoryDto.getRecordedBy());
+        medicalHistory.setRecordedBy(medicalHistoryDto.getRecordedById());
         medicalHistory.setNotes(medicalHistoryDto.getNotes());
         medicalHistory.setImmunizations(medicalHistoryDto.getImmunizations());
         medicalHistory.setPreviousSurgeries(medicalHistoryDto.getPreviousSurgeries());
