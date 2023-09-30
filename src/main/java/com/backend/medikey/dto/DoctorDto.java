@@ -16,5 +16,6 @@ public class DoctorDto {
     private Long hospitalId;
     private List<Long> doctorVisitIds;
 
+
     // Getters and Setters
 }

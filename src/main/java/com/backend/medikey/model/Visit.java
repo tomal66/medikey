@@ -41,4 +41,7 @@ public class Visit {
     @Temporal(TemporalType.DATE)
     private Date followUpDate;
 
+    public Visit(Long visitId) {
+        this.visitId = visitId;
+    }
 }

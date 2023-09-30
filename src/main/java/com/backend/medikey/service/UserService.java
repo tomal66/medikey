@@ -13,4 +13,6 @@ public interface UserService {
     Optional<User> findByPhone(String phone);
     void saveUserVerificationToken(User theUser, String verificationToken);
     String validateToken(String theToken);
+
+    Optional<Object> findById(Long userId);
 }
