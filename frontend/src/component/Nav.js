@@ -9,7 +9,7 @@ import { Button } from "../style/Button";
 import { FaUserAlt } from "react-icons/fa";
 
 
-const Nav = () => {
+const Nav = ({toggleChatbot}) => {
 
     const [menuIcon, setMenuIcon] = useState();
     //const { total_item } = useCartContext();
@@ -267,10 +267,9 @@ const Nav = () => {
           </li>
           <li>
             <NavLink
-              to="/products"
               className="navbar-link "
-              onClick={() => setMenuIcon(false)}>
-              Products
+              onClick={toggleChatbot}>
+              Make Appointment
             </NavLink>
           </li>
           {isAuthenticated ? (

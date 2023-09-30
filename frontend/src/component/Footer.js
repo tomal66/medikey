@@ -63,6 +63,9 @@ const Footer = () => {
 }
 
 const Wrapper = styled.section`
+  position: relative;
+  z-index: 1301;  // ensure this is higher than drawer's z-index
+  
   .iSIFGq {
     margin: 0;
   }

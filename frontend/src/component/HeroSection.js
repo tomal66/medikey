@@ -14,7 +14,7 @@ const HeroSection = ({ myData }) => {
             <p>
               Connecting patients and healthcare simultaneously
             </p>
-            <NavLink to="/products">
+            <NavLink to="/register">
               <Button>Join Now</Button>
             </NavLink>
           </div>

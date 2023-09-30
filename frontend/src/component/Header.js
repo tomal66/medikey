@@ -5,7 +5,7 @@ import Nav from './Nav';
 //import SellerNav from './SellerNav';
 //import { useAuthContext } from '../context/auth_context';
 //import AdminNav from './AdminNav';
-const Header = () => {
+const Header = ({toggleChatbot}) => {
   //const { role } = useAuthContext();
 
   return (
@@ -13,7 +13,7 @@ const Header = () => {
       <NavLink to="/">
         <img src="./Medikey_Logo.png" alt="MediKey" className='logo' />
       </NavLink>
-      <Nav />
+      <Nav toggleChatbot={toggleChatbot}/>
       {/* {role === 'ROLE_SELLER' ? (
         <SellerNav />
       ) : role === 'ROLE_ADMIN' ? ( // Check if the user has ROLE_ADMIN
@@ -33,6 +33,7 @@ const MainHeader = styled.header`
   justify-content: space-between;
   align-items: center;
   position: relative;
+  z-index: 1301;  // Add this line to set z-index above the drawer's z-index (which is typically 1300)
 
   .logo {
     height: 5rem;
@@ -40,5 +41,6 @@ const MainHeader = styled.header`
     margin-left: 10rem;
   }
 `;
+
 
 export default Header

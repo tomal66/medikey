@@ -14,6 +14,13 @@ import 'react-chatbot-kit/build/main.css';
 import Layout from './component/Layout';
 import Button from 'react-bootstrap/Button';
 import React, { useState, useEffect } from 'react';
+import Login from './Login.js';
+import Register from './Register.js'
+import AdminDashboard from './Admin/AdminDashboard';
+import { useLocation } from 'react-router-dom';
+import AddHospital from './Admin/AddHospital';
+import AllHospitals from './Admin/AllHospitals';
+import AllHospitalsTable from './Admin/AllHospitalsTable';
 
 
 function App() {
@@ -44,7 +51,7 @@ function App() {
   };
 
   const [chatbotActive, setChatbotActive] = useState(false);
-
+  
   const toggleChatbot = () => {
     setChatbotActive(!chatbotActive);
   };
@@ -72,14 +79,20 @@ function App() {
     <ThemeProvider theme={theme}>
       <Router>
         <GlobalStyle/>
-        <Header/>
+        <Header  toggleChatbot={toggleChatbot}/>
         <Routes>
         <Route path="/" element={<Layout />}>
  
           {/* Public Routes */}
           <Route path="/" element={<Home/>}/>
-                    
+          <Route path="/login" element={<Login/>}/>
+          <Route path="/register" element={<Register/>}/>
           <Route path="*" element={<ErrorPage/>}/>
+
+          {/* Admin Dashboard */}
+          <Route path="/admin-dashboard" element={<AdminDashboard/>}/>
+          <Route path="/add-hospital" element={<AddHospital/>}/>
+          <Route path="/all-hospitals" element={<AllHospitalsTable/>}/>
 
           {/* <Route element={<RequireAuth allowedRole={"ROLE_USER"} />}>
             <Route path="/cart" element={<Cart/>}/>

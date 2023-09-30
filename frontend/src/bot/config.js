@@ -18,7 +18,7 @@ const config = {
   customComponents: {
     header: () => <div className="react-chatbot-kit-chat-header">MediKey Appointment Assistant</div>,
     botAvatar: (props) => <img alt="chatbot" className="react-chatbot-kit-chat-bot-avatar-container"
-        src="images/botlogo.png" width="40px" height="40px" />,
+        src="images/botlogo.png" width="40px" height="40px"/>,
 
 },
 };

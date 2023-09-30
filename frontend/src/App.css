@@ -5,12 +5,12 @@
   transform-origin: bottom; /* ensures the scaling is from the bottom */
   transform: scaleY(0);
   transition: transform 0.2s ease-in-out;
+  z-index: 1500;
 }
 
 .chatbot.active {
   transform: scaleY(1);
 }
-
 
 
 .help-block{
@@ -20,6 +20,14 @@
 
 .react-chatbot-kit-user-avatar-container {
   display: none !important;
+}
+.react-chatbot-kit-chat-bot-avatar-container {
+  background-color: #3D96FF !important;
+}
+
+.dashboard-container {
+  margin-left: 240px;
+  min-height: 100vh;
 }
 
 
@@ -87,6 +95,7 @@
 
 .bot-btn{
   position: fixed;
+  z-index: 1500;
   box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
     bottom:10px;
     right:40px;
@@ -94,9 +103,11 @@
     width:50px;
     border-radius:50%;
     background-image:url("../public/images/botlogo.png");
+    background-color: #3D96FF;
     background-position: center;
     background-size: cover;
     background-repeat: no-repeat;
+    border: none;
 }
 
 /* Add a glowing effect on hover */
@@ -122,7 +133,9 @@
     border-radius:30%;
 }
 
-
+.datagrid * {
+  font-size: 1.4rem;
+}
 .App {
   text-align: center;
 }
