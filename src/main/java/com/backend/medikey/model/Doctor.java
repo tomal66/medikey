@@ -31,4 +31,18 @@ public class Doctor {
     @OneToMany(mappedBy = "doctor")
     private List<Visit> doctorVisits;
 
+    //Ektu confused
+    public void setUserId(Long userId) {
+        this.user = new User(userId);
+    }
+
+    public void setHospitalId(Long hospitalId) {
+        this.hospital = new Hospital(hospitalId);
+    }
+
+    public void setDoctorVisitIds(List<Long> doctorVisitIds) {
+        for (Long visitId : doctorVisitIds) {
+            this.doctorVisits.add(new Visit(visitId));
+        }
+    }
 }

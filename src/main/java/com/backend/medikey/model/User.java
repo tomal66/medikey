@@ -35,5 +35,8 @@ public class User {
     private Patient patient;
 
 
-
+    //Ektu confused ei implementation niye
+    //public User(Long userId) {
+       // this.userId = userId;
+    //}
 }

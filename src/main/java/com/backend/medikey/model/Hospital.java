@@ -33,4 +33,8 @@ public class Hospital {
     @OneToMany(mappedBy = "hospital")
     private List<Visit> visits;
 
+    //ektu confused
+    public Hospital(Long hospitalId) {
+        this.hospitalId = hospitalId;
+    }
 }

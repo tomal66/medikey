@@ -17,6 +17,8 @@ public class UserController {
 
     @GetMapping
     public List<User> getUsers(){
+
+        System.out.println("Hello");
         return userService.getUsers();
     }
 

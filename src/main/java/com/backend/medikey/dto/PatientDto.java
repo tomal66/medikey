@@ -1,6 +1,8 @@
 package com.backend.medikey.dto;
 
-import lombok.Data;
+import com.backend.medikey.model.User;
+import jakarta.persistence.Entity;
+import lombok.*;
 
 import java.util.List;
 
@@ -12,6 +14,7 @@ public class PatientDto {
     private String email;
     private String phone;
     private Long userId;
+    //private User userId;
     private Long hospitalId;
     private List<Long> patientVisitIds;
     private List<Long> medicalHistoryIds;

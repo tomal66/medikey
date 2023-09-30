@@ -1,7 +1,6 @@
 package com.backend.medikey.dto;
 
 import lombok.Data;
-
 import java.util.Date;
 
 @Data
