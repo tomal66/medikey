@@ -1,9 +1,7 @@
 package com.backend.medikey.service;
 
-import com.backend.medikey.exception.UserAlreadyExistsException;
+
 import com.backend.medikey.model.User;
-import com.backend.medikey.registration.RegistrationRequest;
-import com.backend.medikey.registration.token.VerificationToken;
 import com.backend.medikey.repository.UserRepository;
 import com.backend.medikey.repository.VerificationTokenRepository;
 import lombok.RequiredArgsConstructor;

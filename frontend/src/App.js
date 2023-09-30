@@ -21,6 +21,9 @@ import { useLocation } from 'react-router-dom';
 import AddHospital from './Admin/AddHospital';
 import AllHospitals from './Admin/AllHospitals';
 import AllHospitalsTable from './Admin/AllHospitalsTable';
+import HospitalDashboard from './Hospital/HospitalDashboard';
+import AddDoctor from './Hospital/AddDoctor';
+import AllDoctors from './Hospital/AllDoctors';
 
 
 function App() {
@@ -92,8 +95,12 @@ function App() {
           {/* Admin Dashboard */}
           <Route path="/admin-dashboard" element={<AdminDashboard/>}/>
           <Route path="/add-hospital" element={<AddHospital/>}/>
-          <Route path="/all-hospitals" element={<AllHospitalsTable/>}/>
+          <Route path="/all-hospitals" element={<AllHospitals/>}/>
 
+          {/* Hospital Dashboard */}
+          <Route path = "/hospital-dashboard" element={<HospitalDashboard/>}/>
+          <Route path = "/add-doctor" element={<AddDoctor/>}/>
+          <Route path = "/all-doctors" element={<AllDoctors/>}/>
           {/* <Route element={<RequireAuth allowedRole={"ROLE_USER"} />}>
             <Route path="/cart" element={<Cart/>}/>
             <Route path="/checkout" element={<Checkout/>}/>

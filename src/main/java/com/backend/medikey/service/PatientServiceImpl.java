@@ -3,9 +3,7 @@ package com.backend.medikey.service;
 import com.backend.medikey.dto.PatientDto;
 import com.backend.medikey.model.Patient;
 import com.backend.medikey.model.User;
-import com.backend.medikey.repository.HospitalRepository;
-import com.backend.medikey.repository.PatientRepository;
-import com.backend.medikey.repository.UserRepository;
+import com.backend.medikey.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +20,16 @@ public class PatientServiceImpl implements PatientService {
     private PatientRepository patientRepository;
     @Autowired
     private UserRepository userRepository;
-
+    @Autowired
+    private HospitalRepository hospitalRepository;
+    @Autowired
+    private VisitRepository visitRepository;
+    @Autowired
+    private MedicalHistoryRepository medicalHistoryRepository;
+    @Autowired
+    private TestRepository testRepository;
+    @Autowired
+    private MedicationRepository medicationRepository;
 
 
     @Override
@@ -121,13 +128,13 @@ public class PatientServiceImpl implements PatientService {
         patient.setLastName(patientDto.getLastName());
         patient.setEmail(patientDto.getEmail());
         patient.setPhone(patientDto.getPhone());
-        User user = userRepository.findById(patientDto.getUserId());
+        User user = userRepository.findByUserId(patientDto.getUserId());
         patient.setUser(user);
-        patient.setHospital(patientDto.getHospitalId());
-        patient.setPatientVisitIds(patientDto.getPatientVisitIds());
-        patient.setMedicalHistoryIds(patientDto.getMedicalHistoryIds());
-        patient.setTestIds(patientDto.getTestIds());
-        patient.setMedicationIds(patientDto.getMedicationIds());
+        patient.setHospital(hospitalRepository.findByHospitalId(patientDto.getHospitalId()));
+        patient.setPatientVisits(visitRepository.findByPatient(patientRepository.findByPatientId(patientDto.getPatientId())));
+        patient.setMedicalHistories(medicalHistoryRepository.findByPatient(patientRepository.findByPatientId(patientDto.getPatientId())));
+        patient.setTests(testRepository.findByPatient(patientRepository.findByPatientId(patientDto.getPatientId())));
+        patient.setMedications(medicationRepository.findByPatient(patientRepository.findByPatientId(patientDto.getPatientId())));
         // Fetch and set User and Hospital entities here
         // Add other fields as needed
         return patient;
