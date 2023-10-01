@@ -1,8 +1,10 @@
 package com.backend.medikey.service;
 
 import com.backend.medikey.dto.DoctorDto;
+import com.backend.medikey.dto.TimeSlotDto;
 import com.backend.medikey.model.Doctor;
 import com.backend.medikey.repository.DoctorRepository;
+import com.backend.medikey.repository.HospitalRepository;
 import com.backend.medikey.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -18,6 +20,8 @@ public class DoctorServiceImpl implements DoctorService {
     private DoctorRepository doctorRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private HospitalRepository hospitalRepository;
 
     @Override
     public List<DoctorDto> getAllDoctors() {
@@ -47,7 +51,7 @@ public class DoctorServiceImpl implements DoctorService {
         existingDoctor.setPhone(doctorDto.getPhone());
         existingDoctor.setDepartment(doctorDto.getDepartment());
         existingDoctor.setUser(userRepository.findByUserId(doctorDto.getUserId()));
-        existingDoctor.setHospitalId(doctorDto.getHospitalId());
+        existingDoctor.setHospital(hospitalRepository.findByHospitalId(doctorDto.getHospitalId()));
         Doctor updatedDoctor = doctorRepository.save(existingDoctor);
         return convertToDto(updatedDoctor);
     }
@@ -56,6 +60,14 @@ public class DoctorServiceImpl implements DoctorService {
     public void deleteDoctor(Long id) {
         doctorRepository.deleteById(id);
     }
+
+    @Override
+    public List<DoctorDto> getByDepartment(String department) {
+        return doctorRepository.findByDepartment(department).stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
 
     @Override
     public Optional<DoctorDto> getDoctorByUserId(Long userId) {
@@ -88,7 +100,7 @@ public class DoctorServiceImpl implements DoctorService {
         doctor.setPhone(doctorDto.getPhone());
         doctor.setDepartment(doctorDto.getDepartment());
         doctor.setUser(userRepository.findByUserId(doctorDto.getUserId()));
-        doctor.setHospitalId(doctorDto.getHospitalId());
+        doctor.setHospital(hospitalRepository.findByHospitalId(doctorDto.getHospitalId()));
 
 
         // Fetch and set the User and Hospital entities here

@@ -28,6 +28,7 @@ import AddMP from './Hospital/AddMP';
 import AllMPs from './Hospital/AllMPs';
 import DoctorDashboard from './Doctor/DoctorDashboard';
 import Consultation from './Doctor/Consultation';
+import MakeAppointment from './MakeAppointment';
 
 
 function App() {
@@ -94,6 +95,7 @@ function App() {
           <Route path="/" element={<Home/>}/>
           <Route path="/login" element={<Login/>}/>
           <Route path="/register" element={<Register/>}/>
+          <Route path="/make-appointment" element={<MakeAppointment/>}/>
           <Route path="*" element={<ErrorPage/>}/>
 
           {/* Admin Dashboard */}

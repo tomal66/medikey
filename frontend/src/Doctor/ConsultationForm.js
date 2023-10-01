@@ -12,7 +12,7 @@ import Medication from './Medication';
 import {BsCapsule} from 'react-icons/bs';
 import {FaHistory} from 'react-icons/fa';
 import {BiTestTube} from 'react-icons/bi'
-import Tooltip from '@mui/material/Tooltip';
+import HistoryTable from './HistoryTable';
 
 const New = styled.div`
   width: 100%;
@@ -191,6 +191,8 @@ const ConsultationForm = ({ inputs, title }) => {
   const [selectedTests, setSelectedTests] = useState([]); // State for selected tests
   const [medications, setMedications] = useState([]);
   const [isModalOpen, setModalOpen] = useState(false);
+  const [isTableOpen, setTableOpen] = useState(false);
+  const [modalContent, setModalContent] = useState(null);
   const [medicationName, setMedicationName] = useState('');
   const [dosage, setDosage] = useState('');
   const [frequency, setFrequency] = useState('');
@@ -252,15 +254,11 @@ const ConsultationForm = ({ inputs, title }) => {
     setModalOpen(false);
   };
 
-  const handleHistory = () => {
-    console.log("History");
+  const handleIconClick = (content) => {
+    setModalContent(content);
+    setTableOpen(true);
   };
-  const handleTest = () => {
-    console.log("Test");
-  };
-  const handleMediation = () => {
-    console.log("Medication");
-  };
+  
 
   const handleTestChange = (event) => {
     const {
@@ -292,19 +290,19 @@ const ConsultationForm = ({ inputs, title }) => {
               <PatientDetail><strong>Family History:</strong> {familyHistory}</PatientDetail>
               <div style={{ textAlign: 'center', marginTop: '30px' }}>
 
-                <FaHistory
-                    className="icon my-icon"
-                    onClick={() => handleHistory()} // Assumes 'id' is the unique identifier for each row
-                  />
+              <FaHistory
+                className="icon my-icon"
+                onClick={() => handleIconClick('History')}
+              />
+              <BiTestTube
+                className="icon my-icon"
+                onClick={() => handleIconClick('Test')}
+              />
+              <BsCapsule
+                className="icon my-icon"
+                onClick={() => handleIconClick('Medication')}
+              />
 
-                <BiTestTube
-                  className="icon my-icon"
-                  onClick={() => handleTest()} // Assumes 'id' is the unique identifier for each row
-                />
-                <BsCapsule
-                  className="icon my-icon"
-                  onClick={() => handleMediation()} // Assumes 'id' is the unique identifier for each row
-                />
                 
               </div>
             </Card>
@@ -403,6 +401,21 @@ const ConsultationForm = ({ inputs, title }) => {
 
             </ModalContainer>
         </Modal>
+
+        {/* Tables Modal */}        
+        
+        <Modal
+          open={isTableOpen}
+          onClose={() => setTableOpen(false)}
+        >
+          <TableModalContainer>
+            <h3>{modalContent}</h3>
+            {modalContent === 'History' && <HistoryTable />}
+            {/* {modalContent === 'Test' && <TestTable />}
+            {modalContent === 'Medication' && <MedicationTable />} */}
+          </TableModalContainer>
+        </Modal>
+        
         </div>
       </NewContainer>
     </New>
@@ -423,6 +436,40 @@ const ModalContainer = styled.div`
   max-width: 500px;
   height: 35vh; // adjusts the height to be 80% of the viewport height
   overflow-y: auto; // enables scrolling on the y-axis
+
+  h3 {
+    font-size: 1.8rem;
+    margin-bottom: 1.5rem;
+  }
+
+  p {
+    font-size: 1.6rem;
+    margin-bottom: 1rem;
+    text-align: left; /* Added to align the order info to the left */
+  }
+  p strong {
+    font-weight: bold;
+  }
+`;
+
+
+const TableModalContainer = styled.div`
+  position: absolute;
+  top: 25%;
+  left: 15%;
+  
+
+  background-color: white;
+  padding: 2rem;
+  outline: none;
+  border-radius: 4px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  text-align: center;
+  width: 70%;
+  max-width: 70%;
+  height: 50vh;
+  overflow-y: auto;
+  overflow-x: auto;
 
   h3 {
     font-size: 1.8rem;

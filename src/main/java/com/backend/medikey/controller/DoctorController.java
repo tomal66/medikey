@@ -42,6 +42,12 @@ public class DoctorController {
         return new ResponseEntity<>(convertToDto(doctor), HttpStatus.OK);
     }
 
+    @GetMapping("/{department}")
+    public ResponseEntity<List<DoctorDto>> getDoctorByDepartment(@PathVariable String department) {
+        List<DoctorDto> doctors = doctorService.getByDepartment(department);
+        return new ResponseEntity<>(doctors, HttpStatus.OK);
+    }
+
     @PostMapping("/")
     public ResponseEntity<DoctorDto> createDoctor(@RequestBody DoctorDto doctorDto) {
         DoctorDto newDoctorDto = doctorService.createDoctor(doctorDto);

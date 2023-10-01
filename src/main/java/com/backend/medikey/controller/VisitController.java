@@ -172,10 +172,14 @@ public class VisitController {
 
     // Add a new visit
     @PostMapping
-    public ResponseEntity<VisitDto> addVisit(@RequestBody VisitDto visitDto) {
-        Visit visit = convertToEntity(visitDto);
-        Visit savedVisit = visitService.addVisit(visit);
-        return new ResponseEntity<>(convertToDto(savedVisit), HttpStatus.CREATED);
+    public ResponseEntity<?> addVisit(@RequestBody VisitDto visitDto) {
+        try {
+            Visit visit = convertToEntity(visitDto);
+            Visit savedVisit = visitService.addVisit(visit);
+            return new ResponseEntity<>(convertToDto(savedVisit), HttpStatus.CREATED);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 
     // Update an existing visit

@@ -41,5 +41,6 @@ public interface VisitRepository extends JpaRepository<Visit, Long> {
 
     // Find all visits before a specific follow-up date
     List<Visit> findByFollowUpDateBefore(Date followUpDate);
+    int countByDoctor_DoctorIdAndVisitDate(Long doctorId, Date visitDate);
 
 }

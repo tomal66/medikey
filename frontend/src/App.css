@@ -30,6 +30,17 @@
   min-height: 100vh;
 }
 
+/* Increase the font size for DataGrid cells */
+.MuiDataGrid-cell {
+  font-size: 18px; /* Adjust as needed */
+}
+
+/* Increase the font size for DataGrid headers */
+.MuiDataGrid-columnHeaderTitle {
+  font-size: 18px; /* Adjust as needed */
+}
+
+
 
 .react-chatbot-kit-chat-container{
   width:350px !important;

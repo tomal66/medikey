@@ -52,7 +52,11 @@ public class VisitServiceImpl implements VisitService {
   //  }
 
     @Override
-    public Visit addVisit(Visit visit) {
+    public Visit addVisit(Visit visit) throws Exception {
+        int existingVisits = visitRepository.countByDoctor_DoctorIdAndVisitDate(visit.getDoctor().getDoctorId(), visit.getVisitDate());
+        if (existingVisits >= 30) {
+            throw new Exception("Doctor has reached the maximum number of visits for this day.");
+        }
         return visitRepository.save(visit);
     }
 

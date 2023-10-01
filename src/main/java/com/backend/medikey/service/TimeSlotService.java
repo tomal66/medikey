@@ -14,6 +14,7 @@ public interface TimeSlotService {
     // Basic CRUD operations
     TimeSlot save(TimeSlot timeSlot);
     List<TimeSlot> findAll();
+    List<TimeSlot> findByDoctor(Long doctorId);
     Optional<TimeSlot> findById(Long id);
     void delete(Long id);
 

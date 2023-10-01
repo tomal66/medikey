@@ -21,6 +21,7 @@ public interface TimeSlotRepository extends JpaRepository<TimeSlot, Long> {
 
     // Find all time slots for a specific hospital
     List<TimeSlot> findByHospital_HospitalId(Long hospitalId);
+    List<TimeSlot> findByDoctor_DoctorId(Long doctorId);
 
     // Find all time slots for a specific day
     List<TimeSlot> findByDay(DayOfWeek day);

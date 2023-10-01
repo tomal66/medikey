@@ -70,7 +70,7 @@ public class TimeSlotController {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     }
 
-    @PostMapping("/")
+    @PostMapping("/save")
     public ResponseEntity<TimeSlotDto> createTimeSlot(@RequestBody TimeSlotDto timeSlotDto) {
         TimeSlot timeSlot = convertToEntity(timeSlotDto);
         TimeSlot savedTimeSlot = timeSlotService.save(timeSlot);
@@ -94,5 +94,13 @@ public class TimeSlotController {
         timeSlotService.delete(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
-    //Shesh ki hbe?
+
+    @GetMapping("/doctor/{doctorId}")
+    public ResponseEntity<List<TimeSlotDto>> getAllTimeSlotByDoctor(@PathVariable Long doctorId) {
+        List<TimeSlot> timeSlots = timeSlotService.findByDoctor(doctorId);
+        List<TimeSlotDto> timeSlotDtos = timeSlots.stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+        return new ResponseEntity<>(timeSlotDtos, HttpStatus.OK);
+    }
 }

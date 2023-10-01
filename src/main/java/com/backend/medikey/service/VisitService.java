@@ -22,7 +22,7 @@ public interface VisitService {
 
     //List<Visit> getVisitsByDoctor(String doctor); getting errors related findByDoctor method
 //
-    Visit addVisit(Visit visit);
+    Visit addVisit(Visit visit) throws Exception;
 
     Visit updateVisit(Visit visit);
 

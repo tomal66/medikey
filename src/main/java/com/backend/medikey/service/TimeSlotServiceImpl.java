@@ -34,6 +34,11 @@ public class TimeSlotServiceImpl implements TimeSlotService {
     }
 
     @Override
+    public List<TimeSlot> findByDoctor(Long doctorId) {
+        return timeSlotRepository.findByDoctor_DoctorId(doctorId);
+    }
+
+    @Override
     public Optional<TimeSlot> findById(Long id) {
         return timeSlotRepository.findById(id);
     }
