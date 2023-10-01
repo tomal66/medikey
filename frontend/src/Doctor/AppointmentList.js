@@ -8,24 +8,48 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { DataGrid } from '@mui/x-data-grid';
 
-const AllHospitalsTable = () => {
+const AppointmentList = () => {
 
 
-    const [hospitals, setHospitals] = useState([
+    const [appoitnments, setAppointments] = useState([
         {
-          id: '1',
-          name: 'Sample Hospital2',
-          city: 'Sample City',
-          phoneNumber: '123-456-7890'
+            "id": "1",
+            "name": "John Doe",
+            "arrivedAt": "10:30",
+            "reason": "General Check-up",
+            "actions": ""
         },
         {
-            id: '2',
-            name: 'Sample Hospital222',
-            city: 'Sample City',
-            phoneNumber: '123-456-7890'
-          }
-        
-      ]); // Initialize state 
+            "id": "2",
+            "name": "Jane Smith",
+            "arrivedAt": "11:00",
+            "reason": "Dental Cleaning",
+            "actions": ""
+        },
+        {
+            "id": "3",
+            "name": "Emily Johnson",
+            "arrivedAt": "12:45",
+            "reason": "X-ray",
+            "actions": ""
+        },
+        {
+            "id": "4",
+            "name": "Michael Brown",
+            "arrivedAt": "13:20",
+            "reason": "Vaccination",
+            "actions": ""
+        },
+        {
+            "id": "5",
+            "name": "Sarah Williams",
+            "arrivedAt": "15:15",
+            "reason": "Eye Exam",
+            "actions": ""
+        }        
+      ]);
+      
+      
       
     const [search, setSearch] = useState(""); // Add this line
 
@@ -39,24 +63,17 @@ const AllHospitalsTable = () => {
     //       });
     //   }, []);
 
-    const filteredHospitals = hospitals.filter(
-        hospital =>
-        hospital.id.toLowerCase().includes(search.toLowerCase()) ||
-        hospital.name.toLowerCase().includes(search.toLowerCase()) ||
-        hospital.city.toLowerCase().includes(search.toLowerCase())
+    const filteredAppointments = appoitnments.filter(
+        appointment =>
+        appointment.id.toLowerCase().includes(search.toLowerCase()) ||
+        appointment.name.toLowerCase().includes(search.toLowerCase())
     );
 
     const columns = [
         { field: 'id', headerName: 'ID', flex: 1, headerAlign: 'left',  },
-        { field: 'name', headerName: 'Hospital Name', flex: 1, headerAlign: 'left', },
-        { field: 'city', headerName: 'City', flex: 1, headerAlign: 'left',  },
-        {
-          field: 'phoneNumber',
-          headerName: 'Phone',
-          type: 'phone',
-          flex: 1,
-          headerAlign: 'left',
-        },
+        { field: 'name', headerName: 'Patient Name', flex: 1, headerAlign: 'left', },
+        { field: 'arrivedAt', headerName: 'Arrived at', type: 'time', flex: 1, headerAlign: 'left', },
+        { field: 'reason', headerName: 'Reason', flex: 1, headerAlign: 'left', },
         {
             field: 'actions',
             headerName: 'Actions',
@@ -68,14 +85,6 @@ const AllHospitalsTable = () => {
                   className="icon edit-icon"
                   onClick={() => handleView(params.row.id)} // Assumes 'id' is the unique identifier for each row
                 />
-                <FiEdit2 
-                  className="icon edit-icon" 
-                  // Add your edit logic here
-                />
-                <FiTrash2
-                  className="icon delete-icon"
-                  // Add your delete logic here
-                />
               </>
             ),
           },
@@ -83,7 +92,7 @@ const AllHospitalsTable = () => {
 
   const nav = useNavigate();
   const handleView = (id) => {
-    nav(`/singleHospital/${id}`);
+    nav(`/consult/${id}`);
   };
 
     
@@ -93,7 +102,7 @@ const AllHospitalsTable = () => {
         <div className="container"> 
         <SearchInput
           type="text"
-          placeholder="Search Hospitals"
+          placeholder="Search Patient"
           value={search}
           onChange={e => setSearch(e.target.value)}
         />
@@ -102,7 +111,7 @@ const AllHospitalsTable = () => {
                 sx={{
                     
                     fontSize: '1.4rem',
-                    
+                    backgroundColor: '#FFFFFF',
                     boxShadow: 2,
                     border: 0,
                     borderColor: 'primary.light',
@@ -111,7 +120,7 @@ const AllHospitalsTable = () => {
                     },
                   }}
 
-                rows={filteredHospitals}
+                rows={filteredAppointments}
                 columns={columns}
                 initialState={{
                 pagination: {
@@ -186,4 +195,4 @@ const Wrapper = styled.section`
 
 `;
 
-export default AllHospitalsTable;
+export default AppointmentList;

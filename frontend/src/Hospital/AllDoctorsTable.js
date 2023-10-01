@@ -90,7 +90,7 @@ const AllDoctorsTable = () => {
         {
           field: 'phone',
           headerName: 'Phone',
-          type: 'number',
+          type: 'phone',
           flex: 1,
           headerAlign: 'left',
         },

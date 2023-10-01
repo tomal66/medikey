@@ -24,6 +24,10 @@ import AllHospitalsTable from './Admin/AllHospitalsTable';
 import HospitalDashboard from './Hospital/HospitalDashboard';
 import AddDoctor from './Hospital/AddDoctor';
 import AllDoctors from './Hospital/AllDoctors';
+import AddMP from './Hospital/AddMP';
+import AllMPs from './Hospital/AllMPs';
+import DoctorDashboard from './Doctor/DoctorDashboard';
+import Consultation from './Doctor/Consultation';
 
 
 function App() {
@@ -101,6 +105,14 @@ function App() {
           <Route path = "/hospital-dashboard" element={<HospitalDashboard/>}/>
           <Route path = "/add-doctor" element={<AddDoctor/>}/>
           <Route path = "/all-doctors" element={<AllDoctors/>}/>
+          <Route path = "/add-mp" element={<AddMP/>}/>
+          <Route path = "/all-mp" element={<AllMPs/>}/>
+
+          {/* Doctor Dashboard */}
+          <Route path = "/doctor-dashboard" element={<DoctorDashboard/>}/>
+          <Route path = "/consult/:id" element={<Consultation/>}/>
+          
+
           {/* <Route element={<RequireAuth allowedRole={"ROLE_USER"} />}>
             <Route path="/cart" element={<Cart/>}/>
             <Route path="/checkout" element={<Checkout/>}/>
