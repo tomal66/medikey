@@ -8,24 +8,53 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { DataGrid } from '@mui/x-data-grid';
 
-const AllHospitalsTable = () => {
+const AllMPsTable = () => {
 
 
-    const [hospitals, setHospitals] = useState([
+    const [mps, setMps] = useState([
         {
           id: '1',
-          name: 'Sample Hospital2',
-          city: 'Sample City',
-          phoneNumber: '123-456-7890'
+          firstName: 'John',
+          lastName: 'Doe',
+          
+          email: 'john.doe@example.com',
+          phone: '123-456-7890'
         },
         {
-            id: '2',
-            name: 'Sample Hospital222',
-            city: 'Sample City',
-            phoneNumber: '123-456-7890'
-          }
-        
-      ]); // Initialize state 
+          id: '2',
+          firstName: 'Jane',
+          lastName: 'Doe',
+          
+          email: 'jane.doe@example.com',
+          phone: '098-765-4321'
+        },
+        {
+          id: '3',
+          firstName: 'Emily',
+          lastName: 'Smith',
+          
+          email: 'emily.smith@example.com',
+          phone: '111-222-3333'
+        },
+        {
+          id: '4',
+          firstName: 'Robert',
+          lastName: 'Brown',
+          
+          email: 'robert.brown@example.com',
+          phone: '444-555-6666'
+        },
+        {
+          id: '5',
+          firstName: 'Karen',
+          lastName: 'Williams',
+          
+          email: 'karen.williams@example.com',
+          phone: '777-888-9999'
+        }
+      ]);
+      
+      
       
     const [search, setSearch] = useState(""); // Add this line
 
@@ -39,19 +68,26 @@ const AllHospitalsTable = () => {
     //       });
     //   }, []);
 
-    const filteredHospitals = hospitals.filter(
-        hospital =>
-        hospital.id.toLowerCase().includes(search.toLowerCase()) ||
-        hospital.name.toLowerCase().includes(search.toLowerCase()) ||
-        hospital.city.toLowerCase().includes(search.toLowerCase())
+    const filteredStaffs = mps.filter(
+        staff =>
+        staff.id.toLowerCase().includes(search.toLowerCase()) ||
+        staff.firstName.toLowerCase().includes(search.toLowerCase()) ||
+        staff.lastName.toLowerCase().includes(search.toLowerCase())
     );
 
     const columns = [
         { field: 'id', headerName: 'ID', flex: 1, headerAlign: 'left',  },
-        { field: 'name', headerName: 'Hospital Name', flex: 1, headerAlign: 'left', },
-        { field: 'city', headerName: 'City', flex: 1, headerAlign: 'left',  },
+        { field: 'firstName', headerName: 'First Name', flex: 1, headerAlign: 'left', },
+        { field: 'lastName', headerName: 'Last Name', flex: 1, headerAlign: 'left', },
         {
-          field: 'phoneNumber',
+            field: 'email',
+            headerName: 'Email',
+            type: 'email',
+            flex: 1,
+            headerAlign: 'left',
+          },
+        {
+          field: 'phone',
           headerName: 'Phone',
           type: 'phone',
           flex: 1,
@@ -93,7 +129,7 @@ const AllHospitalsTable = () => {
         <div className="container"> 
         <SearchInput
           type="text"
-          placeholder="Search Hospitals"
+          placeholder="Search Staffs"
           value={search}
           onChange={e => setSearch(e.target.value)}
         />
@@ -111,7 +147,7 @@ const AllHospitalsTable = () => {
                     },
                   }}
 
-                rows={filteredHospitals}
+                rows={filteredStaffs}
                 columns={columns}
                 initialState={{
                 pagination: {
@@ -186,4 +222,4 @@ const Wrapper = styled.section`
 
 `;
 
-export default AllHospitalsTable;
+export default AllMPsTable;

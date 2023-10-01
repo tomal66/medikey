@@ -17,6 +17,7 @@ public interface VisitRepository extends JpaRepository<Visit, Long> {
 
     List<Visit> findByPatient(Patient patient); //
 
+
     // Find all visits on a specific date
     List<Visit> findByVisitDate(Date visitDate);
 

@@ -28,7 +28,7 @@ const Header = ({toggleChatbot}) => {
 const MainHeader = styled.header`
   padding: 0 4.8rem;
   height: 10rem;
-  background-color: ${({ theme }) => theme.colors.bg};
+  background-color: #ffffff;
   display: flex;
   justify-content: space-between;
   align-items: center;
