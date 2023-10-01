@@ -12,7 +12,7 @@ public interface MedicationService {
 
     Optional<Medication> getMedicationById(Long id);
 
-    List<Medication> getMedicationsByUserId(Long userId);
+    //List<Medication> getMedicationsByUserId(Long userId);
 
     List<Medication> getMedicationsByDatePrescribed(Date datePrescribed);
 
@@ -21,4 +21,6 @@ public interface MedicationService {
     Medication updateMedication(Medication medication);
 
     void deleteMedication(Long id);
+
+    List<Medication> getMedicationsByUsername(String username);
 }

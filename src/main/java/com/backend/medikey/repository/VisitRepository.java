@@ -32,6 +32,13 @@ public interface VisitRepository extends JpaRepository<Visit, Long> {
     // Find all visits with a specific reason
     List<Visit> findByReason(String reason);
 
+    List<Visit> findByPatientId(Long patientId);
+
+    // Find visits by the username of the User associated with the Patient
+    List<Visit> findByPatient_User_Username(String username);
+
+    // Find visits by the patientId of the Patient
+    List<Visit> findByPatient_PatientId(Long patientId);
 
     // Find all visits before a specific follow-up date
     List<Visit> findByFollowUpDateBefore(Date followUpDate);

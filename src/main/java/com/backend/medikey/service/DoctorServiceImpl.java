@@ -24,7 +24,7 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public Optional<DoctorDto> getDoctorById(Long id) {
+    public Doctor getDoctorById(Long id) {
         return doctorRepository.findById(id).map(this::convertToDto);
     }
 

@@ -10,6 +10,7 @@ public class VisitDto {
     private Long visitId;
     private Long doctorId;
     private Long patientId;
+    private String patientName;
     private Long medicalHistoryId;
     private List<Long> medicationIds;
     private Date visitDate;
