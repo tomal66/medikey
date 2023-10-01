@@ -23,12 +23,32 @@ public class PatientController {
         return new ResponseEntity<>(patientService.getAllPatients(), HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<PatientDto> getPatientById(@PathVariable Long id) {
-        Optional<PatientDto> patientDto = patientService.getPatientById(id);
+   /* @GetMapping("/{id}")
+    public ResponseEntity<PatientDto> getPatientById(@PathVariable Long patientId) {
+        Optional<PatientDto> patientDto = patientService.getPatientById(patientId);
         return patientDto.map(dto -> new ResponseEntity<>(dto, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }*/
+
+    /*@GetMapping("/{patientId}")
+    public ResponseEntity<PatientDto> getPatientById(@PathVariable Long patientId) {
+        PatientDto patientDto = patientService.getPatientById(patientId);
+        return patientDto.map(dto -> new ResponseEntity<>(dto, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }*/
+
+    @GetMapping("/{patientId}")
+    public ResponseEntity<PatientDto> getPatientById(@PathVariable Long patientId) {
+        PatientDto patientDto = patientService.getPatientById(patientId);
+        if (patientDto != null) {
+            return new ResponseEntity<>(patientDto, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
+
+
+
 
     @PostMapping("/")
     public ResponseEntity<PatientDto> createPatient(@RequestBody PatientDto patientDto) {

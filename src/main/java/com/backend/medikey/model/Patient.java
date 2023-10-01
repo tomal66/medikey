@@ -36,5 +36,9 @@ public class Patient {
     private List<Test> tests;
     @OneToMany(mappedBy = "patient")
     private List<Medication> medications;
+
+    public Patient(Long patientId) {
+        this.patientId = patientId;
+    }
 }
 

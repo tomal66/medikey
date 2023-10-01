@@ -1,8 +1,7 @@
 package com.backend.medikey.service;
 
 import com.backend.medikey.dto.PatientDto;
-import com.backend.medikey.model.Patient;
-import com.backend.medikey.model.User;
+import com.backend.medikey.model.*;
 import com.backend.medikey.repository.*;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -39,9 +38,19 @@ public class PatientServiceImpl implements PatientService {
                 .collect(Collectors.toList());
     }
 
+    /*@Override
+    public PatientDto getPatientById(Long patientId) {
+        return patientRepository.findByPatientId(patientId).map(this::convertToDto);
+    }*/
+
     @Override
-    public Optional<PatientDto> getPatientById(Long id) {
-        return patientRepository.findById(id).map(this::convertToDto);
+    public PatientDto getPatientById(Long patientId) {
+        Patient patient = patientRepository.findByPatientId(patientId);
+        if (patient != null) {
+            return convertToDto(patient);
+        } else {
+            return null; // or throw an exception, depending on your use case
+        }
     }
 
     @Override
@@ -114,11 +123,38 @@ public class PatientServiceImpl implements PatientService {
             dto.setHospitalId(patient.getHospital().getHospitalId());
         }
 
-        Patient patient = patientRepository.findByPatientId(patientId);
-        dto.setPatientVisitIds(patient.getPatientVisitIds());
+        //Patient patient = patientRepository.findByPatientId(patientId);
+        /*dto.setPatientVisitIds(patient.getPatientVisitIds());
         dto.setMedicalHistoryIds(patient.getMedicalHistoryIds());
         dto.setTestIds(patient.getTestIds());
-        dto.setMedicationIds(patient.getMedicationIds());
+        dto.setMedicationIds(patient.getMedicationIds());*/
+        // Assuming patient.getPatientVisits() returns List<Visit>
+        Visit visit = new Visit();
+        List<Long> patientVisitIds = patient.getPatientVisits().stream()
+                .map(Visit::getVisitId)
+                .collect(Collectors.toList());
+        dto.setPatientVisitIds(patientVisitIds);
+
+// Assuming patient.getMedicalHistories() returns List<MedicalHistory>
+        MedicalHistory medicalHistory = new MedicalHistory();
+        List<Long> medicalHistoryIds = patient.getMedicalHistories().stream()
+                .map(MedicalHistory::getMedicalHistoryId)
+                .collect(Collectors.toList());
+        dto.setMedicalHistoryIds(medicalHistoryIds);
+
+// Assuming patient.getTests() returns List<Test>
+        Test test = new Test();
+        List<Long> testIds = patient.getTests().stream()
+                .map(Test::getTestsId)
+                .collect(Collectors.toList());
+        dto.setTestIds(testIds);
+
+// Assuming patient.getMedications() returns List<Medication>
+        List<Long> medicationIds = patient.getMedications().stream()
+                .map(Medication::getMedicationId)
+                .collect(Collectors.toList());
+        dto.setMedicationIds(medicationIds);
+
         // Add other fields as needed
         return dto;
     }
