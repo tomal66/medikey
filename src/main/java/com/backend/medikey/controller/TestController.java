@@ -32,9 +32,9 @@ public class TestController {
         }
     }
 
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<List<Test>> getTestsByUserId(@PathVariable Long userId) {
-        List<Test> userTests = testsService.getTestsByUserId(userId); // 200 OK, body contains list of tests
+    @GetMapping("/user/{username}")
+    public ResponseEntity<List<Test>> getTestsByUserId(@PathVariable String username) {
+        List<Test> userTests = testsService.getTestsByUsername(username); // 200 OK, body contains list of tests
         return ResponseEntity.ok(userTests);
     }
 

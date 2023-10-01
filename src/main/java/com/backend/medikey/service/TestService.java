@@ -14,5 +14,5 @@ public interface TestService {
 
     void deleteTest(Long testId); // delete a test
 
-    List<Test> getTestsByUserId(Long userId);
+    //List<Test> getTestsByUserId(Long userId);
 }

@@ -87,11 +87,22 @@ public class HospitalController {
     }
 
     // Get a specific hospital by ID
-    @GetMapping("/{id}")
-    public ResponseEntity<HospitalDto> getHospitalById(@PathVariable Long id) {
+    /*@GetMapping("/{id}")
+    public ResponseEntity<HospitalDto> getHospitalById(@PathVariable Long hospitalId) {
         Hospital hospital = hospitalService.findByHospitalId(hospitalId);
         return hospital.map(value -> new ResponseEntity<>(convertToDto(value), HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }*/
+
+    @GetMapping("/{hospitalId}")
+    public ResponseEntity<HospitalDto> getHospitalById(@PathVariable Long hospitalId) {
+        Hospital hospital = hospitalService.findByHospitalId(hospitalId);
+        if (hospital != null) {
+            return new ResponseEntity<>(convertToDto(hospital), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
+
 
     // Add a new hospital
     @PostMapping
@@ -102,9 +113,9 @@ public class HospitalController {
     }
 
     // Update an existing hospital
-    @PutMapping("/{id}")
+    /*@PutMapping("/{hospitalid}")
     public ResponseEntity<HospitalDto> updateHospital(@PathVariable Long id, @RequestBody HospitalDto hospitalDto) {
-        Optional<Hospital> existingHospital = hospitalService.findById(id);
+        Optional<Hospital> existingHospital = hospitalService.findByHospitalId(hospitalId);
         if (existingHospital.isPresent()) {
             Hospital hospital = convertToEntity(hospitalDto);
             hospital.setHospitalId(id);  // Ensure the ID remains the same
@@ -113,7 +124,21 @@ public class HospitalController {
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+    }*/
+
+    @PutMapping("/{hospitalId}")  // Changed 'hospitalid' to 'hospitalId' to match the method parameter
+    public ResponseEntity<HospitalDto> updateHospital(@PathVariable Long hospitalId, @RequestBody HospitalDto hospitalDto) {  // Changed 'id' to 'hospitalId'
+        Hospital existingHospital = hospitalService.findByHospitalId(hospitalId);  // Removed Optional since your service method returns a Hospital, not an Optional<Hospital>
+        if (existingHospital != null) {  // Changed from isPresent() to != null
+            Hospital hospital = convertToEntity(hospitalDto);
+            hospital.setHospitalId(hospitalId);  // Ensure the ID remains the same
+            Hospital updatedHospital = hospitalService.save(hospital);
+            return new ResponseEntity<>(convertToDto(updatedHospital), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
+
 
     // Delete a hospital by ID
     @DeleteMapping("/{id}")

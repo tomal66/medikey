@@ -39,8 +39,10 @@ public interface MedicalHistoryRepository extends JpaRepository<MedicalHistory, 
 
     List<MedicalHistory> findByGeneticFactorsContainingIgnoreCase(String geneticFactors);
 
+    MedicalHistory findByVisit_VisitId(Long visitId);
     // Custom query to search for medical history records based on notes
     @Query("SELECT mh FROM MedicalHistory mh WHERE mh.notes LIKE %?1%")
     List<MedicalHistory> findByNotesContaining(String notesDetail);
 
+    List<MedicalHistory> findAllByPatientId(Long patientId);
 }

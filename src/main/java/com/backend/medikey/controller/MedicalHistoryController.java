@@ -88,6 +88,9 @@ package com.backend.medikey.controller;
 
 import com.backend.medikey.dto.MedicalHistoryDto;
 import com.backend.medikey.model.MedicalHistory;
+import com.backend.medikey.repository.MedicalProfessionalRepository;
+import com.backend.medikey.repository.PatientRepository;
+import com.backend.medikey.repository.VisitRepository;
 import com.backend.medikey.service.MedicalHistoryService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -107,6 +110,15 @@ public class MedicalHistoryController {
     @Autowired
     private final MedicalHistoryService medicalHistoryService;
 
+    @Autowired
+    private PatientRepository patientRepository;
+
+    @Autowired
+    private VisitRepository visitRepository;
+
+    @Autowired
+    private MedicalProfessionalRepository medicalProfessionalRepository;
+
     @GetMapping("/")
     public ResponseEntity<List<MedicalHistoryDto>> getAllMedicalHistories() {
         List<MedicalHistory> medicalHistories = medicalHistoryService.getAllMedicalHistories();
@@ -116,12 +128,26 @@ public class MedicalHistoryController {
         return new ResponseEntity<>(dtos, HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
+ /*   @GetMapping("/{id}")
     public ResponseEntity<MedicalHistoryDto> getMedicalHistoryById(@PathVariable Long id) {
         List<MedicalHistory>  medicalHistory = medicalHistoryService.getMedicalHistoryById(id);
         return medicalHistory.map(value -> new ResponseEntity<>(convertToDto(value), HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
+*/
+    @GetMapping("/{patientId}")
+    public ResponseEntity<List<MedicalHistoryDto>> getMedicalHistoryById(@PathVariable Long patientId) {
+        List<MedicalHistory> medicalHistories = medicalHistoryService.getMedicalHistoryByPatientId(patientId);
+        if (medicalHistories != null && !medicalHistories.isEmpty()) {
+            List<MedicalHistoryDto> medicalHistoryDtos = medicalHistories.stream()
+                    .map(this::convertToDto)
+                    .collect(Collectors.toList());
+            return new ResponseEntity<>(medicalHistoryDtos, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+
 
     @PostMapping("/")
     public ResponseEntity<MedicalHistoryDto> createMedicalHistory(@RequestBody MedicalHistoryDto medicalHistoryDto) {
@@ -153,7 +179,7 @@ public class MedicalHistoryController {
         dto.setChronicDiseases(medicalHistory.getChronicDiseases());
         dto.setFamilyHistory(medicalHistory.getFamilyHistory());
         dto.setDateRecorded(medicalHistory.getDateRecorded());
-        dto.setRecordedBy(medicalHistory.getRecordedBy().getMedicalProfessionalId());
+        dto.setRecordedById(medicalHistory.getRecordedBy().getMpId());
         dto.setNotes(medicalHistory.getNotes());
         dto.setImmunizations(medicalHistory.getImmunizations());
         dto.setPreviousSurgeries(medicalHistory.getPreviousSurgeries());
@@ -167,15 +193,15 @@ public class MedicalHistoryController {
     private MedicalHistory convertToEntity(MedicalHistoryDto medicalHistoryDto) {
         MedicalHistory medicalHistory = new MedicalHistory();
         medicalHistory.setMedicalHistoryId(medicalHistoryDto.getMedicalHistoryId());
-        medicalHistory.setPatient(medicalHistoryDto.getPatient().findByUserId());
-        medicalHistory.setVisit(medicalHistoryDto.getVisit().findByVisitId());
+        medicalHistory.setPatient(patientRepository.findByPatientId(medicalHistoryDto.getPatientId()));
+        medicalHistory.setVisit(visitRepository.findByVisitId(medicalHistoryDto.getVisitId()));
         medicalHistory.setDiagnosis(medicalHistoryDto.getDiagnosis());
         medicalHistory.setSymptoms(medicalHistoryDto.getSymptoms());
         medicalHistory.setAllergies(medicalHistoryDto.getAllergies());
         medicalHistory.setChronicDiseases(medicalHistoryDto.getChronicDiseases());
         medicalHistory.setFamilyHistory(medicalHistoryDto.getFamilyHistory());
         medicalHistory.setDateRecorded(medicalHistoryDto.getDateRecorded());
-        medicalHistory.setRecordedBy(medicalHistoryDto.getRecordedById());
+        medicalHistory.setRecordedBy(medicalProfessionalRepository.findByMpId(medicalHistoryDto.getRecordedById()));
         medicalHistory.setNotes(medicalHistoryDto.getNotes());
         medicalHistory.setImmunizations(medicalHistoryDto.getImmunizations());
         medicalHistory.setPreviousSurgeries(medicalHistoryDto.getPreviousSurgeries());

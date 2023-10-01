@@ -3,7 +3,6 @@ package com.backend.medikey.service;
 
 import com.backend.medikey.model.User;
 import com.backend.medikey.repository.UserRepository;
-import com.backend.medikey.repository.VerificationTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -17,28 +16,19 @@ public class UserServiceImpl implements UserService{
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private final VerificationTokenRepository tokenRepository;
+
     @Override
     public List<User> getUsers() {
         return userRepository.findAll();
     }
 
     @Override
-    public User registerUser(RegistrationRequest request) {
-        Optional<User> user = this.findByEmail(request.email());
-        if (user.isPresent()){
-            throw new UserAlreadyExistsException(
-                    "User with email "+request.email() + " already exists");
-        }
-        var newUser = new User();
-        newUser.setFirstName(request.firstName());
-        newUser.setLastName(request.lastName());
-        newUser.setEmail(request.email());
-        newUser.setPassword(passwordEncoder.encode(request.password()));
-        newUser.setRole(request.role());
-        return userRepository.save(newUser);
+    public Optional<Object> findById(Long userId) {
+        return Optional.of(userRepository.findById(userId));
     }
 
+
+    /*
     @Override
     public Optional<User> findByEmail(String email) {
         return userRepository.findUserByEmail(email);
@@ -70,5 +60,5 @@ public class UserServiceImpl implements UserService{
         user.setEnabled(true);
         userRepository.save(user);
         return "valid";
-    }
+    }*/
 }
