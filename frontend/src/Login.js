@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-//import { useAuthContext } from './context/auth_context';
+import { useAuthContext } from './context/auth_context';
 import { NavLink, useNavigate } from 'react-router-dom';
 
 
@@ -11,12 +11,12 @@ const Login = () => {
   const [message, setMessage] = useState('');
   const nav = useNavigate();
 
-  const isAuthenticated = false;
-  const role = null;
-  const error = null;
+  const { login, isAuthenticated, error, role } = useAuthContext();
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    login(username, password)
     //login(username, password)
     // .then(() => {
     //   console.log('Logged in successfully');

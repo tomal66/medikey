@@ -4,7 +4,7 @@ import authReducer from "../reducer/authReducer";
 
 const AuthContext = createContext();
 
-const API = "http://localhost:8080/api/auth/";
+const API = "http://localhost:8567/api/auth/";
 
 const inialState = {
   isAuthenticated: false,
@@ -31,25 +31,12 @@ const AuthProvider = ({ children }) => {
     localStorage.setItem("authState", JSON.stringify(state));
   }, [state]);
 
-  const register = async (username, firstname, lastname, password, mobile, email, role, address, zipcode, city, state, country, latitude, longitude) => {
+  const register = async (username, password, role) => {
     try {
       const response = await axios.post(API + "register", {
         username,
-        firstname,
-        lastname,
         password,
-        mobile,
-        email,
         role,
-        address: {
-          address: address,
-          country: country,
-          zipcode: zipcode,
-          city: city,
-          longitude: longitude,
-          latitude: latitude,
-          state: state
-        }
       });
   
       if (response.data) {

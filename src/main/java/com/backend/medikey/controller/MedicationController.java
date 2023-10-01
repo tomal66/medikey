@@ -47,7 +47,7 @@ public class MedicationController {
         // Note: You should fetch the related entities (Patient, Doctor, Visit) here
         medication.setMedicationId(dto.getMedicationId());
         medication.setPatient(new Patient(dto.getPatientId()));
-        medication.setPrescribedBy(new Doctor(dto.getPrescribedById()));
+        //medication.setPrescribedBy(new Doctor(dto.getPrescribedById()));
         medication.setVisit(new Visit(dto.getVisitId()));
         medication.setDatePrescribed(dto.getDatePrescribed());
         medication.setMedicationName(dto.getMedicationName());

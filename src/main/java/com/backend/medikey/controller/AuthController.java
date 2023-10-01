@@ -17,7 +17,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("api/auth")
+@RequestMapping("/api/auth")
 @CrossOrigin(origins = "http://localhost:3000")
 public class AuthController {
     private final AuthenticationManager authenticationManager;
@@ -33,6 +33,7 @@ public class AuthController {
         this.jwtGenerator = jwtGenerator;
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("register")
     public ResponseEntity<String> register(@RequestBody RegisterDto registerDto)
     {
@@ -50,6 +51,7 @@ public class AuthController {
         return new ResponseEntity<>("User registration success!", HttpStatus.OK);
     }
 
+    @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("login")
     public ResponseEntity<AuthResponseDto> login(@RequestBody LoginDto loginDto){
         Authentication authentication = authenticationManager.authenticate(

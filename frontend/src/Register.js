@@ -1,20 +1,22 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-//import { useAuthContext } from './context/auth_context';
+import { useAuthContext } from './context/auth_context';
 import { NavLink, useNavigate } from 'react-router-dom';
 
 
 const Register = () => {
-  //const { login, isAuthenticated, error, role } = useAuthContext();
+  const { register, isAuthenticated, error } = useAuthContext();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [role, setRole] = useState('ROLE_USER');
   const [message, setMessage] = useState('');
   const nav = useNavigate();
-
-  const isAuthenticated = false;
-  const role = null;
-  const error = null;
+  useEffect(() => {
+    if (isAuthenticated) { 
+      nav("/");
+    }
+  }, [isAuthenticated, nav]);
 
   const doPasswordsMatch = () => {
     return password === confirmPassword;
@@ -23,15 +25,8 @@ const Register = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     if (username && password && password.length >= 8 && doPasswordsMatch()) {
-        // login(username, password)
-        // .then(() => {
-        //   console.log('Logged in successfully');
-        //   setMessage("");
-        // })
-        // .catch((error) => {
-        //   setMessage('Invalid credentials. Please try again.');
-        //   console.log('Error:', error);
-        // });
+      register(username, password, role)
+
       
     } else {
       // Error alert message if any of the required fields are missing or invalid

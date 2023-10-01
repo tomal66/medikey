@@ -62,18 +62,6 @@ public class HospitalController {
         hospital.setPhoneNumber(dto.getPhoneNumber());
         hospital.setEmail(dto.getEmail());
 
-        if (dto.getDoctorIds() != null) {
-            List<Doctor> doctors = dto.getDoctorIds().stream()
-                    .map(Doctor::new)  // This only sets the ID, not the other fields
-                    .collect(Collectors.toList());
-            hospital.setDoctors(doctors);
-        }
-        if (dto.getVisitIds() != null) {
-            List<Visit> visits = dto.getVisitIds().stream()
-                    .map(Visit::new)  // This only sets the ID, not the other fields
-                    .collect(Collectors.toList());
-            hospital.setVisits(visits);
-        }
         // Add other fields as needed
         return hospital;
     }

@@ -4,6 +4,7 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { ChatbotProvider } from './context/ChatBotContext';
+import { AuthProvider } from './context/auth_context';
 
 // const root = ReactDOM.createRoot(document.getElementById('root'));
 // root.render(
@@ -17,7 +18,9 @@ import { ChatbotProvider } from './context/ChatBotContext';
 ReactDOM.render(
   <React.StrictMode>
     <ChatbotProvider>
+      <AuthProvider>      
       <App />
+      </AuthProvider>
     </ChatbotProvider>
   </React.StrictMode>,
   document.getElementById('root')
