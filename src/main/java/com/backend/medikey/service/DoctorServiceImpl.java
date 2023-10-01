@@ -3,6 +3,7 @@ package com.backend.medikey.service;
 import com.backend.medikey.dto.DoctorDto;
 import com.backend.medikey.model.Doctor;
 import com.backend.medikey.repository.DoctorRepository;
+import com.backend.medikey.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +16,8 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Autowired
     private DoctorRepository doctorRepository;
+    @Autowired
+    private UserRepository userRepository;
 
     @Override
     public List<DoctorDto> getAllDoctors() {
@@ -43,7 +46,7 @@ public class DoctorServiceImpl implements DoctorService {
         existingDoctor.setEmail(doctorDto.getEmail());
         existingDoctor.setPhone(doctorDto.getPhone());
         existingDoctor.setDepartment(doctorDto.getDepartment());
-        existingDoctor.setUserId(doctorDto.getUserId());
+        existingDoctor.setUser(userRepository.findByUserId(doctorDto.getUserId()));
         existingDoctor.setHospitalId(doctorDto.getHospitalId());
         Doctor updatedDoctor = doctorRepository.save(existingDoctor);
         return convertToDto(updatedDoctor);
@@ -84,7 +87,7 @@ public class DoctorServiceImpl implements DoctorService {
         doctor.setEmail(doctorDto.getEmail());
         doctor.setPhone(doctorDto.getPhone());
         doctor.setDepartment(doctorDto.getDepartment());
-        doctor.setUserId(doctorDto.getUserId());
+        doctor.setUser(userRepository.findByUserId(doctorDto.getUserId()));
         doctor.setHospitalId(doctorDto.getHospitalId());
 
 

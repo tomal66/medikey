@@ -2,6 +2,8 @@ package com.backend.medikey.controller;
 
 import com.backend.medikey.dto.TimeSlotDto;
 import com.backend.medikey.model.TimeSlot;
+import com.backend.medikey.repository.DoctorRepository;
+import com.backend.medikey.repository.HospitalRepository;
 import com.backend.medikey.service.TimeSlotService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -19,6 +21,10 @@ public class TimeSlotController {
     @Autowired
     private TimeSlotService timeSlotService;
 
+    @Autowired
+    private DoctorRepository doctorRepository;
+    @Autowired
+    private HospitalRepository hospitalRepository;
     // Convert entity to DTO
     private TimeSlotDto convertToDto(TimeSlot timeSlot) {
         TimeSlotDto dto = new TimeSlotDto();
@@ -37,8 +43,8 @@ public class TimeSlotController {
         TimeSlot timeSlot = new TimeSlot();
         timeSlot.setTimeSlotId(dto.getTimeSlotId());
         // Assuming you have methods to find Doctor and Hospital by their IDs
-        timeSlot.setDoctor(timeSlotService.findByDoctorId(dto.getDoctorId()));
-        timeSlot.setHospital(timeSlotService.findByHospitalId(dto.getHospitalId()));
+        timeSlot.setDoctor(doctorRepository.findByDoctorId(dto.getDoctorId()));
+        timeSlot.setHospital(hospitalRepository.findByHospitalId(dto.getHospitalId()));
         timeSlot.setDay(dto.getDay());
         timeSlot.setStartTime(dto.getStartTime());
         timeSlot.setEndTime(dto.getEndTime());
