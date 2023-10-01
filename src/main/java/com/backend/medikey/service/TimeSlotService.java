@@ -1,5 +1,7 @@
 package com.backend.medikey.service;
 
+import com.backend.medikey.model.Doctor;
+import com.backend.medikey.model.Hospital;
 import com.backend.medikey.model.TimeSlot;
 
 import java.time.DayOfWeek;
@@ -18,8 +20,8 @@ public interface TimeSlotService {
     List<TimeSlot> getTimeSlotByUserId(Long userId);
 
     // Custom query methods
-    //List<TimeSlot> findByDoctorId(Long doctorId);
-    List<TimeSlot> findByHospitalId(Long hospitalId);
+    Doctor findByDoctorId(Long doctorId);
+    Hospital findByHospitalId(Long hospitalId);
     List<TimeSlot> findByDay(DayOfWeek day);
     List<TimeSlot> findByStartTime(LocalTime startTime);
     List<TimeSlot> findByEndTime(LocalTime endTime);

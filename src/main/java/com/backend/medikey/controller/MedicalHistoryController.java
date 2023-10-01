@@ -118,7 +118,7 @@ public class MedicalHistoryController {
 
     @GetMapping("/{id}")
     public ResponseEntity<MedicalHistoryDto> getMedicalHistoryById(@PathVariable Long id) {
-        Optional<MedicalHistory> medicalHistory = medicalHistoryService.getMedicalHistoryById(id);
+        List<MedicalHistory>  medicalHistory = medicalHistoryService.getMedicalHistoryById(id);
         return medicalHistory.map(value -> new ResponseEntity<>(convertToDto(value), HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }

@@ -59,7 +59,7 @@ public class VisitController {
         visit.setVisitId(dto.getVisitId());
         visit.setDoctor(doctorService.getDoctorById(dto.getDoctorId()));
         visit.setPatient(patientService.getPatientById(dto.getPatientId()));
-        visit.setMedicalHistory(medicalHistoryService.getMedicalHistoriesByUserId(dto.getuserId())); // Assuming you have a findMedicalHistoryById method
+        visit.setMedicalHistory(medicalHistoryService.getMedicalHistoriesByUserId(dto.getpatientId())); // Assuming you have a findMedicalHistoryById method
         visit.setHospital(hospitalService.findByHospitalId(dto.getHospitalId()));
         visit.setVisitDate(dto.getVisitDate());
         visit.setArrivalTime(dto.getArrivalTime());

@@ -89,7 +89,7 @@ public class HospitalController {
     // Get a specific hospital by ID
     @GetMapping("/{id}")
     public ResponseEntity<HospitalDto> getHospitalById(@PathVariable Long id) {
-        Optional<Hospital> hospital = hospitalService.findById(id);
+        Hospital hospital = hospitalService.findByHospitalId(hospitalId);
         return hospital.map(value -> new ResponseEntity<>(convertToDto(value), HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
