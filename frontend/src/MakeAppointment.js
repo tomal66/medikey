@@ -1,8 +1,32 @@
-import React, {useState} from 'react';
+import React, {useState, forwardRef} from 'react';
 import styled from 'styled-components';
 import { Modal, TextField } from '@mui/material';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { useLocation } from 'react-router-dom';
+import { useEffect } from 'react';
+
+const CustomInput = forwardRef(({ value, onClick }, ref) => (
+    <StyledDatePickerInput onClick={onClick} ref={ref}>
+      {value || "Select date"}
+    </StyledDatePickerInput>
+  ));
+  
+  const StyledDatePickerInput = styled.div`
+    display: block;
+    width: 100%;
+    padding: 1rem;
+    font-size: 16px;
+    border: 1px solid ${({ theme }) => theme.colors.border};
+    border-radius: 3px;
+    margin-bottom: 1rem;
+    outline: none;
+    text-transform: none;
+    cursor: pointer;
+    &:focus {
+      border: 1px solid ${({ theme }) => theme.colors.border};
+    }
+  `;
 
 const MakeAppointment = () => {
   // Sample data, replace with actual data from your API
@@ -51,14 +75,40 @@ const MakeAppointment = () => {
     },
   ]);  
 
+  const location = useLocation();
+  const params = new URLSearchParams(location.search);
+  const department = params.get('department');
+  useEffect(() => {
+    if (department) {
+      setSearch(department);
+    }
+  }, [department]);
+  
+
   const [search, setSearch] = useState(""); // Add this line
   const [isModalOpen, setModalOpen] = useState(false);
-  const [selectedDoctorId, setSelectedDoctorId] = useState(null);
+  const [selectedDoctor, setSelectedDoctor] = useState(doctors[0]);
   const [selectedDate, setSelectedDate] = useState(null);
   const [reason, setReason] = useState('');
-  const handleOpenModal = (doctorId) => {
-    setSelectedDoctorId(doctorId);
+  const [availabilityMessage, setAvailabilityMessage] = useState('');
+
+  const handleDateChange = (date) => {
+    setSelectedDate(date);
+    // Check availability for the selected date
+    // For demonstration, let's assume the doctor is not available on weekends
+    const dayOfWeek = date.getDay();
+    if (dayOfWeek === 0 || dayOfWeek === 6) {
+      setAvailabilityMessage('Doctor is not available on this date');
+    } else {
+      setAvailabilityMessage('');
+    }
+  };
+
+  
+  const handleOpenModal = (doctor) => {
+    setSelectedDoctor(doctor);
     setModalOpen(true);
+    setAvailabilityMessage("")
   };
 
   const handleCloseModal = () => {
@@ -94,15 +144,33 @@ const MakeAppointment = () => {
                 </div>
                 <p className="body">{doctor.department}</p>
                 <p className="body">Hospital ID: {doctor.hospitalId}</p>
-                <Button onClick={() => handleOpenModal(doctor.doctorId)}>Make appointment</Button>
+                <Button onClick={() => handleOpenModal(doctor)}>Check</Button>
             </DoctorCard>
             ))}
             </div>
         </DoctorList>
             <Modal open={isModalOpen} onClose={handleCloseModal}>
             <ModalContainer>
-            <h3>Make an appointment with Doctor ID: {selectedDoctorId}</h3>
-            
+            <h3>{`${selectedDoctor.firstName} ${selectedDoctor.lastName}`}</h3>
+            {availabilityMessage && (
+            <Alert>
+                {availabilityMessage}
+            </Alert>
+            )}
+            <DatePicker
+            selected={selectedDate}
+            onChange={handleDateChange}
+            customInput={<CustomInput />}
+            />
+            <Input
+                  type="reason"
+                  id="reason"
+                  name="reason"
+                  placeholder="Reason for visit"
+                  value={reason}
+                  onChange={(e) => setReason(e.target.value)}
+                  required
+                />
             <Button onClick={handleCloseModal}>Make Appointment</Button>
             </ModalContainer>
         </Modal>
@@ -124,6 +192,18 @@ const Wrapper = styled.div`
     justify-content: center;
     flex-wrap: wrap;
   }
+`;
+
+const Alert = styled.div`
+  width: 100%;
+  padding: 1rem;
+  background-color: #f8d7da;
+  color: #721c24;
+  text-align: center;
+  border: 1px solid #f5c6cb;
+  border-radius: 3px;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
 `;
 
 const Input = styled.input`

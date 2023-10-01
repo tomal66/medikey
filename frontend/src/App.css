@@ -22,6 +22,7 @@
   display: none !important;
 }
 .react-chatbot-kit-chat-bot-avatar-container {
+  display: none !important;
   background-color: #3D96FF !important;
 }
 

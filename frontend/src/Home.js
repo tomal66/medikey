@@ -2,6 +2,7 @@ import React, { useEffect, useContext, useState } from 'react';
 import { ChatbotContext } from './context/ChatBotContext'; // Import the ChatbotContext
 import HeroSection from './component/HeroSection';
 import { useNavigate } from 'react-router-dom';
+import styled from 'styled-components';
 
 const Home = () => {
   const nav = useNavigate();
@@ -36,10 +37,15 @@ const Home = () => {
   };
 
   return (
-    <>
+    <Wrapper>
       <HeroSection myData={data} />     
-    </>
+    </Wrapper>
   );
 };
+const Wrapper = styled.div`
+  min-height: 70vh;
+  background-color: "#FFFFFF";
+`;
+
 
 export default Home;

@@ -5,7 +5,7 @@ export const ChatbotContext = createContext();
 
 export const ChatbotProvider = ({ children }) => {
   const [response, setResponse] = useState([]);
-
+  const [department, setDepartment] = useState(null);
 
   const sendMessage = async (message) => {
     const responseFromServer = await fetch('http://localhost:8567/api/chatbot/sendMessage', {
@@ -38,8 +38,9 @@ export const ChatbotProvider = ({ children }) => {
   // };
 
   return (
-    <ChatbotContext.Provider value={{ response, sendMessage }}>
+    <ChatbotContext.Provider value={{ response, sendMessage, department, setDepartment }}>
       {children}
     </ChatbotContext.Provider>
+
   );
 };

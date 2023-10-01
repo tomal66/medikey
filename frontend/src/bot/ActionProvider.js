@@ -4,7 +4,7 @@ import { ChatbotContext } from '../context/ChatBotContext';
 
 const ActionProvider = ({ createChatBotMessage, setState, children }) => {
 
-  const { sendMessage, response } = useContext(ChatbotContext);
+  const { sendMessage, response, department, setDepartment } = useContext(ChatbotContext);
 
   const handleHello = () => {
     const botMessage = createChatBotMessage('Hello. Nice to meet you.');
@@ -23,6 +23,21 @@ const ActionProvider = ({ createChatBotMessage, setState, children }) => {
         ...prev,
         messages: [...prev.messages, ...messages], // spread messages here
       }));
+      // Check if the response contains department information
+      const departmentMessage = response.find(msg => msg.includes('you need to see someone from'));
+      if (departmentMessage) {
+        let department = departmentMessage.split('you need to see someone from ')[1];
+        department = department.split('.').join("").toLowerCase();
+        setDepartment(department); // set the department in the state
+        const buttonMessage = createChatBotMessage("Would you like to make an appointment?", {
+          widget: "MakeAppointmentButton",
+        });
+        setState((prev) => ({
+          ...prev,
+          messages: [...prev.messages, buttonMessage],
+        }));
+      }
+
     }
   };
 

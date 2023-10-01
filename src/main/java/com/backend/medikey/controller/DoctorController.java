@@ -94,8 +94,8 @@ public class DoctorController {
         doctor.setPhone(doctorDto.getPhone());
         doctor.setDepartment(doctorDto.getDepartment());
         doctor.setDoctorId(doctorDto.getDoctorId());
-        doctor.setHospitalId(doctorDto.getHospitalId());
-        doctor.setDoctorVisitIds(doctorDto.getDoctorVisitIds());
+//        doctor.setHospitalId(doctorDto.getHospitalId());
+//        doctor.setDoctorVisitIds(doctorDto.getDoctorVisitIds());
         // Fetch and set the User and Hospital entities here
         return doctor;
     }
