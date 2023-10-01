@@ -26,6 +26,8 @@ public class Hospital {
     private String postalCode;
     private String phoneNumber;
     private String email;
+    @OneToOne
+    private User user;
 
     // Other attributes related to the hospital can be added here
     @OneToMany

@@ -75,7 +75,7 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public Optional<PatientDto> getPatientByUserId(Long userId) {
-        return patientRepository.findByUserId(userId).map(this::convertToDto);
+        return patientRepository.findByUser_UserId(userId).map(this::convertToDto);
     }
 
     @Override

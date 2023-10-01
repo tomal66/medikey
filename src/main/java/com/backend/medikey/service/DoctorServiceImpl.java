@@ -59,7 +59,7 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     public Optional<DoctorDto> getDoctorByUserId(Long userId) {
-        return doctorRepository.findByUserId(userId).map(this::convertToDto);
+        return doctorRepository.findByUser_UserId(userId).map(this::convertToDto);
     }
 
     @Override

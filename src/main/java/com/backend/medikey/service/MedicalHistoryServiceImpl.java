@@ -2,7 +2,6 @@ package com.backend.medikey.service;
 
 import com.backend.medikey.model.MedicalHistory;
 import com.backend.medikey.model.Patient;
-import com.backend.medikey.model.User;
 import com.backend.medikey.repository.MedicalHistoryRepository;
 import com.backend.medikey.repository.PatientRepository;
 import com.backend.medikey.repository.UserRepository;
@@ -12,7 +11,6 @@ import org.springframework.stereotype.Service;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -33,7 +31,7 @@ public class MedicalHistoryServiceImpl implements MedicalHistoryService {
 
     @Override
     public List<MedicalHistory> getMedicalHistoryByPatientId(Long patientId) {
-        return medicalHistoryRepository.findAllByPatientId(patientId);  // Replace with your actual repository method
+        return medicalHistoryRepository.findAllByPatient_PatientId(patientId);  // Replace with your actual repository method
     }
 
     @Override
@@ -55,9 +53,11 @@ public class MedicalHistoryServiceImpl implements MedicalHistoryService {
         return medicalHistoryRepository.findByDateRecorded(dateRecorded);
     }
 
+
+
     @Override
-    public List<MedicalHistory> getMedicalHistoriesByRecordedBy(String recordedBy) {
-        return medicalHistoryRepository.findByRecordedBy(recordedBy);
+    public List<MedicalHistory> getMedicalHistoriesByRecordedBy(Long recordedById) {
+        return medicalHistoryRepository.findByRecordedBy_MpId(recordedById);
     }
 
     @Override

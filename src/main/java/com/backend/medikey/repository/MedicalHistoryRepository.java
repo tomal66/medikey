@@ -29,7 +29,7 @@ public interface MedicalHistoryRepository extends JpaRepository<MedicalHistory, 
 
     List<MedicalHistory> findByDateRecorded(Date dateRecorded);
 
-    List<MedicalHistory> findByRecordedBy(String recordedBy);
+    List<MedicalHistory> findByRecordedBy_MpId(Long mpId);
 
     List<MedicalHistory> findByImmunizationsContainingIgnoreCase(String immunizations);
 
@@ -44,5 +44,5 @@ public interface MedicalHistoryRepository extends JpaRepository<MedicalHistory, 
     @Query("SELECT mh FROM MedicalHistory mh WHERE mh.notes LIKE %?1%")
     List<MedicalHistory> findByNotesContaining(String notesDetail);
 
-    List<MedicalHistory> findAllByPatientId(Long patientId);
+    List<MedicalHistory> findAllByPatient_PatientId(Long patientId);
 }

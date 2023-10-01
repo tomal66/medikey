@@ -26,6 +26,6 @@ public interface MedicalProfessionalRepository extends JpaRepository<MedicalProf
     List<MedicalProfessional> findByLastName(String lastName);
 
     // Find by hospital
-    List<MedicalProfessional> findByHospital_Id(Long hospitalId);
+
 
 }

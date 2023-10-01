@@ -21,7 +21,7 @@ public interface MedicalHistoryService {
 
     List<MedicalHistory> getMedicalHistoriesByDateRecorded(Date dateRecorded);
 
-    List<MedicalHistory> getMedicalHistoriesByRecordedBy(String recordedBy);
+    List<MedicalHistory> getMedicalHistoriesByRecordedBy(Long recordedById);
 
     MedicalHistory addMedicalHistory(MedicalHistory medicalHistory);
 

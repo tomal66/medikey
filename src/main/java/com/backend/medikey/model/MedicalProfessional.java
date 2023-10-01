@@ -29,7 +29,7 @@ public class MedicalProfessional {
     @OneToOne
     private Hospital hospital;
 
-    @OneToMany(mappedBy = "medicalProfessional")
+    @OneToMany(mappedBy = "recordedBy")
     private List<MedicalHistory> takenHistories;
 
     public Object getMedicalProfessionalId() {
