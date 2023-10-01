@@ -20,8 +20,8 @@ public interface TimeSlotService {
     List<TimeSlot> getTimeSlotByUserId(Long userId);
 
     // Custom query methods
-    Doctor findByDoctorId(Long doctorId);
-    Hospital findByHospitalId(Long hospitalId);
+    //Doctor findByDoctorId(Long doctorId);
+    //Hospital findByHospitalId(Long hospitalId);
     List<TimeSlot> findByDay(DayOfWeek day);
     List<TimeSlot> findByStartTime(LocalTime startTime);
     List<TimeSlot> findByEndTime(LocalTime endTime);

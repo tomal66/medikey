@@ -10,6 +10,8 @@ import java.util.Optional;
 public interface MedicalHistoryService {
 
     List<MedicalHistory> getAllMedicalHistories();
+    List<MedicalHistory> getMedicalHistoryByPatientId(Long patientId);
+
 
     //List<MedicalHistory> getMedicalHistoryById(Patient patient);
     List<MedicalHistory> getMedicalHistoriesByPatient(Patient patient);

@@ -14,6 +14,8 @@ public interface MedicalProfessionalRepository extends JpaRepository<MedicalProf
     // Find by email
     Optional<MedicalProfessional> findByEmail(String email);
 
+    MedicalProfessional findByMpId(Long mpId);
+
     // Find by phone number
     Optional<MedicalProfessional> findByPhone(String phone);
 

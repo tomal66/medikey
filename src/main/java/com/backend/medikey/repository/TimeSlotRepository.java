@@ -1,5 +1,6 @@
 package com.backend.medikey.repository;
 
+import com.backend.medikey.model.Doctor;
 import com.backend.medikey.model.Medication;
 import com.backend.medikey.model.TimeSlot;
 import com.backend.medikey.model.User;
@@ -29,4 +30,6 @@ public interface TimeSlotRepository extends JpaRepository<TimeSlot, Long> {
 
     // Find all time slots that end at a specific time
     List<TimeSlot> findByEndTime(LocalTime endTime);
+
+    //Doctor findByDoctor_DoctorId(Long doctorId);
 }

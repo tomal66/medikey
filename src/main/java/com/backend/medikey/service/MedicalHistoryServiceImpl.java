@@ -32,6 +32,11 @@ public class MedicalHistoryServiceImpl implements MedicalHistoryService {
     }
 
     @Override
+    public List<MedicalHistory> getMedicalHistoryByPatientId(Long patientId) {
+        return medicalHistoryRepository.findAllByPatientId(patientId);  // Replace with your actual repository method
+    }
+
+    @Override
     public List<MedicalHistory> getMedicalHistoriesByPatient(Patient patient) {
         return medicalHistoryRepository.findByPatient(patient);
     }

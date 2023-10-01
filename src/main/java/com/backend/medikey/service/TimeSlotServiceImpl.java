@@ -1,5 +1,6 @@
 package com.backend.medikey.service;
 
+import com.backend.medikey.model.Doctor;
 import com.backend.medikey.model.Medication;
 import com.backend.medikey.model.TimeSlot;
 import com.backend.medikey.model.User;
@@ -47,10 +48,16 @@ public class TimeSlotServiceImpl implements TimeSlotService {
         Optional<User> doctor = userRepository.findUserByUserId(userId);
         return timeSlotRepository.findByDoctor(doctor);
     }
-    @Override
+
+//    @Override
+//    public Doctor findByDoctorId(Long doctorId) {
+//        return timeSlotRepository.findByDoctor_DoctorId(doctorId);
+//    }
+
+   /* @Override
     public List<TimeSlot> findByHospitalId(Long hospitalId) {
         return timeSlotRepository.findByHospital_HospitalId(hospitalId);
-    }
+    }*/
 
     @Override
     public List<TimeSlot> findByDay(DayOfWeek day) {

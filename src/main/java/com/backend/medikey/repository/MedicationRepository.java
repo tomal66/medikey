@@ -3,6 +3,7 @@ package com.backend.medikey.repository;
 import com.backend.medikey.model.Medication;
 import com.backend.medikey.model.Patient;
 import com.backend.medikey.model.User;
+import com.backend.medikey.model.Visit;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -18,6 +19,8 @@ public interface MedicationRepository extends JpaRepository<Medication, Long> {
     // Find all medications by a specific user
     List<Medication> findByPatient(Patient patient);
 
+    List<Medication> findByVisit(Visit visit);
+
     // Find all medications prescribed on a specific date
     List<Medication> findByDatePrescribed(Date datePrescribed);
 
@@ -31,4 +34,6 @@ public interface MedicationRepository extends JpaRepository<Medication, Long> {
 
     @Query("SELECT m FROM Medication m JOIN m.patient p JOIN p.user u WHERE u.username = :username")
     List<Medication> findMedicationsByUsername(@Param("username") String username);
+
+
 }
