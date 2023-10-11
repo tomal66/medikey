@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useAuthContext } from './context/auth_context';
 import { NavLink, useNavigate } from 'react-router-dom';
-
+import { TextField } from '@mui/material';
 
 const Login = () => {
   //const { login, isAuthenticated, error, role } = useAuthContext();
@@ -55,6 +55,7 @@ const Login = () => {
 
   return (
     <Wrapper>
+      <TextField id="outlined-basic" label="Outlined" variant="outlined" sx={{fontSize: '5rem'}}/>
       <Container>
         <Title>Sign In</Title>
         {
@@ -74,6 +75,7 @@ const Login = () => {
             onChange={(e) => setUsername(e.target.value)}
             required
           />
+          
           <Input
             type="password"
             id="password"

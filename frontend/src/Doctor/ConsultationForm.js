@@ -13,6 +13,7 @@ import {BsCapsule} from 'react-icons/bs';
 import {FaHistory} from 'react-icons/fa';
 import {BiTestTube} from 'react-icons/bi'
 import HistoryTable from './HistoryTable';
+import TextField from '@mui/material/TextField';
 
 const New = styled.div`
   width: 100%;
@@ -312,12 +313,14 @@ const ConsultationForm = ({ inputs, title }) => {
               
                 <div className="formInput">
                   <label>Diagnosis</label>
+                  
                   <input type='text' placeholder='Diagnosis' value={diagnosis} onChange={(e) => setDiagnosis(e.target.value)}/>
                 </div>
 
                 <div className="formInput">
                   <label></label>
                   <FormControl sx={{ m: 1, width: 300 }}>
+                  
                     <InputLabel>Tests</InputLabel>
                     <Select
                       labelId="demo-multiple-checkbox-label"

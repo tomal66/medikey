@@ -29,6 +29,7 @@ import AllMPs from './Hospital/AllMPs';
 import DoctorDashboard from './Doctor/DoctorDashboard';
 import Consultation from './Doctor/Consultation';
 import MakeAppointment from './MakeAppointment';
+import MuiNavBar from './component/MuiNavBar';
 
 
 function App() {
@@ -84,10 +85,13 @@ function App() {
   }, []);
 
   return ( 
+    <>
+      
     <ThemeProvider theme={theme}>
       <Router>
         <GlobalStyle/>
-        <Header  toggleChatbot={toggleChatbot}/>
+        <MuiNavBar toggleChatbot={toggleChatbot}/>
+        {/* <Header  toggleChatbot={toggleChatbot}/> */}
         <Routes>
         <Route path="/" element={<Layout />}>
  
@@ -156,6 +160,7 @@ function App() {
         <Footer/>
       </Router>
     </ThemeProvider>
+    </>
    );
 }
 
