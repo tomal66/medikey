@@ -19,7 +19,7 @@ const config = {
     chatButton: {
       backgroundColor: '#3D96FF',
     },
-  },
+  },///
   customComponents: {
     header: () => <div className="react-chatbot-kit-chat-header">MediKey Appointment Assistant</div>,
     botAvatar: (props) => <img alt="chatbot" className="react-chatbot-kit-chat-bot-avatar-container"
