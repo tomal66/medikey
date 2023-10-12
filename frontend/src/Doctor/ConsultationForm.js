@@ -55,7 +55,7 @@ const Card = styled.div`
   padding: 16px;
   text-align: left;
   background-color: ${({ theme }) => theme.colors.bg};
-  border-radius: 1.5rem;
+  border-radius: 15px;
   margin: 16px;
 
   .patient-card-header {
@@ -67,8 +67,8 @@ const Card = styled.div`
 
   .icon {
     cursor: pointer;
-    font-size: 2.5rem;
-    margin-right: 1rem;
+    font-size: 25px;
+    margin-right: 10px;
     transition: color 0.2s ease-in-out;
   }
   .my-icon {
@@ -123,7 +123,7 @@ const Right = styled.div`
         display: flex;
         align-items: center;
         gap: 10px;
-        padding: .5rem;
+        padding: 5px;
         font-size: small;
 
         .icon {
@@ -134,11 +134,11 @@ const Right = styled.div`
       input {
         display: block;
         width: 100%;
-        padding: 1rem;
+        padding: 10px;
         font-size: 16px;
         border: 0px solid ${({ theme }) => theme.colors.border};
         border-radius: 3px;
-        margin-bottom: 1rem;
+        margin-bottom: 10px;
         outline: none;
         text-transform: none;
         &:focus {
@@ -348,7 +348,7 @@ const ConsultationForm = ({ inputs, title }) => {
                     onDelete={removeMedication} />
                 ))}
 
-              <div style={{ width: '100%', textAlign: 'center', paddingLeft: '3rem' }}>
+              <div style={{ width: '100%', textAlign: 'center', paddingLeft: '30px' }}>
                 <Button onClick={handleModal}>+ Medication</Button>
                 <Button type='submit'>Save</Button>
               </div>
@@ -431,7 +431,7 @@ const ModalContainer = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: white;
-  padding: 2rem;
+  padding: 20px;
   outline: none;
   border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -441,13 +441,13 @@ const ModalContainer = styled.div`
   overflow-y: auto; // enables scrolling on the y-axis
 
   h3 {
-    font-size: 1.8rem;
-    margin-bottom: 1.5rem;
+    font-size: 18px;
+    margin-bottom: 15px;
   }
 
   p {
-    font-size: 1.6rem;
-    margin-bottom: 1rem;
+    font-size: 16px;
+    margin-bottom: 10px;
     text-align: left; /* Added to align the order info to the left */
   }
   p strong {
@@ -463,7 +463,7 @@ const TableModalContainer = styled.div`
   
 
   background-color: white;
-  padding: 2rem;
+  padding: 20px;
   outline: none;
   border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -475,13 +475,13 @@ const TableModalContainer = styled.div`
   overflow-x: auto;
 
   h3 {
-    font-size: 1.8rem;
-    margin-bottom: 1.5rem;
+    font-size: 18px;
+    margin-bottom: 15px;
   }
 
   p {
-    font-size: 1.6rem;
-    margin-bottom: 1rem;
+    font-size: 16px;
+    margin-bottom: 10px;
     text-align: left; /* Added to align the order info to the left */
   }
   p strong {
@@ -492,11 +492,11 @@ const TableModalContainer = styled.div`
 const Input = styled.input`
   display: block;
   width: 100%;
-  padding: 1rem;
+  padding: 10px;
   font-size: 16px;
   border: 0px solid ${({ theme }) => theme.colors.border};
   border-radius: 3px;
-  margin-bottom: 1rem;
+  margin-bottom: 10px;
   outline: none;
   text-transform: none;
   &:focus {
@@ -507,7 +507,7 @@ const Input = styled.input`
 const Button = styled.button`
   display: block;
   width: 100%;
-  padding: 0.75rem;
+  padding: 7.5px;
   font-size: 18px;
   color: ${({ theme }) => theme.colors.white};
   background-color: ${({ theme }) => theme.colors.btn};
@@ -521,7 +521,7 @@ const Button = styled.button`
 
   &:hover,
   &:active {
-    box-shadow: 0 2rem 2rem 0 rgb(132 144 255 / 30%);
+    box-shadow: 0 20px 20px 0 rgb(132 144 255 / 30%);
     box-shadow: ${({ theme }) => theme.colors.shadowSupport};
     transform: scale(0.96);
   }

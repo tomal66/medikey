@@ -26,8 +26,8 @@ const Header = ({toggleChatbot}) => {
 }
 
 const MainHeader = styled.header`
-  padding: 0 4.8rem;
-  height: 10rem;
+  padding: 0 48px;
+  height: 100px;
   background-color: #ffffff;
   display: flex;
   justify-content: space-between;
@@ -36,9 +36,9 @@ const MainHeader = styled.header`
   z-index: 1301;  // Add this line to set z-index above the drawer's z-index (which is typically 1300)
 
   .logo {
-    height: 5rem;
-    width: 5rem;
-    margin-left: 10rem;
+    height: 50px;
+    width: 50px;
+    margin-left: 100px;
   }
 `;
 

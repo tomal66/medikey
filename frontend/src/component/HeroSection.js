@@ -35,15 +35,15 @@ const HeroSection = ({ myData }) => {
 }
 
 const Wrapper = styled.section`
-  padding: 12rem 0;
+  padding: 120px 0;
   img {
-    min-width: 10rem;
-    height: 10rem;
+    min-width: 100px;
+    height: 100px;
   }
 
   .hero-section-data {
     p {
-      margin: 2rem 0;
+      margin: 20px 0;
     }
 
     h1 {
@@ -76,7 +76,7 @@ const Wrapper = styled.section`
       background-color: #91c4ff;
       position: absolute;
       left: 25%;
-      top: -3rem;
+      top: -30px;
       z-index: -1;
       border-radius: 20px;
     }
@@ -89,7 +89,7 @@ const Wrapper = styled.section`
 
   @media (max-width: ${({ theme }) => theme.media.mobile}) {
     .grid {
-      gap: 10rem;
+      gap: 100px;
     }
 
     figure::after {

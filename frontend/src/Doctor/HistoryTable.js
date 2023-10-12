@@ -90,12 +90,12 @@ const HistoryTable = () => {
 };
 
 const Wrapper = styled.section`
-  padding: 12rem 0;
+  padding: 120px 0;
 
   .icon {
     cursor: pointer;
-    font-size: 2.2rem;
-    margin-right: 1rem;
+    font-size: 22px;
+    margin-right: 10px;
     transition: color 0.2s ease-in-out;
   }
 
@@ -114,7 +114,7 @@ const ModalContainer = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: white;
-  padding: 2rem;
+  padding: 20px;
   outline: none;
   border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);

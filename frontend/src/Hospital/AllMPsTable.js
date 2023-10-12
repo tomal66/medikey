@@ -137,7 +137,7 @@ const AllMPsTable = () => {
             <DataGrid
                 sx={{
                     
-                    fontSize: '1.4rem',
+                    fontSize: '14px',
                     
                     boxShadow: 2,
                     border: 0,
@@ -169,9 +169,9 @@ const AllMPsTable = () => {
 
 
 const SearchInput = styled.input`
-  margin-bottom: 1rem;
-  padding: 0.5rem;
-  font-size: 1.6rem;
+  margin-bottom: 10px;
+  padding: 5px;
+  font-size: 16px;
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: 3px;
   outline: none;
@@ -180,7 +180,7 @@ const SearchInput = styled.input`
 
 
 const Wrapper = styled.section`
-  padding: 12rem 0;
+  padding: 120px 0;
 
   .image-wrapper {
   width: 70px;
@@ -199,8 +199,8 @@ const Wrapper = styled.section`
 
 .icon {
   cursor: pointer;
-  font-size: 2.2rem;
-  margin-right: 1rem;
+  font-size: 22px;
+  margin-right: 10px;
   transition: color 0.2s ease-in-out;
 }
 

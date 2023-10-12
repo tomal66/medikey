@@ -26,7 +26,7 @@ const Wrapper = styled.div`
   background-color: #fafafa;
   border-radius: 10px;
   border: 1px solid #ccc;
-  padding: 1.5rem;
+  padding: 15px;
   
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
   
@@ -34,25 +34,25 @@ const Wrapper = styled.div`
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1rem;
+    margin-bottom: 10px;
   }
 
   .medication-name {
     font-weight: bold;
-    font-size: 1.5rem;
+    font-size: 15px;
     color: #333;
   }
 
   .body {
-    font-size: 1.5rem;
+    font-size: 15px;
     color: #666;
     line-height: 1.6;
   }
 
   .icon {
   cursor: pointer;
-  font-size: 2.2rem;
-  margin-right: 1rem;
+  font-size: 22px;
+  margin-right: 10px;
   transition: color 0.2s ease-in-out;
 }
 .delete-icon {

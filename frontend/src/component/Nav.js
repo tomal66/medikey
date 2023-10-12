@@ -24,7 +24,7 @@ const Nav = ({toggleChatbot}) => {
 
       const ProfileIcon = styled(FaUserAlt)`
         cursor: pointer;
-        font-size: 1.8rem;
+        font-size: 18px;
         color: ${({ theme }) => theme.colors.black};
         transition: color 0.3s linear;
 
@@ -35,10 +35,10 @@ const Nav = ({toggleChatbot}) => {
 
       const DropDownItem = styled.a`
         display: block;
-        border-radius: 1rem;
+        border-radius: 10px;
         padding: 8px 16px;
         text-decoration: none;
-        font-size: 1.4rem;
+        font-size: 14px;
         color: ${({ theme }) => theme.colors.black};
         transition: background-color 0.3s linear, color 0.3s linear;
         cursor: pointer;
@@ -60,8 +60,8 @@ const Nav = ({toggleChatbot}) => {
       min-width: 115px;
       background-color: ${({ theme }) => theme.colors.white};
       box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-      padding: 0.2rem;
-      border-radius: 1rem;
+      padding: 0.2*10px;
+      border-radius: 1*10px;
       top: 150%; // Adjusted the position
       left: 50%; // Adjusted the position
       transform: translateX(-50%); // Adjusted the position
@@ -100,7 +100,7 @@ const Nav = ({toggleChatbot}) => {
     const Nav = styled.nav`
       .navbar-lists {
         display: flex;
-        gap: 4.8rem;
+        gap: 4.8*10px;
         align-items: center;
   
         .navbar-link {
@@ -108,7 +108,7 @@ const Nav = ({toggleChatbot}) => {
           &:visited {
             display: inline-block;
             text-decoration: none;
-            font-size: 1.8rem;
+            font-size: 1.8*10px;
             font-weight: 500;
             text-transform: uppercase;
             color: ${({ theme }) => theme.colors.black};
@@ -142,12 +142,12 @@ const Nav = ({toggleChatbot}) => {
   
         .cart-trolley {
           position: relative;
-          font-size: 3.2rem;
+          font-size: 3.2*10px;
         }
   
         .cart-total--item {
-          width: 2.4rem;
-          height: 2.4rem;
+          width: 2.4*10px;
+          height: 2.4*10px;
           position: absolute;
           background-color: #000;
           color: #fff;
@@ -156,7 +156,7 @@ const Nav = ({toggleChatbot}) => {
           place-items: center;
           top: -20%;
           left: 70%;
-          font-size: 1.5rem;
+          font-size: 1.5*10px;
           background-color: ${({ theme }) => theme.colors.helper};
         }
       }
@@ -167,8 +167,8 @@ const Nav = ({toggleChatbot}) => {
   
       .user-logout,
       .user-login {
-        font-size: 1.4rem;
-        padding: 0.8rem 1.4rem;
+        font-size: 1.4*10px;
+        padding: 0.8*10px 1.4*10px;
       }
   
       @media (max-width: ${({ theme }) => theme.media.mobile}) {
@@ -178,14 +178,14 @@ const Nav = ({toggleChatbot}) => {
           border: ${({ theme }) => theme.colors.black};
   
           .mobile-nav-icon {
-            font-size: 4.2rem;
+            font-size: 4.2*10px;
             color: ${({ theme }) => theme.colors.black};
           }
         }
   
         .active .mobile-nav-icon {
           display: none;
-          font-size: 4.2rem;
+          font-size: 4.2*10px;
           position: absolute;
           top: 30%;
           right: 10%;
@@ -226,7 +226,7 @@ const Nav = ({toggleChatbot}) => {
           transition: all 3s linear;
   
           .navbar-link {
-            font-size: 4.2rem;
+            font-size: 4.2*10px;
           }
         }
         .cart-trolley--link {
@@ -234,21 +234,21 @@ const Nav = ({toggleChatbot}) => {
   
           .cart-trolley {
             position: relative;
-            font-size: 5.2rem;
+            font-size: 5.2*10px;
           }
   
           .cart-total--item {
-            width: 4.2rem;
-            height: 4.2rem;
-            font-size: 2rem;
+            width: 4.2*10px;
+            height: 4.2*10px;
+            font-size: 2*10px;
             color: #fff;
           }
         }
   
         .user-logout,
         .user-login {
-          font-size: 2.2rem;
-          padding: 0.8rem 1.4rem;
+          font-size: 2.2*10px;
+          padding: 0.8*10px 1.4*10px;
         }
       }
     `;

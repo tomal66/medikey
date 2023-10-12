@@ -15,11 +15,11 @@ const CustomInput = forwardRef(({ value, onClick }, ref) => (
   const StyledDatePickerInput = styled.div`
     display: block;
     width: 100%;
-    padding: 1rem;
+    padding: 10px;
     font-size: 16px;
     border: 1px solid ${({ theme }) => theme.colors.border};
     border-radius: 3px;
-    margin-bottom: 1rem;
+    margin-bottom: 10px;
     outline: none;
     text-transform: none;
     cursor: pointer;
@@ -196,24 +196,24 @@ const Wrapper = styled.div`
 
 const Alert = styled.div`
   width: 100%;
-  padding: 1rem;
+  padding: 10px;
   background-color: #f8d7da;
   color: #721c24;
   text-align: center;
   border: 1px solid #f5c6cb;
   border-radius: 3px;
-  margin-bottom: 1rem;
-  font-size: 1.5rem;
+  margin-bottom: 10px;
+  font-size: 15px;
 `;
 
 const Input = styled.input`
   display: block;
   width: 100%;
-  padding: 1rem;
+  padding: 10px;
   font-size: 16px;
   border: 0px solid ${({ theme }) => theme.colors.border};
   border-radius: 3px;
-  margin-bottom: 1rem;
+  margin-bottom: 10px;
   outline: none;
   text-transform: none;
   &:focus {
@@ -227,7 +227,7 @@ const ModalContainer = styled.div`
   left: 50%;
   transform: translate(-50%, -50%);
   background-color: white;
-  padding: 2rem;
+  padding: 20px;
   outline: none;
   border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
@@ -237,13 +237,13 @@ const ModalContainer = styled.div`
   overflow-y: auto; // enables scrolling on the y-axis
 
   h3 {
-    font-size: 1.8rem;
-    margin-bottom: 1.5rem;
+    font-size: 18px;
+    margin-bottom: 15px;
   }
 
   p {
-    font-size: 1.6rem;
-    margin-bottom: 1rem;
+    font-size: 16px;
+    margin-bottom: 10px;
     text-align: left; /* Added to align the order info to the left */
   }
   p strong {
@@ -252,9 +252,9 @@ const ModalContainer = styled.div`
 `;
 
 const SearchInput = styled.input`
-  margin-bottom: 1rem;
-  padding: 0.5rem;
-  font-size: 1.6rem;
+  margin-bottom: 10px;
+  padding: 5px;
+  font-size: 16px;
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: 3px;
   outline: none;
@@ -265,7 +265,7 @@ const SearchInput = styled.input`
 const Button = styled.button`
   display: block;
   width: 100%;
-  padding: 0.75rem;
+  padding: 7.5px;
   margin-top: 10px;
   font-size: 18px;
   color: ${({ theme }) => theme.colors.white};
@@ -280,7 +280,7 @@ const Button = styled.button`
 
   &:hover,
   &:active {
-    box-shadow: 0 2rem 2rem 0 rgb(132 144 255 / 30%);
+    box-shadow: 0 20px 20px 0 rgb(132 144 255 / 30%);
     box-shadow: ${({ theme }) => theme.colors.shadowSupport};
     transform: scale(0.96);
   }
@@ -290,7 +290,7 @@ const Button = styled.button`
 const DoctorList = styled.div`
   display: flex;
   flex-wrap: wrap;
-  gap: .5rem;
+  gap: 5px;
 `;
 
 const DoctorCard = styled.div`
@@ -298,24 +298,24 @@ const DoctorCard = styled.div`
   background-color: #fafafa;
   border-radius: 10px;
   border: 1px solid #ccc;
-  padding: 1.5rem;
+  padding: 15px;
   box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
 
   .doctor-header {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 1rem;
+    margin-bottom: 10px;
   }
 
   .doctor-name {
     font-weight: bold;
-    font-size: 1.5rem;
+    font-size: 15px;
     color: #333;
   }
 
   .body {
-    font-size: 1.5rem;
+    font-size: 15px;
     color: #666;
     line-height: 1.6;
   }

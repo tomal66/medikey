@@ -50,7 +50,7 @@ const MakeAppointmentButton = () => {
 const Button = styled.button`
 display: block;
 width: 100%;
-padding: 0.75rem;
+padding: 7.5px;
 font-size: 18px;
 color: ${({ theme }) => theme.colors.white};
 background-color: ${({ theme }) => theme.colors.btn};
@@ -64,7 +64,7 @@ transition: all 0.3s ease;
 
 &:hover,
 &:active {
-  box-shadow: 0 2rem 2rem 0 rgb(132 144 255 / 30%);
+  box-shadow: 0 20px 20px 0 rgb(132 144 255 / 30%);
   box-shadow: ${({ theme }) => theme.colors.shadowSupport};
   transform: scale(0.96);
 }

@@ -231,11 +231,11 @@ const Wrapper = styled.div`
 const Input = styled.input`
   display: block;
   width: 100%;
-  padding: 1rem;
+  padding: 10px;
   font-size: 16px;
   border: 1px solid ${({ theme }) => theme.colors.border};
   border-radius: 3px;
-  margin-bottom: 1rem;
+  margin-bottom: 10px;
   outline: none;
   text-transform: none;
   &:focus {
@@ -245,23 +245,23 @@ const Input = styled.input`
 
 const Alert = styled.div`
   width: 100%;
-  padding: 1rem;
+  padding: 10px;
   background-color: #f8d7da;
   color: #721c24;
   text-align: center;
   border: 1px solid #f5c6cb;
   border-radius: 3px;
-  margin-bottom: 1rem;
-  font-size: 1.5rem;
+  margin-bottom: 10px;
+  font-size: 15px;
 `;
 
 const Container = styled.div`
   width: 100%;
   max-width: 400px;
-  padding: 4rem;
+  padding: 40px;
   background-color: #fff;
   border-radius: 15px;
-  margin-top: 10rem;
+  margin-top: 100px;
   box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
 `;
 
@@ -269,12 +269,12 @@ const Title = styled.h1`
   font-size: 24px;
   color: #474747;
   text-align: center;
-  margin-bottom: 3rem;
+  margin-bottom: 30px;
 `;
 
 const Form = styled.form`
   width: 100%;
-  margin-bottom: 1rem;
+  margin-bottom: 10px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -286,7 +286,7 @@ const StyledRow = styled.div`
   width: 100%;
 
   ${Input} {
-    width: calc(50% - 0.5rem);  // Adjust width of individual Input components
+    width: calc(50% - 5px);  // Adjust width of individual Input components
   }
 `;
 
@@ -295,7 +295,7 @@ const StyledRow = styled.div`
 const Button = styled.button`
   display: block;
   width: 100%;
-  padding: 0.75rem;
+  padding: 7.5px;
   font-size: 18px;
   color: ${({ theme }) => theme.colors.white};
   background-color: ${({ theme }) => theme.colors.btn};
@@ -309,7 +309,7 @@ const Button = styled.button`
 
   &:hover,
   &:active {
-    box-shadow: 0 2rem 2rem 0 rgb(132 144 255 / 30%);
+    box-shadow: 0 20px 20px 0 rgb(132 144 255 / 30%);
     box-shadow: ${({ theme }) => theme.colors.shadowSupport};
     transform: scale(0.96);
   }
@@ -317,7 +317,7 @@ const Button = styled.button`
 `;
 
 const Options = styled.div`
-margin-top: 3rem;
+margin-top: 30px;
   display: flex;
   justify-content: space-between;
   

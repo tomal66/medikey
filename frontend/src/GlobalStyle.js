@@ -11,7 +11,7 @@ export const GlobalStyle = createGlobalStyle`
 
 
 html {
-  font-size: 62.5%;
+  //font-size: 62.5%;
   /* scroll-behavior: smooth; */
   /* 1rem = 10px */
   overflow-x: hidden;
@@ -24,7 +24,7 @@ body {
 }
 
 body::-webkit-scrollbar {
-  width: 1.5rem;
+  width: 15px;
 }
 
 body::-webkit-scrollbar-track {
@@ -49,26 +49,26 @@ h4 {
 
 h1 {
   color: ${({ theme }) => theme.colors.heading};
-  font-size: 6rem;
+  font-size: 60px;
   font-weight: 900;
 }
 
  h2 {
    color: ${({ theme }) => theme.colors.heading};
-   font-size: 4.4rem;
+   font-size: 44px;
    font-weight: 300;
    white-space: normal;
   
   }
 
 h3 {
-  font-size: 1.8rem;
+  font-size: 18px;
   font-weight: 400;
 }
 
 p, button {
   color: ${({ theme }) => theme.colors.text};
-  font-size: 1.65rem;
+  font-size: 16.5px;
   line-height: 1.5;
   font-weight:400;
 }
@@ -85,13 +85,13 @@ li {
 ${"" /* resuable code section  */}
 
 .container {
-  max-width: 120rem;
+  max-width: 1200px;
   margin: 0 auto;
 }
 
 .grid {
   display: grid;
-  gap: 9rem;
+  gap: 90px;
 }
 
 .grid-two-column {
@@ -111,9 +111,9 @@ ${"" /* resuable code section  */}
 }
 
   .common-heading {
-      font-size: 3.8rem;
+      font-size: 38px;
       font-weight: 600;
-      margin-bottom: 6rem;
+      margin-bottom: 60px;
       text-transform: capitalize;
     }
 
@@ -130,36 +130,36 @@ ${"" /* resuable code section  */}
       text-transform: uppercase;
       background-color: ${({ theme }) => theme.colors.bg};
       color: ${({ theme }) => theme.colors.helper};
-      padding: 0.8rem 2rem;
-      font-size: 1.2rem;
-      border-radius: 2rem;
+      padding: 8px 20px;
+      font-size: 12px;
+      border-radius: 20px;
     }
 
 input, textarea{
-    max-width: 50rem;
+    max-width: 500px;
     color: ${({ theme }) => theme.colors.black};
-    padding: 1.6rem 2.4rem;
+    padding: 16px 24px;
     border: 1px solid ${({ theme }) => theme.colors.border};
     text-transform: uppercase;
    box-shadow: ${({ theme }) => theme.colors.shadowSupport};
 }
     input[type="submit"]{
-    max-width: 16rem;
-    margin-top: 2rem;
+    max-width: 160px;
+    margin-top: 20px;
     background-color: ${({ theme }) => theme.colors.btn};
     color: ${({ theme }) => theme.colors.white};
-    padding: 1.4rem 2.2rem;
+    padding: 14px 22px;
     border-style: solid;
-    border-width: .1rem;
+    border-width: 1px;
     text-transform: uppercase;
-    font-size: 1.8rem;
+    font-size: 18px;
     cursor: pointer;
     }
 
 @media (max-width: ${({ theme }) => theme.media.tab}) {
     .container {
-    max-width: 130rem;
-    padding: 0 3.2rem;
+    max-width: 1300px;
+    padding: 0 32px;
   }
   }
 
@@ -169,7 +169,7 @@ input, textarea{
     }
 
 .grid{
-  gap: 3.2rem;
+  gap: 32px;
 }
       .grid-two-column , .grid-three-column, .grid-four-column{
           grid-template-columns: 1fr;

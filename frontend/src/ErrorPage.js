@@ -25,20 +25,21 @@ const ErrorPage = () => {
 
 const Wrapper = styled.section`
   .container {
-    padding: 9rem ;
+    padding: 90px ;
     text-align: center;
-    margin-bottom: 15rem;
+    margin-bottom: 150px;
+    min-height: 55vh;
 
     h2 {
-      font-size: 10rem;
+      font-size: 100px;
     }
 
     h3 {
-      font-size: 4.2rem;
+      font-size: 42px;
     }
 
     p {
-      margin: 2rem 0;
+      margin: 20px 0;
     }
   }
 `;

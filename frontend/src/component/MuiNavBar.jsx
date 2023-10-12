@@ -8,20 +8,20 @@ const MuiNavBar = ({toggleChatbot}) => {
     <AppBar component='nav' position='static' sx={{background: '#ecf5ff'}}>
         <Toolbar>
             <NavLink to="/">
-                <IconButton size='large' edge='start' aria-label='logo' sx={{marginLeft: "1rem"}}>
+                <IconButton size='large' edge='start' aria-label='logo' sx={{marginLeft: "10px"}}>
                     <Logo color="#3d96ff" size="45px" />
                 </IconButton>
             </NavLink>
-            <Typography variant='h5' component='div' sx={{flexGrow: 1, color:"#3d96ff", fontWeight: 'bold', fontSize:'3rem'}}> 
+            <Typography variant='h5' component='div' sx={{flexGrow: 1, color:"#3d96ff", fontWeight: 'bold', fontSize:'30px'}}> 
                 MediKey
             </Typography>
             <Stack direction='row' spacing={2}>
                 <NavLink to="/">
-                    <Button  sx={{fontSize: '1.8rem', color:'#255a99'}} >Home</Button>
+                    <Button  sx={{fontSize: '18px', color:'#255a99'}} >Home</Button>
                 </NavLink>
-                <Button  sx={{fontSize: '1.8rem', color:'#255a99'}} onClick={toggleChatbot}>Make Appointment</Button>
+                <Button  sx={{fontSize: '18px', color:'#255a99'}} onClick={toggleChatbot}>Make Appointment</Button>
                 <NavLink to="/login">
-                    <Button  sx={{fontSize: '1.5rem', backgroundColor:'#3d96ff'}} variant='contained'>Login</Button>
+                    <Button  sx={{fontSize: '15px', backgroundColor:'#3d96ff'}} variant='contained'>Login</Button>
                 </NavLink>
                 
             </Stack>

@@ -5,7 +5,7 @@ export const Button = styled.button`
   max-width: auto;
   background-color: #3D96FF;
   color: rgb(255 255 255);
-  padding: 1.4rem 2.4rem;
+  padding: 14px 24px;
   border: none;
   text-transform: uppercase;
   text-align: center;
@@ -17,7 +17,7 @@ export const Button = styled.button`
 
   &:hover,
   &:active {
-    box-shadow: 0 2rem 2rem 0 rgb(132 144 255 / 30%);
+    box-shadow: 0 20px 20px 0 rgb(132 144 255 / 30%);
     box-shadow: ${({ theme }) => theme.colors.shadowSupport};
     transform: scale(0.96);
   }
@@ -25,6 +25,6 @@ export const Button = styled.button`
   a {
     text-decoration: none;
     color: rgb(255 255 255);
-    font-size: 1.8rem;
+    font-size: 18px;
   }
 `;

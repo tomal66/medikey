@@ -40,29 +40,29 @@ const AdminDashboardItems = () => {
 }
 
 const Wrapper = styled.section`
-  padding: 9rem 0;
+  padding: 90px 0;
 
   .grid {
-    gap: 4.8rem;
+    gap: 48px;
   }
 
   .services-1,
   .services-2,
   .services-3 {
     width: auto;
-    height: 20rem;
+    height: 200px;
     display: flex;
     flex-direction: column;
     justify-content: center;
     align-content: center;
     background: ${({ theme }) => theme.colors.bg};
     text-align: center;
-    border-radius: 2rem;
+    border-radius: 20px;
     box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
   }
 
   .services-2 {
-    gap: 4rem;
+    gap: 40px;
     background-color: transparent;
     box-shadow: none;
 
@@ -73,7 +73,7 @@ const Wrapper = styled.section`
       flex: 1;
       justify-content: center;
       align-items: center;
-      border-radius: 2rem;
+      border-radius: 20px;
       box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
       transition: all 0.2s ease;
 
@@ -82,7 +82,7 @@ const Wrapper = styled.section`
         flex-direction: row;
         justify-content: center;
         align-items: center;
-        gap: 1rem;
+        gap: 10px;
         padding: 10px;
       }
     }
@@ -103,21 +103,21 @@ const Wrapper = styled.section`
     text-align: center;
     text-transform: none;
     color: ${({ theme }) => theme.colors.text};
-    font-size: 2rem;
+    font-size: 20px;
     font-weight: bold;
-    margin-bottom: 3rem;
+    margin-bottom: 30px;
   }
 
   h3 {
-    margin-top: 1.4rem;
-    font-size: 2rem;
+    margin-top: 14px;
+    font-size: 20px;
   }
 
   .icon {
     /* font-size: rem; */
-    width: 8rem;
-    height: 8rem;
-    padding: 2rem;
+    width: 80px;
+    height: 80px;
+    padding: 20px;
     border-radius: 30%;
     background-color: #fff;
     color: #3D96FF;
