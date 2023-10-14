@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import { useAuthContext } from './context/auth_context';
 import { NavLink, useNavigate } from 'react-router-dom';
 import { TextField } from '@mui/material';
+import Html5QrcodePlugin from './Html5QrcodePlugin';
 
 const Login = () => {
   //const { login, isAuthenticated, error, role } = useAuthContext();
@@ -55,11 +56,6 @@ const Login = () => {
 
   return (
     <Wrapper>
-      <TextField
-        label="name"
-        margin="normal"
-        
-      />
       <Container>
         <Title>Sign In</Title>
         {

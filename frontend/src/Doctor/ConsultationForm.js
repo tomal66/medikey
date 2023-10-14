@@ -115,38 +115,7 @@ const Right = styled.div`
     flex-wrap: wrap;
     gap: 30px;
     justify-content: space-around;
-
-    .formInput {
-      width: 40%;
-
-      label {
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        padding: 5px;
-        font-size: small;
-
-        .icon {
-          cursor: pointer;
-        }
-      }
-
-      input {
-        display: block;
-        width: 100%;
-        padding: 10px;
-        font-size: 16px;
-        border: 0px solid ${({ theme }) => theme.colors.border};
-        border-radius: 3px;
-        margin-bottom: 10px;
-        outline: none;
-        text-transform: none;
-        &:focus {
-          border: 1px solid ${({ theme }) => theme.colors.border};
-          
-        }
-      }
-    }
+    margin-top: 30px;
 
     button {
       width: 150px;
@@ -214,7 +183,7 @@ const ConsultationForm = ({ inputs, title }) => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Submitted");
+    console.log("Submitted "+diagnosis+" "+selectedTests);
     //login(username, password)
     // .then(() => {
     //   console.log('Logged in successfully');
@@ -281,7 +250,7 @@ const ConsultationForm = ({ inputs, title }) => {
           <Left>
             <Card>
               <h3 className='patient-card-header'>Patient Details</h3>
-              <PatientDetail><strong>Patient name:</strong> {patientName}</PatientDetail>
+              <PatientDetail><strong>Name:</strong> {patientName}</PatientDetail>
               <PatientDetail><strong>Reason to visit:</strong> {reasonToVisit}</PatientDetail>
               <PatientDetail><strong>Symptoms:</strong> {symptoms}</PatientDetail>
               <PatientDetail><strong>Allergies:</strong> {allergies}</PatientDetail>
@@ -309,18 +278,20 @@ const ConsultationForm = ({ inputs, title }) => {
             </Card>
           </Left>
           <Right>
+          
             <form onSubmit={handleSubmit}>
-              
-                <div className="formInput">
-                  <label>Diagnosis</label>
-                  
-                  <input type='text' placeholder='Diagnosis' value={diagnosis} onChange={(e) => setDiagnosis(e.target.value)}/>
-                </div>
-
-                <div className="formInput">
-                  <label></label>
                   <FormControl sx={{ m: 1, width: 300 }}>
-                  
+                    <TextField
+                          label="Diagnosis"
+                          variant="outlined" // You can choose other variants like "filled" if you prefer
+                          placeholder="Diagnosis"
+                          value={diagnosis}
+                          onChange={(e) => setDiagnosis(e.target.value)}
+                          required
+                          inputProps={{ style: { textTransform: 'none' } }}
+                        />  
+                  </FormControl>            
+                  <FormControl sx={{ m: 1, width: 300 }}>
                     <InputLabel>Tests</InputLabel>
                     <Select
                       labelId="demo-multiple-checkbox-label"
@@ -331,6 +302,7 @@ const ConsultationForm = ({ inputs, title }) => {
                       input={<OutlinedInput label="Tests" />}
                       renderValue={(selected) => selected.join(', ')}
                       MenuProps={MenuProps}
+                      inputProps={{MenuProps: {disableScrollLock: true}}}
                     >
                       {names.map((name) => (
                         <MenuItem key={name} value={name}>
@@ -340,8 +312,8 @@ const ConsultationForm = ({ inputs, title }) => {
                       ))}
                     </Select>
                   </FormControl>
-                  
-                </div>
+
+
                 {medications.map((medication) => (
                   <Medication 
                     medication={medication}
@@ -360,47 +332,69 @@ const ConsultationForm = ({ inputs, title }) => {
             onClose={() => setModalOpen(false)}
             aria-labelledby="review-modal-title"
             aria-describedby="review-modal-description"
+            disableScrollLock={true}
         >
             <ModalContainer>
                 <h3 id="review-modal-title">Add Medication</h3>
-                <Input
-                  type="medicationName"
-                  id="medicationName"
-                  name="medicationName"
-                  placeholder="Medication Name"
-                  value={medicationName}
-                  onChange={(e) => setMedicationName(e.target.value)}
-                  required
-                />
-                <Input
-                  type="dosage"
-                  id="dosage"
-                  name="dosage"
-                  placeholder="Dosage"
-                  value={dosage}
-                  onChange={(e) => setDosage(e.target.value)}
-                  required
-                />
-                <Input
-                  type="frequency"
-                  id="frequency"
-                  name="frequency"
-                  placeholder="Frequency"
-                  value={frequency}
-                  onChange={(e) => setFrequency(e.target.value)}
-                  required
-                />
-                <Input
-                  type="duration"
-                  id="duration"
-                  name="duration"
-                  placeholder="Duration"
-                  value={duration}
-                  onChange={(e) => setDuration(e.target.value)}
-                  required
-                />
+                <FormControl sx={{ m: 1, width: 250 }}>
+                  <TextField
+                    label="Medication Name"
+                    variant="outlined"
+                    placeholder="Medication Name"
+                    value={medicationName}
+                    onChange={(e) => setMedicationName(e.target.value)}
+                    required
+                    inputProps={{ style: { textTransform: 'none' } }}
+                    id="medicationName"
+                    name="medicationName"
+                  />
+                </FormControl>
 
-                <Button onClick={addMedication}>Add</Button>
+                <FormControl sx={{ m: 1, width: 250 }}>
+                  <TextField
+                    label="Dosage"
+                    variant="outlined"
+                    placeholder="Dosage"
+                    value={dosage}
+                    onChange={(e) => setDosage(e.target.value)}
+                    required
+                    inputProps={{ style: { textTransform: 'none' } }}
+                    id="dosage"
+                    name="dosage"
+                  />
+                </FormControl>
+
+                <FormControl sx={{ m: 1, width: 250 }}>
+                  <TextField
+                    label="Frequency"
+                    variant="outlined"
+                    placeholder="Frequency"
+                    value={frequency}
+                    onChange={(e) => setFrequency(e.target.value)}
+                    required
+                    inputProps={{ style: { textTransform: 'none' } }}
+                    id="frequency"
+                    name="frequency"
+                  />
+                </FormControl>
+
+                <FormControl sx={{ m: 1, width: 250 }}>
+                  <TextField
+                    label="Duration"
+                    variant="outlined"
+                    placeholder="Duration"
+                    value={duration}
+                    onChange={(e) => setDuration(e.target.value)}
+                    required
+                    inputProps={{ style: { textTransform: 'none' } }}
+                    id="duration"
+                    name="duration"
+                  />
+                </FormControl>
+                <FormControl sx={{ m: 1, width: 250 }}>
+                  <Button onClick={addMedication}>Add</Button>
+                </FormControl>
+                
 
             </ModalContainer>
         </Modal>
@@ -410,6 +404,7 @@ const ConsultationForm = ({ inputs, title }) => {
         <Modal
           open={isTableOpen}
           onClose={() => setTableOpen(false)}
+          disableScrollLock={true}
         >
           <TableModalContainer>
             <h3>{modalContent}</h3>
@@ -436,8 +431,8 @@ const ModalContainer = styled.div`
   border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   text-align: center;
-  max-width: 500px;
-  height: 35vh; // adjusts the height to be 80% of the viewport height
+  width: 350px;
+  height: 48vh; // adjusts the height to be 80% of the viewport height
   overflow-y: auto; // enables scrolling on the y-axis
 
   h3 {

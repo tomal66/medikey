@@ -5,7 +5,7 @@ import { NavLink } from "react-router-dom"
 
 const MuiNavBar = ({toggleChatbot}) => {
   return (
-    <AppBar component='nav' position='static' sx={{background: '#ecf5ff'}}>
+    <AppBar component='nav' position='static' sx={{background: '#eff6fa'}}>
         <Toolbar>
             <NavLink to="/">
                 <IconButton size='large' edge='start' aria-label='logo' sx={{marginLeft: "10px"}}>
