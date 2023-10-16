@@ -12,11 +12,32 @@ const Register = () => {
   const [role, setRole] = useState('ROLE_PATIENT');
   const [message, setMessage] = useState('');
   const nav = useNavigate();
+  
   useEffect(() => {
-    if (isAuthenticated) { 
-      nav("/patient-dashboard");
-    }
-  }, [isAuthenticated, nav]);
+    if (isAuthenticated) {
+        // Redirect to the respective form page based on the role if currentUser is not found
+        switch (role) {
+          case "ROLE_PATIENT":
+            nav("/patient-form");
+            break;
+          case "ROLE_DOCTOR":
+            nav("/doctor-form");
+            break;
+          case "ROLE_STAFF":
+            nav("/staff-form");
+            break;
+          case "ROLE_HOSPITAL":
+            nav("/hospital-form");
+            break;
+          case "ROLE_ADMIN":
+            nav("/admin-form");
+            break;
+          default:
+            nav("/default-form"); // A fallback form if needed
+            break;
+        }
+    } 
+  }, [isAuthenticated, role, nav]);
 
   const doPasswordsMatch = () => {
     return password === confirmPassword;

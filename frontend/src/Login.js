@@ -6,7 +6,7 @@ import { TextField } from '@mui/material';
 import Html5QrcodePlugin from './Html5QrcodePlugin';
 
 const Login = () => {
-  const { login, isAuthenticated, error, role } = useAuthContext();
+  const { login, isAuthenticated, error, role, currentUser } = useAuthContext();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
@@ -28,28 +28,44 @@ const Login = () => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      if(role==="ROLE_PATIENT")
-      {
+      if (!currentUser) {
+        // Redirect to the respective form page based on the role if currentUser is not found
+        switch (role) {
+          case "ROLE_PATIENT":
+            nav("/patient-form");
+            break;
+          case "ROLE_DOCTOR":
+            nav("/doctor-form");
+            break;
+          case "ROLE_STAFF":
+            nav("/staff-form");
+            break;
+          case "ROLE_HOSPITAL":
+            nav("/hospital-form");
+            break;
+          case "ROLE_ADMIN":
+            nav("/admin-form");
+            break;
+          default:
+            nav("/default-form"); // A fallback form if needed
+            break;
+        }
+      } else if (role === "ROLE_PATIENT") {
         nav("/patient-dashboard");
-      }
-      else if(role==="ROLE_DOCTOR"){
+      } else if (role === "ROLE_DOCTOR") {
         nav("/doctor-dashboard");
-      }
-      else if(role==="ROLE_STAFF"){
+      } else if (role === "ROLE_STAFF") {
         nav("/mp-dashboard");
-      }
-      else if(role==="ROLE_HOSPITAL"){
+      } else if (role === "ROLE_HOSPITAL") {
         nav("/mp-dashboard");
-      }
-      else if(role==="ROLE_ADMIN"){
+      } else if (role === "ROLE_ADMIN") {
         nav("/admin-dashboard");
-      }
-      else{
+      } else {
         nav("/");
       }
-
     }
-  }, [isAuthenticated, nav]);
+  }, [isAuthenticated, currentUser, role, nav]);
+
 
   useEffect(() => {
     if(error){

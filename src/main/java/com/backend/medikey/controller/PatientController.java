@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:3000")
 @RequestMapping("/api/patients")
 public class PatientController {
 
@@ -37,7 +38,7 @@ public class PatientController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }*/
 
-    @GetMapping("/{patientId}")
+    @GetMapping("/patient/{patientId}")
     public ResponseEntity<PatientDto> getPatientById(@PathVariable Long patientId) {
         PatientDto patientDto = patientService.getPatientById(patientId);
         if (patientDto != null) {
@@ -47,6 +48,15 @@ public class PatientController {
         }
     }
 
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<PatientDto> getPatientByUserId(@PathVariable Long userId) {
+        PatientDto patientDto = patientService.getPatientByUserId(userId);
+        if (patientDto!=null) {
+            return new ResponseEntity<>(patientDto, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+    }
 
 
 

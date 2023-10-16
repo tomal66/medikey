@@ -17,7 +17,7 @@ public interface PatientService {
 
     void deletePatient(Long id);
 
-    Optional<PatientDto> getPatientByUserId(Long userId);
+    PatientDto getPatientByUserId(Long userId);
 
     Patient save(Patient patient);
 

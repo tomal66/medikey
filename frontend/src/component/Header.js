@@ -2,26 +2,24 @@ import React from 'react'
 import { NavLink } from 'react-router-dom';
 import styled from 'styled-components';
 import Nav from './Nav';
-//import SellerNav from './SellerNav';
-//import { useAuthContext } from '../context/auth_context';
-//import AdminNav from './AdminNav';
+import { useAuthContext } from '../context/auth_context';
+import PatientNav from './PatientNav';
+import MuiNavBar from './MuiNavBar';
+
 const Header = ({toggleChatbot}) => {
-  //const { role } = useAuthContext();
+  const { role } = useAuthContext();
 
   return (
-    <MainHeader>
-      <NavLink to="/">
-        <img src="./Medikey_Logo.png" alt="MediKey" className='logo' />
-      </NavLink>
-      <Nav toggleChatbot={toggleChatbot}/>
-      {/* {role === 'ROLE_SELLER' ? (
-        <SellerNav />
+      <>
+      {role === 'ROLE_PATIENT' ? (
+            <PatientNav toggleChatbot={toggleChatbot}/>
+
       ) : role === 'ROLE_ADMIN' ? ( // Check if the user has ROLE_ADMIN
-        <AdminNav /> // Render AdminNav for admin user
+        <Nav /> // Render AdminNav for admin user
       ) : (
-        <Nav />
-      )} */}
-    </MainHeader>
+        <MuiNavBar toggleChatbot={toggleChatbot}/>
+      )}
+      </>
   )
 }
 

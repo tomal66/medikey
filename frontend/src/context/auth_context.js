@@ -13,6 +13,7 @@ const inialState = {
   role: null,
   stateRestored: false,
   userId: null,
+  currentUser: null,
 };
  
 const AuthProvider = ({ children }) => {
@@ -58,7 +59,7 @@ const AuthProvider = ({ children }) => {
         username,
         password,
       });
-
+  
       if (response.data.accessToken) {
         dispatch({
           type: "LOGIN",
@@ -69,24 +70,47 @@ const AuthProvider = ({ children }) => {
             userId: response.data.userId,
           },
         });
+  
+        // Fetch user details based on role
+        axios.get(API + "getUser", {
+          params: {
+            userId: response.data.userId,
+            role: response.data.role
+          }
+        })
+        .then(userResponse => {
+          dispatch({ type: "SET_CURRENT_USER", payload: userResponse.data });
+        })
+        .catch(error => {
+          console.error("Error fetching user details:", error);
+        });
+  
+        return response.data;
       }
-
-      return response.data;
     } catch (error) {
       console.log(error.response.data);
       dispatch({ type: "AUTH_ERROR", payload: error });
     }
   };
+  
+  
 
   const logout = () => {
     dispatch({ type: "LOGOUT" });
   };
 
+  const setCurrentUser = (user) => {
+    dispatch({ type: "SET_CURRENT_USER", payload: user });
+  };
+
+
   return (
-    <AuthContext.Provider value={{ ...state, register, login, logout }}>
+    <AuthContext.Provider value={{ ...state, register, login, logout, setCurrentUser }}>
       {children}
     </AuthContext.Provider>
   );
+
+
 };
 
 const useAuthContext = () => {

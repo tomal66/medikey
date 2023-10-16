@@ -143,20 +143,7 @@ const MakeAppointment = () => {
                 {availabilityMessage}
             </Alert>
             )}
-            {/* <DatePicker
-            selected={selectedDate}
-            onChange={handleDateChange}
-            customInput={<CustomInput />}
-            />
-            <Input
-                  type="reason"
-                  id="reason"
-                  name="reason"
-                  placeholder="Reason for visit"
-                  value={reason}
-                  onChange={(e) => setReason(e.target.value)}
-                  required
-                /> */}
+            
 
             
             <LocalizationProvider dateAdapter={AdapterDayjs}>

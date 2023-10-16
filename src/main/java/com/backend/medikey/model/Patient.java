@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.NaturalId;
 
+import java.util.Date;
 import java.util.List;
 
 @Getter
@@ -24,10 +25,9 @@ public class Patient {
     private String email;
     @NaturalId(mutable = true)
     private String phone;
+    private Date dateOfBirth;
     @OneToOne
     private User user;
-    @OneToOne
-    private Hospital hospital;
     @OneToMany(mappedBy = "patient")
     private List<Visit> patientVisits;
     @OneToMany(mappedBy = "patient")

@@ -30,6 +30,8 @@ import DoctorDashboard from './Doctor/DoctorDashboard';
 import Consultation from './Doctor/Consultation';
 import MakeAppointment from './MakeAppointment';
 import MuiNavBar from './component/MuiNavBar';
+import PatientDashboard from './PatientDashboard';
+import PatientForm from './PatientForm';
 
 
 function App() {
@@ -90,8 +92,7 @@ function App() {
     <ThemeProvider theme={theme}>
       <Router>
         <GlobalStyle/>
-        <MuiNavBar toggleChatbot={toggleChatbot}/>
-        {/* <Header  toggleChatbot={toggleChatbot}/> */}
+        <Header  toggleChatbot={toggleChatbot}/>
         <Routes>
         <Route path="/" element={<Layout />}>
  
@@ -117,6 +118,10 @@ function App() {
           {/* Doctor Dashboard */}
           <Route path = "/doctor-dashboard" element={<DoctorDashboard/>}/>
           <Route path = "/consult/:id" element={<Consultation/>}/>
+
+          {/* Patient Dashboard */}
+          <Route path = "/patient-dashboard" element={<PatientDashboard/>}/>
+          <Route path = "/patient-form" element={<PatientForm/>}/>
           
 
           {/* <Route element={<RequireAuth allowedRole={"ROLE_USER"} />}>

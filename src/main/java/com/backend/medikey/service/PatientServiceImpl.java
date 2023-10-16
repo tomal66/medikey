@@ -55,9 +55,17 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public PatientDto createPatient(PatientDto patientDto) {
-        Patient patient = convertToEntity(patientDto);
+        Patient patient = new Patient();
+        patient.setFirstName(patientDto.getFirstName());
+        patient.setLastName(patientDto.getLastName());
+        patient.setEmail(patientDto.getEmail());
+        patient.setPhone(patientDto.getPhone());
+        User user = userRepository.findByUserId(patientDto.getUserId());
+        patient.setUser(user);
+        patient.setDateOfBirth(patientDto.getDateOfBirth());
         Patient newPatient = patientRepository.save(patient);
-        return convertToDto(newPatient);
+        patientDto.setPatientId(newPatient.getPatientId());
+        return patientDto;
     }
 
     @Override
@@ -74,8 +82,9 @@ public class PatientServiceImpl implements PatientService {
     }
 
     @Override
-    public Optional<PatientDto> getPatientByUserId(Long userId) {
-        return patientRepository.findByUser_UserId(userId).map(this::convertToDto);
+    public PatientDto getPatientByUserId(Long userId) {
+        PatientDto patientDto = convertToDto(patientRepository.findByUser_UserId(userId));
+        return patientDto;
     }
 
     @Override
@@ -119,9 +128,7 @@ public class PatientServiceImpl implements PatientService {
             dto.setUserId(patient.getUser().getUserId());
         }
 
-        if(patient.getHospital() != null) {
-            dto.setHospitalId(patient.getHospital().getHospitalId());
-        }
+
 
         //Patient patient = patientRepository.findByPatientId(patientId);
         /*dto.setPatientVisitIds(patient.getPatientVisitIds());
@@ -161,14 +168,13 @@ public class PatientServiceImpl implements PatientService {
 
     private Patient convertToEntity(PatientDto patientDto) {
         Patient patient = new Patient();
-        patient.setPatientId(patientDto.getPatientId());
         patient.setFirstName(patientDto.getFirstName());
         patient.setLastName(patientDto.getLastName());
         patient.setEmail(patientDto.getEmail());
         patient.setPhone(patientDto.getPhone());
         User user = userRepository.findByUserId(patientDto.getUserId());
         patient.setUser(user);
-        patient.setHospital(hospitalRepository.findByHospitalId(patientDto.getHospitalId()));
+        patient.setDateOfBirth(patientDto.getDateOfBirth());
         patient.setPatientVisits(visitRepository.findByPatient(patientRepository.findByPatientId(patientDto.getPatientId())));
         patient.setMedicalHistories(medicalHistoryRepository.findByPatient(patientRepository.findByPatientId(patientDto.getPatientId())));
         patient.setTests(testRepository.findByPatient(patientRepository.findByPatientId(patientDto.getPatientId())));

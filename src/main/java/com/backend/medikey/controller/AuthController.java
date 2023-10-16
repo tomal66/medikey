@@ -1,11 +1,13 @@
 package com.backend.medikey.controller;
 
 import com.backend.medikey.dto.LoginDto;
+import com.backend.medikey.dto.PatientDto;
 import com.backend.medikey.dto.RegisterDto;
 import com.backend.medikey.dto.AuthResponseDto;
 import com.backend.medikey.model.User;
 import com.backend.medikey.repository.UserRepository;
 import com.backend.medikey.security.JWTGenerator;
+import com.backend.medikey.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -24,6 +26,8 @@ public class AuthController {
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
     private final JWTGenerator jwtGenerator;
+    @Autowired
+    private PatientService patientService;
 
     @Autowired
     public AuthController(AuthenticationManager authenticationManager, UserRepository userRepository, PasswordEncoder passwordEncoder, JWTGenerator jwtGenerator) {
@@ -65,5 +69,32 @@ public class AuthController {
         Long userId = userRepository.findByUsername(username).getUserId();
 
         return new ResponseEntity<>(new AuthResponseDto(token, username, role, userId), HttpStatus.OK);
+    }
+
+    @CrossOrigin(origins = "http://localhost:3000")
+    @GetMapping("getUser")
+    public ResponseEntity<?> getUser(@RequestParam Long userId, @RequestParam String role) {
+        Object userDetails = null;
+
+        switch (role) {
+            case "ROLE_PATIENT":
+                // Fetch patient details using the patient service
+                PatientDto patientDto = patientService.getPatientByUserId(userId);
+                if (patientDto != null) {
+                    userDetails = patientDto;
+                }
+                break;
+
+            // Add similar conditions for other roles
+
+            default:
+                return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
+        if (userDetails != null) {
+            return new ResponseEntity<>(userDetails, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 }
