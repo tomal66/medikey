@@ -23,7 +23,7 @@ public class AuthController {
     private final AuthenticationManager authenticationManager;
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
-    private JWTGenerator jwtGenerator;
+    private final JWTGenerator jwtGenerator;
 
     @Autowired
     public AuthController(AuthenticationManager authenticationManager, UserRepository userRepository, PasswordEncoder passwordEncoder, JWTGenerator jwtGenerator) {
@@ -62,7 +62,8 @@ public class AuthController {
         String token = jwtGenerator.generateToken(authentication);
         String username = jwtGenerator.getUsernameFromJWT(token);
         String role = userRepository.findByUsername(username).getRole();
+        Long userId = userRepository.findByUsername(username).getUserId();
 
-        return new ResponseEntity<>(new AuthResponseDto(token, username, role), HttpStatus.OK);
+        return new ResponseEntity<>(new AuthResponseDto(token, username, role, userId), HttpStatus.OK);
     }
 }

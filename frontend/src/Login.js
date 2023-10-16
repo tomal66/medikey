@@ -6,13 +6,11 @@ import { TextField } from '@mui/material';
 import Html5QrcodePlugin from './Html5QrcodePlugin';
 
 const Login = () => {
-  //const { login, isAuthenticated, error, role } = useAuthContext();
+  const { login, isAuthenticated, error, role } = useAuthContext();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
   const nav = useNavigate();
-
-  const { login, isAuthenticated, error, role } = useAuthContext();
 
 
   const handleSubmit = (e) => {
@@ -30,9 +28,18 @@ const Login = () => {
 
   useEffect(() => {
     if (isAuthenticated) {
-      if(role==="ROLE_SELLER")
+      if(role==="ROLE_PATIENT")
       {
-        nav("/seller-dashboard");
+        nav("/patient-dashboard");
+      }
+      else if(role==="ROLE_DOCTOR"){
+        nav("/doctor-dashboard");
+      }
+      else if(role==="ROLE_STAFF"){
+        nav("/mp-dashboard");
+      }
+      else if(role==="ROLE_HOSPITAL"){
+        nav("/mp-dashboard");
       }
       else if(role==="ROLE_ADMIN"){
         nav("/admin-dashboard");

@@ -9,12 +9,12 @@ const Register = () => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [role, setRole] = useState('ROLE_USER');
+  const [role, setRole] = useState('ROLE_PATIENT');
   const [message, setMessage] = useState('');
   const nav = useNavigate();
   useEffect(() => {
     if (isAuthenticated) { 
-      nav("/");
+      nav("/patient-dashboard");
     }
   }, [isAuthenticated, nav]);
 
@@ -38,21 +38,6 @@ const Register = () => {
     
   };
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      if(role==="ROLE_SELLER")
-      {
-        nav("/seller-dashboard");
-      }
-      else if(role==="ROLE_ADMIN"){
-        nav("/admin-dashboard");
-      }
-      else{
-        nav("/");
-      }
-
-    }
-  }, [isAuthenticated, nav]);
 
   useEffect(() => {
     if(error){

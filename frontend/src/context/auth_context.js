@@ -12,6 +12,7 @@ const inialState = {
   error: null,
   role: null,
   stateRestored: false,
+  userId: null,
 };
  
 const AuthProvider = ({ children }) => {
@@ -64,7 +65,8 @@ const AuthProvider = ({ children }) => {
           payload: {
             username: response.data.username,
             accessToken: response.data.accessToken,
-            role: response.data.role
+            role: response.data.role,
+            userId: response.data.userId,
           },
         });
       }

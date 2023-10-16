@@ -1,32 +1,16 @@
 import React, {useState, forwardRef} from 'react';
 import styled from 'styled-components';
 import { Modal, TextField } from '@mui/material';
-import DatePicker from 'react-datepicker';
+import FormControl from '@mui/material/FormControl';
 import 'react-datepicker/dist/react-datepicker.css';
 import { useLocation } from 'react-router-dom';
 import { useEffect } from 'react';
 
-const CustomInput = forwardRef(({ value, onClick }, ref) => (
-    <StyledDatePickerInput onClick={onClick} ref={ref}>
-      {value || "Select date"}
-    </StyledDatePickerInput>
-  ));
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+
   
-  const StyledDatePickerInput = styled.div`
-    display: block;
-    width: 100%;
-    padding: 10px;
-    font-size: 16px;
-    border: 1px solid ${({ theme }) => theme.colors.border};
-    border-radius: 3px;
-    margin-bottom: 10px;
-    outline: none;
-    text-transform: none;
-    cursor: pointer;
-    &:focus {
-      border: 1px solid ${({ theme }) => theme.colors.border};
-    }
-  `;
 
 const MakeAppointment = () => {
   // Sample data, replace with actual data from your API
@@ -36,42 +20,42 @@ const MakeAppointment = () => {
       firstName: 'John',
       lastName: 'Doe',
       department: 'Cardiology',
-      hospitalId: 101,
+      hospital: 101,
     },
     {
       doctorId: 2,
       firstName: 'Jane',
       lastName: 'Smith',
       department: 'Neurology',
-      hospitalId: 102,
+      hospital: 102,
     },
     {
       doctorId: 3,
       firstName: 'Emily',
       lastName: 'Brown',
       department: 'Orthopedics',
-      hospitalId: 103,
+      hospital: 103,
     },
     {
       doctorId: 4,
       firstName: 'William',
       lastName: 'Johnson',
       department: 'Radiology',
-      hospitalId: 104,
+      hospital: 104,
     },
     {
       doctorId: 5,
       firstName: 'Sophia',
       lastName: 'Williams',
       department: 'Dermatology',
-      hospitalId: 105,
+      hospital: 105,
     },
     {
       doctorId: 6,
       firstName: 'Michael',
       lastName: 'Davis',
       department: 'Gastroenterology',
-      hospitalId: 106,
+      hospital: 106,
     },
   ]);  
 
@@ -92,11 +76,10 @@ const MakeAppointment = () => {
   const [reason, setReason] = useState('');
   const [availabilityMessage, setAvailabilityMessage] = useState('');
 
-  const handleDateChange = (date) => {
-    setSelectedDate(date);
-    // Check availability for the selected date
-    // For demonstration, let's assume the doctor is not available on weekends
-    const dayOfWeek = date.getDay();
+  
+  const handleMUIDateChange = (newValue) => {
+    setSelectedDate(newValue.toDate().toISOString().split('T')[0]); // convert dayjs object to JavaScript Date
+    const dayOfWeek = newValue.day();
     if (dayOfWeek === 0 || dayOfWeek === 6) {
       setAvailabilityMessage('Doctor is not available on this date');
     } else {
@@ -112,7 +95,9 @@ const MakeAppointment = () => {
   };
 
   const handleCloseModal = () => {
+    console.log(selectedDate);
     setModalOpen(false);
+    setReason('');
   };
 
   const filteredDoctors = doctors.filter(
@@ -134,30 +119,31 @@ const MakeAppointment = () => {
         />
         
         
-        <DoctorList>
-        <div className="grid grid-three-column">
-            {filteredDoctors.map((doctor) => (
-                
-            <DoctorCard key={doctor.doctorId}>
-                <div className="doctor-header">
-                <h4 className="doctor-name">{`${doctor.firstName} ${doctor.lastName}`}</h4>
-                </div>
-                <p className="body">{doctor.department}</p>
-                <p className="body">Hospital ID: {doctor.hospitalId}</p>
-                <Button onClick={() => handleOpenModal(doctor)}>Check</Button>
-            </DoctorCard>
-            ))}
+          <DoctorList>
+            <div className="grid grid-three-column">
+              {filteredDoctors.map((doctor) => (
+                <DoctorCard key={doctor.doctorId}>
+                  <div className="doctor-header">
+                    <h4 className="doctor-name">{`${"Dr."} ${doctor.firstName} ${doctor.lastName}`}</h4>
+                    <img src="/images/doctor.jpg" alt={`${doctor.firstName} ${doctor.lastName}`} className="doctor-image" />
+                  </div>
+                  <p className="body">{doctor.department}</p>
+                  <p className="body">{doctor.hospital}</p>
+                  <Button onClick={() => handleOpenModal(doctor)}>Check Availability</Button>
+                </DoctorCard>
+              ))}
+  
             </div>
-        </DoctorList>
-            <Modal open={isModalOpen} onClose={handleCloseModal}>
+          </DoctorList>
+            <Modal open={isModalOpen} onClose={handleCloseModal} disableScrollLock={true}>
             <ModalContainer>
-            <h3>{`${selectedDoctor.firstName} ${selectedDoctor.lastName}`}</h3>
+            <h3>{`${"Dr."} ${selectedDoctor.firstName} ${selectedDoctor.lastName}`}</h3>
             {availabilityMessage && (
             <Alert>
                 {availabilityMessage}
             </Alert>
             )}
-            <DatePicker
+            {/* <DatePicker
             selected={selectedDate}
             onChange={handleDateChange}
             customInput={<CustomInput />}
@@ -170,8 +156,34 @@ const MakeAppointment = () => {
                   value={reason}
                   onChange={(e) => setReason(e.target.value)}
                   required
+                /> */}
+
+            
+            <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <FormControl sx={{ m: 1, width: 300 }}>
+                <DatePicker
+                  value={null}
+                  onChange={handleMUIDateChange}
+                  label="Select a date"
+                  renderInput={(params) => <TextField {...params} />}
                 />
-            <Button onClick={handleCloseModal}>Make Appointment</Button>
+              </FormControl>
+              
+              <FormControl sx={{ m: 1, width: 300 }}>
+                <TextField
+                  id="reason"
+                  name="reason"
+                  label="Reason for visit"
+                  value={reason}
+                  onChange={(e) => setReason(e.target.value)}
+                  variant="outlined"
+                  
+                  margin="normal"
+                />
+              </FormControl>
+              
+            </LocalizationProvider>
+            <Button onClick={handleCloseModal} >Make Appointment</Button>
             </ModalContainer>
         </Modal>
         </div>
@@ -232,8 +244,8 @@ const ModalContainer = styled.div`
   border-radius: 4px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
   text-align: center;
-  max-width: 500px;
-  height: 35vh; // adjusts the height to be 80% of the viewport height
+  max-width: 350px;
+  height: auto; // adjusts the height to be 80% of the viewport height: ;
   overflow-y: auto; // enables scrolling on the y-axis
 
   h3 {
@@ -303,9 +315,17 @@ const DoctorCard = styled.div`
 
   .doctor-header {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start; // Align items to the start
     align-items: center;
     margin-bottom: 10px;
+  }
+
+  .doctor-image {
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-left: auto; // Push the image to the right
   }
 
   .doctor-name {
@@ -319,7 +339,7 @@ const DoctorCard = styled.div`
     color: #666;
     line-height: 1.6;
   }
-
 `;
+
 
 export default MakeAppointment;
