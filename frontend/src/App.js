@@ -17,7 +17,6 @@ import React, { useState, useEffect } from 'react';
 import Login from './Login.js';
 import Register from './Register.js'
 import AdminDashboard from './Admin/AdminDashboard';
-import { useLocation } from 'react-router-dom';
 import AddHospital from './Admin/AddHospital';
 import AllHospitals from './Admin/AllHospitals';
 import AllHospitalsTable from './Admin/AllHospitalsTable';
@@ -32,6 +31,9 @@ import MakeAppointment from './MakeAppointment';
 import MuiNavBar from './component/MuiNavBar';
 import PatientDashboard from './PatientDashboard';
 import PatientForm from './PatientForm';
+import 'react-toastify/dist/ReactToastify.css';
+import { ToastContainer } from 'react-toastify';
+import { useAuthContext } from './context/auth_context';
 
 
 function App() {
@@ -62,7 +64,8 @@ function App() {
   };
 
   const [chatbotActive, setChatbotActive] = useState(false);
-  
+  const { role } = useAuthContext();  
+
   const toggleChatbot = () => {
     setChatbotActive(!chatbotActive);
   };
@@ -88,8 +91,10 @@ function App() {
 
   return ( 
     <>
+    <ToastContainer />
       
     <ThemeProvider theme={theme}>
+      
       <Router>
         <GlobalStyle/>
         <Header  toggleChatbot={toggleChatbot}/>
@@ -152,16 +157,21 @@ function App() {
         </Route>
           
         </Routes>
-        <div className={`chatbot ${chatbotActive ? 'active' : ''}`}>
-          {chatbotActive && (
-            <Chatbot
-              config={config}
-              messageParser={MessageParser}
-              actionProvider={ActionProvider}
-            />
-          )}
-        </div>
-        <Button className="bot-btn" onClick={toggleChatbot}>&nbsp;</Button>
+        {/* Conditionally render chatbot and chatbot button based on role */}
+        {(role === "ROLE_PATIENT" || role === null) && (
+          <>
+            <div className={`chatbot ${chatbotActive ? 'active' : ''}`}>
+              {chatbotActive && (
+                <Chatbot
+                  config={config}
+                  messageParser={MessageParser}
+                  actionProvider={ActionProvider}
+                />
+              )}
+            </div>
+            <Button className="bot-btn" onClick={toggleChatbot}>&nbsp;</Button>
+          </>
+        )}
         <Footer/>
       </Router>
     </ThemeProvider>

@@ -7,6 +7,7 @@ import java.util.List;
 @Data
 public class HospitalDto {
     private Long hospitalId;
+    private Long userId;
     private String name;
     private String address;
     private String city;

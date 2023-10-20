@@ -25,4 +25,5 @@ public interface HospitalRepository extends JpaRepository<Hospital, Long> {
     List<Hospital> findByPostalCode(String postalCode);
     Hospital findByHospitalId(Long hospitalId);
 
+    Hospital findHospitalByUser_UserId(Long userId);
 }

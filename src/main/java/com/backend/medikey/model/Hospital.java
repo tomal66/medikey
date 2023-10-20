@@ -30,7 +30,7 @@ public class Hospital {
     private User user;
 
     // Other attributes related to the hospital can be added here
-    @OneToMany
+    @OneToMany(mappedBy = "hospital")
     private List<Doctor> doctors;
     @OneToMany(mappedBy = "hospital")
     private List<Visit> visits;

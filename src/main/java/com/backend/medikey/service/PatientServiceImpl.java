@@ -83,8 +83,13 @@ public class PatientServiceImpl implements PatientService {
 
     @Override
     public PatientDto getPatientByUserId(Long userId) {
-        PatientDto patientDto = convertToDto(patientRepository.findByUser_UserId(userId));
-        return patientDto;
+        Patient patient = patientRepository.findByUser_UserId(userId);
+        if(patient!=null){
+            PatientDto patientDto = convertToDto(patient);
+            return patientDto;
+        }
+        else return null;
+
     }
 
     @Override

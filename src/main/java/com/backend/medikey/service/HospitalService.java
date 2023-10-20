@@ -1,5 +1,6 @@
 package com.backend.medikey.service;
 
+import com.backend.medikey.dto.HospitalDto;
 import com.backend.medikey.model.Hospital;
 
 import java.util.List;
@@ -12,6 +13,7 @@ public interface HospitalService {
     List<Hospital> findAll();
     Hospital findByHospitalId(Long hospitalId);
     void delete(Long id);
+    HospitalDto findByUserId(Long userId);
 
     // Custom query methods
     List<Hospital> findByName(String name);

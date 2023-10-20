@@ -23,8 +23,8 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public Optional<Object> findById(Long userId) {
-        return Optional.of(userRepository.findById(userId));
+    public User findById(Long userId) {
+        return userRepository.findByUserId(userId);
     }
 
 

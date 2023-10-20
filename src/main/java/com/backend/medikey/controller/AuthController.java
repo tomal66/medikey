@@ -1,12 +1,10 @@
 package com.backend.medikey.controller;
 
-import com.backend.medikey.dto.LoginDto;
-import com.backend.medikey.dto.PatientDto;
-import com.backend.medikey.dto.RegisterDto;
-import com.backend.medikey.dto.AuthResponseDto;
+import com.backend.medikey.dto.*;
 import com.backend.medikey.model.User;
 import com.backend.medikey.repository.UserRepository;
 import com.backend.medikey.security.JWTGenerator;
+import com.backend.medikey.service.HospitalService;
 import com.backend.medikey.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,6 +26,8 @@ public class AuthController {
     private final JWTGenerator jwtGenerator;
     @Autowired
     private PatientService patientService;
+    @Autowired
+    private HospitalService hospitalService;
 
     @Autowired
     public AuthController(AuthenticationManager authenticationManager, UserRepository userRepository, PasswordEncoder passwordEncoder, JWTGenerator jwtGenerator) {
@@ -39,7 +39,7 @@ public class AuthController {
 
     @CrossOrigin(origins = "http://localhost:3000")
     @PostMapping("register")
-    public ResponseEntity<String> register(@RequestBody RegisterDto registerDto)
+    public ResponseEntity<?> register(@RequestBody RegisterDto registerDto)
     {
         if(userRepository.existsByUsername(registerDto.getUsername())){
             return new ResponseEntity<>("Username is taken!", HttpStatus.BAD_REQUEST);
@@ -50,9 +50,9 @@ public class AuthController {
         user.setUsername(registerDto.getUsername());
         user.setPassword(passwordEncoder.encode(registerDto.getPassword()));
         user.setRole(registerDto.getRole());
-        userRepository.save(user);
+        User savedUser = userRepository.save(user);
 
-        return new ResponseEntity<>("User registration success!", HttpStatus.OK);
+        return new ResponseEntity<>(savedUser.getUserId(), HttpStatus.OK);
     }
 
     @CrossOrigin(origins = "http://localhost:3000")
@@ -67,8 +67,32 @@ public class AuthController {
         String username = jwtGenerator.getUsernameFromJWT(token);
         String role = userRepository.findByUsername(username).getRole();
         Long userId = userRepository.findByUsername(username).getUserId();
+        Object userDetails = null;
 
-        return new ResponseEntity<>(new AuthResponseDto(token, username, role, userId), HttpStatus.OK);
+        switch (role) {
+            case "ROLE_PATIENT":
+                // Fetch patient details using the patient service
+                PatientDto patientDto = patientService.getPatientByUserId(userId);
+                if (patientDto != null) {
+                    userDetails = patientDto;
+                }
+                break;
+
+            case "ROLE_HOSPITAL":
+                // Fetch patient details using the patient service
+                HospitalDto hospitalDto = hospitalService.findByUserId(userId);
+                if (hospitalDto != null) {
+                    userDetails = hospitalDto;
+                }
+                break;
+
+            // Add similar conditions for other roles
+
+            default:
+                break;
+        }
+
+        return new ResponseEntity<>(new AuthResponseDto(token, username, role, userId, userDetails), HttpStatus.OK);
     }
 
     @CrossOrigin(origins = "http://localhost:3000")

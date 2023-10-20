@@ -26,7 +26,7 @@ public class Doctor {
     private String department;
     @OneToOne
     private User user;
-    @OneToOne
+    @ManyToOne
     private Hospital hospital;
     @OneToMany(mappedBy = "doctor")
     private List<Visit> doctorVisits;

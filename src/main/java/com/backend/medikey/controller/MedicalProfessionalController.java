@@ -97,7 +97,7 @@ public class MedicalProfessionalController {
         entity.setEmail(medicalProfessionalDto.getEmail());
         entity.setPhone(medicalProfessionalDto.getPhone());
 
-        User user = (User) userService.findById(medicalProfessionalDto.getUserId()).orElse(null);
+        User user = (User) userService.findById(medicalProfessionalDto.getUserId());
         entity.setUser(user);
 
         // Assuming you have a similar service for Hospital

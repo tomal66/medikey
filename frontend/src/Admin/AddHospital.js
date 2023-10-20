@@ -1,14 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-//import { useAuthContext } from './context/auth_context';
-import { NavLink, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import { TextField, Button, FormControl, Typography } from '@mui/material';
+import axios from 'axios';
 
 const AddHospital = () => {
   //const { login, isAuthenticated, error, role } = useAuthContext();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const [role, setRole] = useState('ROLE_HOSPITAL');
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
   const [city, setCity] = useState('');
@@ -21,18 +23,40 @@ const AddHospital = () => {
   const nav = useNavigate();
 
   const isAuthenticated = false;
-  const role = null;
   const error = null;
+  const API = 'http://localhost:8567/api/'
 
   const doPasswordsMatch = () => {
     return password === confirmPassword;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (username && password && password.length >= 8 && doPasswordsMatch()) {
-        try{
-            //await addProduct(productData, images);
+        try {
+            // Register the user
+            const userResponse = await axios.post(API+'auth/register', {
+                username: username,
+                password: password,
+                role: role
+            });
+
+            const userId = userResponse.data;
+
+            // Register the hospital with the received userId
+            await axios.post(API+'hospitals', {
+                userId: userId,
+                name: name,
+                address: address,
+                city: city,
+                state: state,
+                country: country,
+                postalCode: postalCode,
+                phoneNumber: phoneNumber,
+                email: email
+            });
+
             Swal.fire({
                 title: 'Success',
                 text: 'Hospital Added!',
@@ -40,30 +64,29 @@ const AddHospital = () => {
                 confirmButtonColor: '#3D96FF',
                 confirmButtonText: 'Done',
                 heightAuto: true,
-              }).then((result) => {
+            }).then((result) => {
                 if (result.isConfirmed) {
-                  nav('/admin-dashboard'); // Replace '/' with the desired path
+                    nav('/admin-dashboard'); // Replace '/' with the desired path
                 }
-              });
-          } catch(error){
+            });
+        } catch (error) {
             Swal.fire({
                 title: 'Error',
                 text: 'Failed to add hospital',
                 icon: 'error',
                 confirmButtonText: 'Try Again',
                 heightAuto: true,
-              });
-          }
-      
+            });
+        }
     } else {
-      // Error alert message if any of the required fields are missing or invalid
-      if (!username) setMessage("Please enter a username!");
-      else if (!password) setMessage("Please enter a password!");
-      else if (password.length < 8) setMessage("Password must be at least 8 characters long!");
-      else if (!doPasswordsMatch()) setMessage("Passwords do not match!");
+        // Error alert message if any of the required fields are missing or invalid
+        if (!username) setMessage("Please enter a username!");
+        else if (!password) setMessage("Please enter a password!");
+        else if (password.length < 8) setMessage("Password must be at least 8 characters long!");
+        else if (!doPasswordsMatch()) setMessage("Passwords do not match!");
     }
-    
-  };
+};
+
 
   useEffect(() => {
     if (isAuthenticated) {
@@ -105,115 +128,173 @@ const AddHospital = () => {
         <Form onSubmit={handleSubmit}>
             
 
-            <Input
-              type="username"
-              id="username"
+        <FormControl sx={{ m: 1, width: 350 }}>
+            <TextField
+              autoComplete="username"
               name="username"
-              placeholder="Admin Username"
+              variant="outlined"
+              required
+              fullWidth
+              id="username"
+              label="Username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              required
+              inputProps={{ style: { textTransform: 'none' } }}
             />
-            <Input
-              type="text"
-              id="name"
+          </FormControl>
+          <FormControl sx={{ m: 1, width: 350 }}>
+            <TextField
+              autoComplete="name"
               name="name"
-              placeholder="Hospital Name"
+              variant="outlined"
+              required
+              fullWidth
+              id="name"
+              label="Hospital Name"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              required
+              inputProps={{ style: { textTransform: 'none' } }}
             />
+          </FormControl>
 
             <StyledRow>
-            <Input
-              type="password"
-              id="password"
-              name="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-            <Input
-              type="password"
-              id="confirmPassword"
-              name="confirmPassword"
-              placeholder="Confirm Password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-            />
+              <FormControl sx={{ m: 1, width: 350 }}>
+                <TextField
+                  autoComplete="name"
+                  name="name"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="name"
+                  label="Password"
+                  type='password'
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  inputProps={{ style: { textTransform: 'none' } }}
+                />
+              </FormControl>
+              <FormControl sx={{ m: 1, width: 350 }}>
+                <TextField
+                  autoComplete="password"
+                  name="password"
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="password"
+                  type='password'
+                  label="Confirm Password"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  inputProps={{ style: { textTransform: 'none' } }}
+                />
+              </FormControl>
             </StyledRow>
-            <Input
-              type="text"
-              id="address"
-              name="address"
-              placeholder="Address"
-              value={address}
-              onChange={(e) => setAddress(e.target.value)}
-              required
-            />
+            
+              <FormControl sx={{ m: 1, width: 350 }}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="address"
+                  label="Address"
+                  name="address"
+                  value={address}
+                  onChange={(e) => setAddress(e.target.value)}
+                  inputProps={{ style: { textTransform: 'none' } }}
+                />
+              </FormControl>
+              <StyledRow>
+              <FormControl sx={{ m: 1, width: 350 }}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="city"
+                  label="City"
+                  name="city"
+                  value={city}
+                  onChange={(e) => setCity(e.target.value)}
+                  inputProps={{ style: { textTransform: 'none' } }}
+                />
+              </FormControl>
+            
+
+            
+              <FormControl sx={{ m: 1, width: 350 }}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="state"
+                  label="State"
+                  name="state"
+                  value={state}
+                  onChange={(e) => setState(e.target.value)}
+                  inputProps={{ style: { textTransform: 'none' } }}
+                />
+              </FormControl>
+              </StyledRow>
+
             <StyledRow>
-            <Input
-              type="text"
-              id="city"
-              name="city"
-              placeholder="City"
-              value={city}
-              onChange={(e) => setCity(e.target.value)}
-              required
-            />
-            <Input
-              type="text"
-              id="state"
-              name="state"
-              placeholder="State"
-              value={state}
-              onChange={(e) => setState(e.target.value)}
-              required
-            />
-            </StyledRow>
+              <FormControl sx={{ m: 1, width: 350 }}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="country"
+                  label="Country"
+                  name="country"
+                  value={country}
+                  onChange={(e) => setCountry(e.target.value)}
+                  inputProps={{ style: { textTransform: 'none' } }}
+                />
+              </FormControl>
             
-          <StyledRow>
+              <FormControl sx={{ m: 1, width: 350 }}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="postalCode"
+                  label="Postal Code"
+                  name="postalCode"
+                  value={postalCode}
+                  onChange={(e) => setPostalCode(e.target.value)}
+                  inputProps={{ style: { textTransform: 'none' } }}
+                />
+              </FormControl>
+              </StyledRow>
+              <FormControl sx={{ m: 1, width: 350 }}>
+                <TextField
+                  variant="outlined"
+                  required
+                  fullWidth
+                  id="phoneNumber"
+                  label="Phone Number"
+                  name="phoneNumber"
+                  value={phoneNumber}
+                  onChange={(e) => setPhoneNumber(e.target.value)}
+                  inputProps={{ style: { textTransform: 'none' } }}
+                />
+              </FormControl>
             
-            <Input
-              type="text"
-              id="country"
-              name="country"
-              placeholder="Country"
-              value={country}
-              onChange={(e) => setCountry(e.target.value)}
-              required
-            />
-            <Input
-              type="text"
-              id="postalCode"
-              name="postalCode"
-              placeholder="Postal Code"
-              value={postalCode}
-              onChange={(e) => setPostalCode(e.target.value)}
-              required
-            />
-          </StyledRow>            
-            <Input
-              type="tel"
-              id="phoneNumber"
-              name="phoneNumber"
-              placeholder="Phone Number"
-              value={phoneNumber}
-              onChange={(e) => setPhoneNumber(e.target.value)}
-              required
-            />
-            <Input
-              type="email"
-              id="email"
-              name="email"
-              placeholder="Email"
-              value={email}
-              onChange={(e) => setEmail(e.target.value)}
-              required
-            />
-          <Button type="submit">Add Hospital</Button>
+
+            <FormControl sx={{ m: 1, width: 350 }}>
+              <TextField
+                variant="outlined"
+                required
+                fullWidth
+                id="email"
+                label="Email"
+                name="email"
+                type="email"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                inputProps={{ style: { textTransform: 'none' } }}
+              />
+            </FormControl>
+
+            <Button type="submit" variant='contained' fullWidth sx={{backgroundColor:'#3D96FF'}}>Add Hospital</Button>
         </Form>
       </Container>
     </Wrapper>
@@ -257,11 +338,11 @@ const Alert = styled.div`
 
 const Container = styled.div`
   width: 100%;
-  max-width: 400px;
+  max-width: 450px;
   padding: 40px;
   background-color: #fff;
   border-radius: 15px;
-  margin-top: 100px;
+  margin-top: 50px;
   box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
 `;
 
@@ -290,48 +371,5 @@ const StyledRow = styled.div`
   }
 `;
 
-
-
-const Button = styled.button`
-  display: block;
-  width: 100%;
-  padding: 7.5px;
-  font-size: 18px;
-  color: ${({ theme }) => theme.colors.white};
-  background-color: ${({ theme }) => theme.colors.btn};
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  -webkit-transition: all 0.3s ease 0s;
-  -moz-transition: all 0.3s ease 0s;
-  -o-transition: all 0.3s ease 0s;
-
-  &:hover,
-  &:active {
-    box-shadow: 0 20px 20px 0 rgb(132 144 255 / 30%);
-    box-shadow: ${({ theme }) => theme.colors.shadowSupport};
-    transform: scale(0.96);
-  }
-
-`;
-
-const Options = styled.div`
-margin-top: 30px;
-  display: flex;
-  justify-content: space-between;
-  
-`;
-
-const Option = styled.a`
-  font-size: 14px;
-  color: ${({ theme }) => theme.colors.helper};
-  text-decoration: none;
-  cursor: pointer;
-
-  &:hover {
-    text-decoration: underline;
-  }
-`;
 
 export default AddHospital;

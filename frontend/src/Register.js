@@ -62,7 +62,7 @@ const Register = () => {
 
   useEffect(() => {
     if(error){
-      setMessage("Invalid Credentials")
+      setMessage("Username is taken!")
     }
   }, [error, setMessage])
 

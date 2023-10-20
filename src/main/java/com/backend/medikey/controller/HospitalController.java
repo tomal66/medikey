@@ -3,8 +3,10 @@ package com.backend.medikey.controller;
 import com.backend.medikey.dto.HospitalDto;
 import com.backend.medikey.model.Doctor;
 import com.backend.medikey.model.Hospital;
+import com.backend.medikey.model.User;
 import com.backend.medikey.model.Visit;
 import com.backend.medikey.service.HospitalService;
+import com.backend.medikey.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -20,6 +22,10 @@ public class HospitalController {
 
     @Autowired
     private HospitalService hospitalService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private AuthController authController;
 
     // Convert Hospital to HospitalDto
     private HospitalDto convertToDto(Hospital hospital) {
@@ -61,6 +67,7 @@ public class HospitalController {
         hospital.setPostalCode(dto.getPostalCode());
         hospital.setPhoneNumber(dto.getPhoneNumber());
         hospital.setEmail(dto.getEmail());
+        hospital.setUser(userService.findById(dto.getUserId()));
 
         // Add other fields as needed
         return hospital;
@@ -94,25 +101,13 @@ public class HospitalController {
 
     // Add a new hospital
     @PostMapping
-    public ResponseEntity<HospitalDto> addHospital(@RequestBody HospitalDto hospitalDto) {
+    public ResponseEntity<?> addHospital(@RequestBody HospitalDto hospitalDto) {
         Hospital hospital = convertToEntity(hospitalDto);
         Hospital newHospital = hospitalService.save(hospital);
-        return new ResponseEntity<>(convertToDto(newHospital), HttpStatus.CREATED);
+        return new ResponseEntity<>("Hospital added!", HttpStatus.CREATED);
     }
 
-    // Update an existing hospital
-    /*@PutMapping("/{hospitalid}")
-    public ResponseEntity<HospitalDto> updateHospital(@PathVariable Long id, @RequestBody HospitalDto hospitalDto) {
-        Optional<Hospital> existingHospital = hospitalService.findByHospitalId(hospitalId);
-        if (existingHospital.isPresent()) {
-            Hospital hospital = convertToEntity(hospitalDto);
-            hospital.setHospitalId(id);  // Ensure the ID remains the same
-            Hospital updatedHospital = hospitalService.save(hospital);
-            return new ResponseEntity<>(convertToDto(updatedHospital), HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }*/
+
 
     @PutMapping("/{hospitalId}")  // Changed 'hospitalid' to 'hospitalId' to match the method parameter
     public ResponseEntity<HospitalDto> updateHospital(@PathVariable Long hospitalId, @RequestBody HospitalDto hospitalDto) {  // Changed 'id' to 'hospitalId'

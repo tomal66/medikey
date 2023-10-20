@@ -8,6 +8,7 @@ const authReducer = (state, action) => {
           username: action.payload.username,
           role: action.payload.role,
           userId: action.payload.userId,
+          currentUser: action.payload.userDetails,
           error: null,
         };
 

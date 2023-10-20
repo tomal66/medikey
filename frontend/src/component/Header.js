@@ -5,6 +5,8 @@ import Nav from './Nav';
 import { useAuthContext } from '../context/auth_context';
 import PatientNav from './PatientNav';
 import MuiNavBar from './MuiNavBar';
+import AdminNav from './AdminNav';
+import HospitalNav from './HospitalNav';
 
 const Header = ({toggleChatbot}) => {
   const { role } = useAuthContext();
@@ -15,7 +17,9 @@ const Header = ({toggleChatbot}) => {
             <PatientNav toggleChatbot={toggleChatbot}/>
 
       ) : role === 'ROLE_ADMIN' ? ( // Check if the user has ROLE_ADMIN
-        <Nav /> // Render AdminNav for admin user
+        <AdminNav /> // Render AdminNav for admin user
+      ) : role === 'ROLE_HOSPITAL' ? ( // Check if the user has ROLE_ADMIN
+        <HospitalNav /> // Render AdminNav for admin user
       ) : (
         <MuiNavBar toggleChatbot={toggleChatbot}/>
       )}

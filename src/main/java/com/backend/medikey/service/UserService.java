@@ -13,5 +13,5 @@ public interface UserService {
     void saveUserVerificationToken(User theUser, String verificationToken);
     String validateToken(String theToken);*/
 
-    Optional<Object> findById(Long userId);
+    User findById(Long userId);
 }
