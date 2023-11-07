@@ -75,6 +75,13 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
+    public List<DoctorDto> getByHospital(Long hospitalId) {
+        return doctorRepository.findByHospital_HospitalId(hospitalId).stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public void delete(Long id) {
         doctorRepository.deleteById(id);
     }

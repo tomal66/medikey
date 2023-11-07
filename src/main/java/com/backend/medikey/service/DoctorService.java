@@ -21,6 +21,8 @@ public interface DoctorService {
     List<DoctorDto> getByDepartment(String department);
 
     Optional<DoctorDto> getDoctorByUserId(Long userId);
+    List<DoctorDto> getByHospital(Long hospitalId);
+
 
 
     void delete(Long id);

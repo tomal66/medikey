@@ -48,7 +48,13 @@ public class DoctorController {
         return new ResponseEntity<>(doctors, HttpStatus.OK);
     }
 
-    @PostMapping("/")
+    @GetMapping("/hospital/{hospitalId}")
+    public ResponseEntity<List<DoctorDto>> getDoctorByHospital(@PathVariable Long hospitalId) {
+        List<DoctorDto> doctors = doctorService.getByHospital(hospitalId);
+        return new ResponseEntity<>(doctors, HttpStatus.OK);
+    }
+
+    @PostMapping
     public ResponseEntity<DoctorDto> createDoctor(@RequestBody DoctorDto doctorDto) {
         DoctorDto newDoctorDto = doctorService.createDoctor(doctorDto);
         return new ResponseEntity<>(newDoctorDto, HttpStatus.CREATED);

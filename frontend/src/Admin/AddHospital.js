@@ -22,7 +22,6 @@ const AddHospital = () => {
   const [message, setMessage] = useState('');
   const nav = useNavigate();
 
-  const isAuthenticated = false;
   const error = null;
   const API = 'http://localhost:8567/api/'
 
@@ -57,6 +56,20 @@ const AddHospital = () => {
                 email: email
             });
 
+            // Prepare the email data
+            const emailData = {
+              to: email,
+              from: "medikey.health@gmail.com",
+              subject: "Account Created",
+              name: `${name}`,
+              role: 'Hospital',
+              username: username,
+              password: password 
+          };
+
+          // Send the email
+          await axios.post(API+'mail/sendingEmail', emailData);
+
             Swal.fire({
                 title: 'Success',
                 text: 'Hospital Added!',
@@ -88,21 +101,6 @@ const AddHospital = () => {
 };
 
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      if(role==="ROLE_SELLER")
-      {
-        nav("/seller-dashboard");
-      }
-      else if(role==="ROLE_ADMIN"){
-        nav("/admin-dashboard");
-      }
-      else{
-        nav("/");
-      }
-
-    }
-  }, [isAuthenticated, nav]);
 
   useEffect(() => {
     if(error){

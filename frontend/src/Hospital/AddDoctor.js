@@ -3,9 +3,12 @@ import styled from 'styled-components';
 //import { useAuthContext } from './context/auth_context';
 import { NavLink, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import { TextField, Button, FormControl, MenuItem } from '@mui/material';
+import { useAuthContext } from '../context/auth_context';
+import axios from 'axios';
+
 
 const AddDoctor = () => {
-  //const { login, isAuthenticated, error, role } = useAuthContext();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
@@ -16,67 +19,163 @@ const AddDoctor = () => {
   const [department, setDepartment] = useState('');
   const [message, setMessage] = useState('');
   const nav = useNavigate();
+  const {currentUser} = useAuthContext();
+  const API = 'http://localhost:8567/api/'
 
-  const isAuthenticated = false;
-  const role = null;
+  const departments = [
+    {
+      value: 'CARDIAC & VASCULAR SURGERY',
+      label: 'Cardiac & Vascular Surgery',
+    },
+    {
+      value: 'CARDIOLOGY (INTERVENTIONAL)',
+      label: 'Cardiology (Interventional)',
+    },
+    {
+      value: 'COLORECTAL & LAPAROSCOPIC SURGERY',
+      label: 'Colorectal & Laparoscopic Surgery',
+    },
+    {
+      value: 'DERMATOLOGY',
+      label: 'Dermatology',
+    },
+    {
+      value: 'DIABETES',
+      label: 'Diabetes',
+    },
+    {
+      value: 'ENDOCRINOLOGY',
+      label: 'Endocrinology',
+    },
+    {
+      value: 'ENT, HEAD & NECK SURGERY',
+      label: 'ENT, Head & Neck Surgery',
+    },
+    {
+      value: 'GASTROENTEROLOGY',
+      label: 'Gastroenterology',
+    },
+    {
+      value: 'HYPERTENSION',
+      label: 'Hypertension',
+    },
+    {
+      value: 'INTERNAL MEDICINE',
+      label: 'Internal Medicine',
+    },
+    {
+      value: 'NEURO SURGERY',
+      label: 'Neuro Surgery',
+    },
+    {
+      value: 'NEUROMEDICINE',
+      label: 'Neuromedicine',
+    },
+    {
+      value: 'ORTHOPEDICS',
+      label: 'Orthopedics',
+    },
+    {
+      value: 'RESPIRATORY MEDICINE',
+      label: 'Respiratory Medicine',
+    },
+    {
+      value: 'UROLOGY',
+      label: 'Urology',
+    },
+  ];
+  
   const error = null;
 
   const doPasswordsMatch = () => {
     return password === confirmPassword;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (username && password && password.length >= 8 && doPasswordsMatch()) {
-        try{
-            //await addProduct(productData, images);
+        try {
+            // Register the user
+            const userResponse = await axios.post(API+'auth/register', {
+                username: username,
+                password: password,
+                role: 'ROLE_DOCTOR'
+            });
+
+            const userId = userResponse.data;
+
+            // Register the doctor with the received userId
+            await axios.post(API+'doctors', {
+                userId: userId,
+                firstName: firstName,
+                lastName: lastName,
+                email: email,
+                phone: phone,
+                department: department,
+                hospitalId: currentUser.hospitalId
+            });
+
+            // Prepare the email data
+            const emailData = {
+                to: email,
+                from: "medikey.health@gmail.com",
+                subject: "Account Created",
+                name: `${firstName}`,
+                role: 'Doctor',
+                username: username,
+                password: password 
+            };
+
+            // Send the email
+            await axios.post(API+'mail/sendingEmail', emailData);
+
+            // Success alert
             Swal.fire({
                 title: 'Success',
-                text: 'Doctor Added!',
+                text: 'Doctor Added and Email Sent!',
                 icon: 'success',
                 confirmButtonColor: '#3D96FF',
                 confirmButtonText: 'Done',
                 heightAuto: true,
-              }).then((result) => {
+            }).then((result) => {
                 if (result.isConfirmed) {
-                  nav('/hospital-dashboard'); // Replace '/' with the desired path
+                    nav('/hospital-dashboard'); // Replace with the desired path
                 }
-              });
-          } catch(error){
-            Swal.fire({
-                title: 'Error',
-                text: 'Failed to add hospital',
-                icon: 'error',
-                confirmButtonText: 'Try Again',
-                heightAuto: true,
-              });
-          }
-      
+            });
+        } catch (error) {
+            // Error alert for the email sending failure
+            if (error.response && error.response.data) {
+                Swal.fire({
+                    title: 'Error',
+                    text: `Failed to send email: ${error.response.data.message}`,
+                    icon: 'error',
+                    confirmButtonText: 'Try Again',
+                    confirmButtonColor: '#3D96FF',
+                    heightAuto: true,
+                });
+            } else {
+                // General error alert
+                Swal.fire({
+                    title: 'Error',
+                    text: 'Failed to add doctor',
+                    icon: 'error',
+                    confirmButtonText: 'Try Again',
+                    confirmButtonColor: '#3D96FF',
+                    heightAuto: true,
+                });
+            }
+        }
     } else {
-      // Error alert message if any of the required fields are missing or invalid
-      if (!username) setMessage("Please enter a username!");
-      else if (!password) setMessage("Please enter a password!");
-      else if (password.length < 8) setMessage("Password must be at least 8 characters long!");
-      else if (!doPasswordsMatch()) setMessage("Passwords do not match!");
+        // Error alert message if any of the required fields are missing or invalid
+        if (!username) setMessage("Please enter a username!");
+        else if (!password) setMessage("Please enter a password!");
+        else if (password.length < 8) setMessage("Password must be at least 8 characters long!");
+        else if (!doPasswordsMatch()) setMessage("Passwords do not match!");
     }
-    
-  };
+};
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      if(role==="ROLE_SELLER")
-      {
-        nav("/seller-dashboard");
-      }
-      else if(role==="ROLE_ADMIN"){
-        nav("/admin-dashboard");
-      }
-      else{
-        nav("/");
-      }
 
-    }
-  }, [isAuthenticated, nav]);
 
   useEffect(() => {
     if(error){
@@ -100,105 +199,129 @@ const AddDoctor = () => {
           )
         }
         <Form onSubmit={handleSubmit}>
-            
-
-            <Input
-              type="username"
-              id="username"
+          <FormControl sx={{ m: 1, width: 350 }}>
+            <TextField
+              autoComplete="username"
               name="username"
-              placeholder="Doctor Username"
+              variant="outlined"
+              required
+              id="username"
+              label="Doctor Username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              required
+              inputProps={{ style: { textTransform: 'none' } }}
             />
-            
-            <StyledRow>
-            <Input
-              type="password"
-              id="password"
-              name="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-            <Input
-              type="password"
-              id="confirmPassword"
-              name="confirmPassword"
-              placeholder="Confirm Password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-            />
-            </StyledRow>
-            <StyledRow>
-            <Input
-              type="text"
-              id="firstName"
-              name="firstName"
-              placeholder="First Name"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-              required
-            />
+          </FormControl>
 
-            <Input
-              type="text"
-              id="lastName"
-              name="lastName"
-              placeholder="Last Name"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-              required
-            />
-            </StyledRow>
+          <StyledRow>
+            <FormControl sx={{ m: 1, width: 350 }}>
+              <TextField
+                type="password"
+                name="password"
+                variant="outlined"
+                required
+                id="password"
+                label="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                inputProps={{ style: { textTransform: 'none' } }}
+                
+              />
+            </FormControl>
+            <FormControl sx={{ m: 1, width: 350 }}>
+              <TextField
+                type="password"
+                name="confirmPassword"
+                variant="outlined"
+                required
+                id="confirmPassword"
+                label="Confirm Password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                inputProps={{ style: { textTransform: 'none' } }}
+              />
+            </FormControl>
+          </StyledRow>
 
-            <Select
-            id="department"
-            name="department"
-            value={department} // make sure to define this state variable
-            onChange={(e) => setDepartment(e.target.value)} // make sure to define this function
-            required
+          <StyledRow>
+            <FormControl sx={{ m: 1, width: 350 }}>
+              <TextField
+                type="text"
+                name="firstName"
+                variant="outlined"
+                required
+                id="firstName"
+                label="First Name"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                inputProps={{ style: { textTransform: 'none' } }}
+              />
+            </FormControl>
+            <FormControl sx={{ m: 1, width: 350 }}>
+              <TextField
+                type="text"
+                name="lastName"
+                variant="outlined"
+                required
+                id="lastName"
+                label="Last Name"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                inputProps={{ style: { textTransform: 'none' } }}
+              />
+            </FormControl>
+          </StyledRow>
+
+          <FormControl sx={{ m: 1, width: 350 }}>
+            <TextField
+              select
+              label="Department"
+              id="department"
+              name="department"
+              value={department}
+              onChange={(e) => setDepartment(e.target.value)}
+              required
+              inputProps={{MenuProps: {disableScrollLock: true}}}
             >
-                <option value="">Select a department</option>
-                <option value="CARDIAC & VASCULAR SURGERY">CARDIAC & VASCULAR SURGERY</option>
-                <option value="CARDIOLOGY (INTERVENTIONAL)">CARDIOLOGY (INTERVENTIONAL)</option>
-                <option value="COLORECTAL & LAPAROSCOPIC SURGERY">COLORECTAL & LAPAROSCOPIC SURGERY</option>
-                <option value="DERMATOLOGY">DERMATOLOGY</option>
-                <option value="Diabetes">Diabetes</option>
-                <option value="ENDOCRINOLOGY">ENDOCRINOLOGY</option>
-                <option value="ENT, HEAD & NECK SURGERY">ENT, HEAD & NECK SURGERY</option>
-                <option value="GASTROENTEROLOGY">GASTROENTEROLOGY</option>
-                <option value="Hypertension">Hypertension</option>
-                <option value="INTERNAL MEDICINE">INTERNAL MEDICINE</option>
-                <option value="NEURO SURGERY">NEURO SURGERY</option>
-                <option value="NEUROMEDICINE">NEUROMEDICINE</option>
-                <option value="ORTHOPEDICS">ORTHOPEDICS</option>
-                <option value="RESPIRATORY MEDICINE">RESPIRATORY MEDICINE</option>
-                <option value="UROLOGY">UROLOGY</option>
-            </Select>
+              {departments.map((option) => (
+                <MenuItem key={option.value} value={option.value}>
+                  {option.label}
+                </MenuItem>
+              ))}
+            </TextField>
+          </FormControl>
 
-            
-            <Input
+          <FormControl sx={{ m: 1, width: 350 }}>
+            <TextField
               type="tel"
-              id="phone"
               name="phone"
-              placeholder="Phone"
+              variant="outlined"
+              required
+              id="phone"
+              label="Phone"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
-              required
+              inputProps={{ style: { textTransform: 'none' } }}
             />
-            <Input
+          </FormControl>
+
+          <FormControl sx={{ m: 1, width: 350 }}>
+            <TextField
               type="email"
-              id="email"
               name="email"
-              placeholder="Email"
+              variant="outlined"
+              required
+              id="email"
+              label="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              required
+              inputProps={{ style: { textTransform: 'none' } }}
             />
-          <Button type="submit">Add Doctor</Button>
+          </FormControl>
+
+          <Button type="submit" variant="contained" fullWidth sx={{backgroundColor: '#3d96ff'}}>
+            Add Doctor
+          </Button>
         </Form>
       </Container>
     </Wrapper>
@@ -228,21 +351,6 @@ const Input = styled.input`
   }
 `;
 
-const Select = styled.select`
-  display: block;
-  width: 100%;
-  padding: 10px;
-  font-size: 16px;
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: 3px;
-  margin-bottom: 10px;
-  outline: none;
-  text-transform: none;
-  &:focus {
-    border-color: ${({ theme }) => theme.colors.helper};
-  }
-`;
-
 const Alert = styled.div`
   width: 100%;
   padding: 10px;
@@ -257,11 +365,11 @@ const Alert = styled.div`
 
 const Container = styled.div`
   width: 100%;
-  max-width: 400px;
+  max-width: 450px;
   padding: 40px;
   background-color: #fff;
   border-radius: 15px;
-  margin-top: 100px;
+  margin-top: 50px;
   box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
 `;
 
@@ -290,48 +398,5 @@ const StyledRow = styled.div`
   }
 `;
 
-
-
-const Button = styled.button`
-  display: block;
-  width: 100%;
-  padding: 7.5px;
-  font-size: 18px;
-  color: ${({ theme }) => theme.colors.white};
-  background-color: ${({ theme }) => theme.colors.btn};
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  -webkit-transition: all 0.3s ease 0s;
-  -moz-transition: all 0.3s ease 0s;
-  -o-transition: all 0.3s ease 0s;
-
-  &:hover,
-  &:active {
-    box-shadow: 0 20px 20px 0 rgb(132 144 255 / 30%);
-    box-shadow: ${({ theme }) => theme.colors.shadowSupport};
-    transform: scale(0.96);
-  }
-
-`;
-
-const Options = styled.div`
-margin-top: 30px;
-  display: flex;
-  justify-content: space-between;
-  
-`;
-
-const Option = styled.a`
-  font-size: 14px;
-  color: ${({ theme }) => theme.colors.helper};
-  text-decoration: none;
-  cursor: pointer;
-
-  &:hover {
-    text-decoration: underline;
-  }
-`;
 
 export default AddDoctor;

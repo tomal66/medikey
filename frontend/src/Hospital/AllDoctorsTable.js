@@ -1,82 +1,71 @@
 import React, {useMemo, useEffect, useState} from 'react'
 import { AiFillEye} from 'react-icons/ai'
-import DataTable from 'react-data-table-component'
 import styled from 'styled-components'
 import { FiEdit2, FiTrash2 } from 'react-icons/fi';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { DataGrid } from '@mui/x-data-grid';
+import { TextField, Button, FormControl, MenuItem } from '@mui/material';
+import { useAuthContext } from '../context/auth_context';
+
 
 const AllDoctorsTable = () => {
 
+  const {currentUser} = useAuthContext();
+  const [doctors, setDoctors] = useState([]);
+  const authState = JSON.parse(localStorage.getItem("authState"));
+  const hospitalId = authState?.currentUser?.hospitalId;
 
-    const [doctors, setDoctors] = useState([
-        {
-          id: '1',
-          firstName: 'John',
-          lastName: 'Doe',
-          department: 'CARDIOLOGY',
-          email: 'john.doe@example.com',
-          phone: '123-456-7890'
-        },
-        {
-          id: '2',
-          firstName: 'Jane',
-          lastName: 'Doe',
-          department: 'ORTHOPEDICS',
-          email: 'jane.doe@example.com',
-          phone: '098-765-4321'
-        },
-        {
-          id: '3',
-          firstName: 'Emily',
-          lastName: 'Smith',
-          department: 'NEUROMEDICINE',
-          email: 'emily.smith@example.com',
-          phone: '111-222-3333'
-        },
-        {
-          id: '4',
-          firstName: 'Robert',
-          lastName: 'Brown',
-          department: 'ENDOCRINOLOGY',
-          email: 'robert.brown@example.com',
-          phone: '444-555-6666'
-        },
-        {
-          id: '5',
-          firstName: 'Karen',
-          lastName: 'Williams',
-          department: 'DERMATOLOGY',
-          email: 'karen.williams@example.com',
-          phone: '777-888-9999'
-        }
-      ]);
+
+  // useEffect(() => {
+  //   const fetchDoctors = async () => {
+  //     try {
+  //       const response = await axios.get(`http://localhost:8567/api/doctors/hospital/${hospitalId}`);
+  //       setDoctors(response.data);
+  //       console.log(hospitalId)
+  //     } catch (error) {
+  //       console.error("Error fetching doctors:", error);
+  //       // Handle error here, e.g., set error message in state
+  //     }
+  //   };
+
+  //   fetchDoctors();
+  // }, []);
       
       
       
     const [search, setSearch] = useState(""); // Add this line
 
-    // useEffect(() => {
-    //     axios.get('http://localhost:8080/api/hospital/all')
-    //       .then(response => {
-    //         setHospitals(response.data); 
-    //       })
-    //       .catch(error => {
-    //         console.error('Error:', error);
-    //       });
-    //   }, []);
+    useEffect(() => {
+      // Ensure currentUser is available before making the call
+      if (hospitalId) {
+        axios.get(`http://localhost:8567/api/doctors/hospital/${hospitalId}`)
+          .then(response => {
+            const dataWithIds = response.data.map((doctor) => ({
+              ...doctor,
+              id: doctor.doctorId,
+            }));
+            setDoctors(dataWithIds); 
+          })
+          .catch(error => {
+            console.error('Error:', error);
+          });
+      } else {
+        console.error('currentUser or hospitalId is undefined');
+      }
+    }, []);
+    
 
     const filteredDoctors = doctors.filter(
         doctor =>
-        doctor.id.toLowerCase().includes(search.toLowerCase()) ||
+        doctor.doctorId === Number(search) ||
         doctor.firstName.toLowerCase().includes(search.toLowerCase()) ||
         doctor.lastName.toLowerCase().includes(search.toLowerCase())
     );
 
     const columns = [
-        { field: 'id', headerName: 'ID', flex: 1, headerAlign: 'left',  },
+        { field: 'id', headerName: 'ID', flex: .5, headerAlign: 'left',  },
         { field: 'firstName', headerName: 'First Name', flex: 1, headerAlign: 'left', },
         { field: 'lastName', headerName: 'Last Name', flex: 1, headerAlign: 'left', },
         { field: 'department', headerName: 'Department', flex: 1, headerAlign: 'left', },
@@ -97,7 +86,7 @@ const AllDoctorsTable = () => {
         {
             field: 'actions',
             headerName: 'Actions',
-            flex: 1,
+            flex: .7,
             sortable: false,
             renderCell: (params) => (
               <>
@@ -128,11 +117,17 @@ const AllDoctorsTable = () => {
     return (
       <Wrapper>
         <div className="container"> 
-        <SearchInput
+        <TextField
           type="text"
-          placeholder="Search Doctors"
+          label="Search Doctors"
+          variant="outlined"
           value={search}
           onChange={e => setSearch(e.target.value)}
+          sx={{
+            marginBottom: '10px',           
+          }}
+          inputProps={{ 
+          style: { textTransform: 'none' } }}
         />
         <div style={{ height: 400, width: '100%',}}>
             <DataGrid
@@ -156,7 +151,7 @@ const AllDoctorsTable = () => {
                 },
                 }}
                 pageSizeOptions={[5, 10]}
-                checkboxSelection
+                
                 classes={'datagrid'}
             />
             </div>
