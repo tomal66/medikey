@@ -44,17 +44,28 @@ public class DoctorServiceImpl implements DoctorService {
 
     @Override
     public DoctorDto updateDoctor(Long id, DoctorDto doctorDto) {
-        Doctor existingDoctor = doctorRepository.findById(id).orElseThrow(() -> new RuntimeException("Doctor not found"));
+        Doctor existingDoctor = doctorRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Doctor not found"));
+
         existingDoctor.setFirstName(doctorDto.getFirstName());
         existingDoctor.setLastName(doctorDto.getLastName());
         existingDoctor.setEmail(doctorDto.getEmail());
         existingDoctor.setPhone(doctorDto.getPhone());
         existingDoctor.setDepartment(doctorDto.getDepartment());
+        existingDoctor.setTitle(doctorDto.getTitle()); // Update the title
+        existingDoctor.setMaxPatients(doctorDto.getMaxPatients()); // Update the maxPatients
+        existingDoctor.setDaysOfWeek(doctorDto.getDaysOfWeek()); // Update the daysOfWeek
+        existingDoctor.setStartTime(doctorDto.getStartTime()); // Update the startTime
         existingDoctor.setUser(userRepository.findByUserId(doctorDto.getUserId()));
         existingDoctor.setHospital(hospitalRepository.findByHospitalId(doctorDto.getHospitalId()));
+
+        // Save the updated doctor info
         Doctor updatedDoctor = doctorRepository.save(existingDoctor);
+
+        // Convert to DTO and return
         return convertToDto(updatedDoctor);
     }
+
 
     @Override
     public void deleteDoctor(Long id) {
@@ -70,8 +81,8 @@ public class DoctorServiceImpl implements DoctorService {
 
 
     @Override
-    public Optional<DoctorDto> getDoctorByUserId(Long userId) {
-        return doctorRepository.findByUser_UserId(userId).map(this::convertToDto);
+    public DoctorDto getDoctorByUserId(Long userId) {
+        return convertToDto(doctorRepository.findByUser_UserId(userId));
     }
 
     @Override
@@ -94,6 +105,10 @@ public class DoctorServiceImpl implements DoctorService {
         dto.setEmail(doctor.getEmail());
         dto.setPhone(doctor.getPhone());
         dto.setDepartment(doctor.getDepartment());
+        dto.setTitle(doctor.getTitle()); // Set the title
+        dto.setMaxPatients(doctor.getMaxPatients()); // Set the maxPatients
+        dto.setDaysOfWeek(doctor.getDaysOfWeek()); // Set the daysOfWeek
+        dto.setStartTime(doctor.getStartTime()); // Set the startTime
         dto.setUserId(doctor.getUser().getUserId());
         dto.setHospitalId(doctor.getHospital().getHospitalId());
         return dto;
@@ -101,17 +116,24 @@ public class DoctorServiceImpl implements DoctorService {
 
     private Doctor convertToEntity(DoctorDto doctorDto) {
         Doctor doctor = new Doctor();
+        if (doctorDto.getDoctorId() != null) { // Only set if ID is present
+            doctor.setDoctorId(doctorDto.getDoctorId());
+        }
         doctor.setFirstName(doctorDto.getFirstName());
         doctor.setLastName(doctorDto.getLastName());
         doctor.setEmail(doctorDto.getEmail());
         doctor.setPhone(doctorDto.getPhone());
         doctor.setDepartment(doctorDto.getDepartment());
+        doctor.setTitle(doctorDto.getTitle()); // Get the title
+        doctor.setMaxPatients(doctorDto.getMaxPatients()); // Get the maxPatients
+        doctor.setDaysOfWeek(doctorDto.getDaysOfWeek()); // Get the daysOfWeek
+        doctor.setStartTime(doctorDto.getStartTime()); // Get the startTime
         doctor.setUser(userRepository.findByUserId(doctorDto.getUserId()));
         doctor.setHospital(hospitalRepository.findByHospitalId(doctorDto.getHospitalId()));
-
 
         // Fetch and set the User and Hospital entities here
 
         return doctor;
     }
+
 }

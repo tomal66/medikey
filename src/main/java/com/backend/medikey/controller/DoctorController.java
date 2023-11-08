@@ -9,6 +9,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import com.backend.medikey.model.Visit;
 
+import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -81,28 +83,15 @@ public class DoctorController {
         doctorDto.setEmail(doctor.getEmail());
         doctorDto.setPhone(doctor.getPhone());
         doctorDto.setDepartment(doctor.getDepartment());
+        doctorDto.setTitle(doctor.getTitle()); // Include title
+        doctorDto.setMaxPatients(doctor.getMaxPatients()); // Include maxPatients
+        doctorDto.setDaysOfWeek(doctor.getDaysOfWeek()); // Include daysOfWeek
+        // Format the LocalTime to a string
+        doctorDto.setStartTime(LocalTime.parse(doctor.getStartTime().format(DateTimeFormatter.ofPattern("HH:mm:ss")))); // Include startTime
         doctorDto.setUserId(doctor.getUser().getUserId());
         doctorDto.setHospitalId(doctor.getHospital().getHospitalId());
-        List<Long> doctorVisitIds = doctor.getDoctorVisits().stream()
-                .map(Visit::getVisitId)
-                .collect(Collectors.toList());
-
-        doctorDto.setDoctorVisitIds(doctorVisitIds);
+        // Since doctorVisits relationship is removed, doctorVisitIds should also be removed
         return doctorDto;
     }
 
-    private Doctor convertToEntity(DoctorDto doctorDto) {
-        Doctor doctor = new Doctor();
-        doctor.setDoctorId(doctorDto.getDoctorId());
-        doctor.setFirstName(doctorDto.getFirstName());
-        doctor.setLastName(doctorDto.getLastName());
-        doctor.setEmail(doctorDto.getEmail());
-        doctor.setPhone(doctorDto.getPhone());
-        doctor.setDepartment(doctorDto.getDepartment());
-        doctor.setDoctorId(doctorDto.getDoctorId());
-//        doctor.setHospitalId(doctorDto.getHospitalId());
-//        doctor.setDoctorVisitIds(doctorDto.getDoctorVisitIds());
-        // Fetch and set the User and Hospital entities here
-        return doctor;
-    }
 }

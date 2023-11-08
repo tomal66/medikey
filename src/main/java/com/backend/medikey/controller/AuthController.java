@@ -4,6 +4,7 @@ import com.backend.medikey.dto.*;
 import com.backend.medikey.model.User;
 import com.backend.medikey.repository.UserRepository;
 import com.backend.medikey.security.JWTGenerator;
+import com.backend.medikey.service.DoctorService;
 import com.backend.medikey.service.HospitalService;
 import com.backend.medikey.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,6 +29,8 @@ public class AuthController {
     private PatientService patientService;
     @Autowired
     private HospitalService hospitalService;
+    @Autowired
+    private DoctorService doctorService;
 
     @Autowired
     public AuthController(AuthenticationManager authenticationManager, UserRepository userRepository, PasswordEncoder passwordEncoder, JWTGenerator jwtGenerator) {
@@ -83,6 +86,13 @@ public class AuthController {
                 HospitalDto hospitalDto = hospitalService.findByUserId(userId);
                 if (hospitalDto != null) {
                     userDetails = hospitalDto;
+                }
+                break;
+            case "ROLE_DOCTOR":
+                // Fetch patient details using the patient service
+                DoctorDto doctorDto = doctorService.getDoctorByUserId(userId);
+                if (doctorDto != null) {
+                    userDetails = doctorDto;
                 }
                 break;
 

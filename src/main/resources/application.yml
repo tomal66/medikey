@@ -6,6 +6,10 @@ spring:
     username: admin
     password: 12345678
     driver-class-name: com.mysql.cj.jdbc.Driver
+  servlet:
+    multipart:
+      max-file-size: 10MB  # Set maximum file size
+      max-request-size: 15MB  # Set maximum request size
   jpa:
     hibernate:
       ddl-auto: update

@@ -141,6 +141,7 @@ const AppointmentList = () => {
         />
         <div style={{ height: 400, width: '100%',}}>
             <DataGrid
+                
                 sx={{
                     
                     fontSize: '14px',
@@ -169,6 +170,7 @@ const AppointmentList = () => {
         </div>
 
         <Modal
+          disableScrollLock
           open={isModalOpen}
           onClose={closeModal}  // Modified the onClose to use the closeModal function
         >

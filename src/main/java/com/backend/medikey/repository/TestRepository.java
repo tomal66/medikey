@@ -22,4 +22,5 @@ public interface TestRepository extends JpaRepository<Test, Long> {
 
     @Query("SELECT t FROM Test t JOIN t.patient p JOIN p.user u WHERE u.username = :username")
     List<Test> findTestsByUsername(@Param("username") String username);
+
 }

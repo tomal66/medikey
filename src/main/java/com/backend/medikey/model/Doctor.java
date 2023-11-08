@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.hibernate.annotations.NaturalId;
 
+import java.time.LocalTime;
 import java.util.List;
 
 @Getter
@@ -24,14 +25,17 @@ public class Doctor {
     @NaturalId(mutable = true)
     private String phone;
     private String department;
+    private String title; // New field for the title of the doctor
+    private Integer maxPatients; // New field for the maximum number of patients
+
+    private String daysOfWeek; // Stores the days as a comma-separated string
+    private LocalTime startTime; // Stores the start time of the doctor
+    private String profileImage;
     @OneToOne
     private User user;
     @ManyToOne
     private Hospital hospital;
     @OneToMany(mappedBy = "doctor")
     private List<Visit> doctorVisits;
-
-    @OneToMany(mappedBy = "doctor")
-    private List<TimeSlot> timeSlots;
 
 }

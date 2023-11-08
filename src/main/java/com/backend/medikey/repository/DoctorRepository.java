@@ -29,7 +29,7 @@ public interface DoctorRepository extends JpaRepository<Doctor, Long> {
     List<Doctor> findByHospital_HospitalId(Long hospitalId);
 
     // Find by user ID
-    Optional<Doctor> findByUser_UserId(Long userId);
+    Doctor findByUser_UserId(Long userId);
 
     Doctor findByDoctorId(Long doctorId);
 }

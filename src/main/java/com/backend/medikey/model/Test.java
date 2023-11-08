@@ -31,4 +31,5 @@ public class Test {
     @ManyToOne
     private Doctor doctorReferred; // test referenced by doctor or hospital
     private String notes;
+    private String testReport;
 }
