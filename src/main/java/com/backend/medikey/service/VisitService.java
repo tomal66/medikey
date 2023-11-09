@@ -1,5 +1,6 @@
 package com.backend.medikey.service;
 
+import com.backend.medikey.dto.VisitDto;
 import com.backend.medikey.model.Visit;
 
 import java.util.Date;
@@ -8,23 +9,21 @@ import java.util.Optional;
 
 public interface VisitService {
 
-    List<Visit> getAllVisits();
+    List<VisitDto> getAllVisits();
 
-    Optional<Visit> getVisitById(Long id);
+    Optional<VisitDto> getVisitById(Long id);
 
-    //List<Visit> getVisitsByUserId(Long userId);
 
-    List<Visit> getVisitsByUsername(String username);
+    List<VisitDto> getVisitsByUsername(String username);
 
-    List<Visit> getVisitsByVisitDate(Date visitDate);
+    List<VisitDto> getVisitsByVisitDate(Date visitDate);
 
-    //List<Visit> getVisitsByHospital(String hospital);
+    List<VisitDto> getVisitsByDoctorAndVisitDate(Date visitDate, Long doctorId);
 
-    //List<Visit> getVisitsByDoctor(String doctor); getting errors related findByDoctor method
-//
-    Visit addVisit(Visit visit) throws Exception;
+    VisitDto addVisit(VisitDto visitDto) throws Exception;
 
-    Visit updateVisit(Visit visit);
+    VisitDto updateVisit(VisitDto visitDto);
+    boolean isDoctorAvailable(Long doctorId, Date date);
 
     void deleteVisit(Long id);
 

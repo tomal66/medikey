@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/doctors")
+@CrossOrigin(origins = "http://localhost:3000")
 public class DoctorController {
 
     @Autowired
@@ -31,7 +32,7 @@ public class DoctorController {
         return new ResponseEntity<>(doctorDtos, HttpStatus.OK);
     }
 */
-    @GetMapping("/")
+    @GetMapping("/all")
     public ResponseEntity<List<DoctorDto>> getAllDoctors() {
         List<DoctorDto> doctorDtos = doctorService.getAllDoctors();
         return new ResponseEntity<>(doctorDtos, HttpStatus.OK);

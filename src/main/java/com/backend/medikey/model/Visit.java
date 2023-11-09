@@ -19,8 +19,14 @@ public class Visit {
     private Doctor doctor;
     @ManyToOne
     private Patient patient;
+
+    // Field to store the UUID
+    @Column(name = "unique_identifier", nullable = false, updatable = false, unique = true)
+    private String uniqueIdentifier;
+
     @OneToOne
     private MedicalHistory medicalHistory;
+    private Integer slNo;
     @OneToMany(mappedBy = "visit")
     private List<Medication> medications;
     @Column(name = "visit_date", nullable = false)
@@ -40,8 +46,4 @@ public class Visit {
     @Column(name = "follow_up_date")
     @Temporal(TemporalType.DATE)
     private Date followUpDate;
-
-    public Visit(Long visitId) {
-        this.visitId = visitId;
-    }
 }

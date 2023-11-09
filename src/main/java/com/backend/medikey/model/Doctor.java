@@ -27,7 +27,7 @@ public class Doctor {
     private String department;
     private String title; // New field for the title of the doctor
     private Integer maxPatients; // New field for the maximum number of patients
-
+    private Integer minutes;
     private String daysOfWeek; // Stores the days as a comma-separated string
     private LocalTime startTime; // Stores the start time of the doctor
     private String profileImage;

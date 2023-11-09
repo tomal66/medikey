@@ -48,7 +48,7 @@ public class MedicationController {
         medication.setMedicationId(dto.getMedicationId());
         medication.setPatient(new Patient(dto.getPatientId()));
         //medication.setPrescribedBy(new Doctor(dto.getPrescribedById()));
-        medication.setVisit(new Visit(dto.getVisitId()));
+        //medication.setVisit(new Visit(dto.getVisitId()));
         medication.setDatePrescribed(dto.getDatePrescribed());
         medication.setMedicationName(dto.getMedicationName());
         medication.setDosage(dto.getDosage());

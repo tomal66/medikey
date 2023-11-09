@@ -12,7 +12,6 @@ public class VisitDto {
     private Long patientId;
     private String patientName;
     private Long medicalHistoryId;
-    private List<Long> medicationIds;
     private Date visitDate;
     private Date arrivalTime;
     private Date checkingTime;
@@ -20,5 +19,6 @@ public class VisitDto {
     private String reason;
     private String tests;
     private Date followUpDate;
-    //yogdhfaf
+    private Integer slNo;
+    private String uniqueIdentifier;
 }

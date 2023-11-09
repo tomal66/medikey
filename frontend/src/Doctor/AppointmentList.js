@@ -10,69 +10,43 @@ import { DataGrid } from '@mui/x-data-grid';
 import { Modal, Button } from '@mui/material';
 import Html5QrcodePlugin from '../Html5QrcodePlugin';
 import Loading from '../style/Loading'
+import { useAuthContext } from '../context/auth_context';
+import format from 'date-fns/format';
 
 const AppointmentList = () => {
   const [isModalOpen, setModalOpen] = useState(false);
   const [selectedAppointment, setSelectedAppointment] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [showAlert, setShowAlert] = useState(false);
-
-    const [appoitnments, setAppointments] = useState([
-        {
-            "id": "1",
-            "name": "John Doe",
-            "arrivedAt": "10:30",
-            "reason": "General Check-up",
-            "actions": "",
-            "code": "739444"
-        },
-        {
-            "id": "2",
-            "name": "Jane Smith",
-            "arrivedAt": "11:00",
-            "reason": "Dental Cleaning",
-            "actions": "",
-            "code": "739404"
-        },
-        {
-            "id": "3",
-            "name": "Emily Johnson",
-            "arrivedAt": "12:45",
-            "reason": "X-ray",
-            "actions": "",
-            "code": "739444"
-        },
-        {
-            "id": "4",
-            "name": "Michael Brown",
-            "arrivedAt": "13:20",
-            "reason": "Vaccination",
-            "actions": "",
-            "code": "739444"
-        },
-        {
-            "id": "5",
-            "name": "Sarah Williams",
-            "arrivedAt": "15:15",
-            "reason": "Eye Exam",
-            "actions": "",
-            "code": "739444"
-        }        
-      ]);
+  const {currentUser} = useAuthContext();
+  const [appoitnments, setAppointments] = useState([]);
       
-      
+    useEffect(() => {
+      const fetchAppointments = async () => {
+        setIsLoading(true); // Start loading before the API call
+        const formattedDate = format(new Date(), 'yyyy-MM-dd'); // format today's date
+        try {
+          const response = await axios.get(`http://localhost:8567/api/visits/doctor/${currentUser.doctorId}?visitDate=${formattedDate}`);
+          const mappedAppointments = response.data.map((appt) => ({
+            id: appt.slNo.toString(), // Convert to string because DataGrid expects IDs as strings
+            name: appt.patientName,
+            arrivedAt: appt.arrivalTime || 'Not yet', // Replace null with 'Not yet'
+            reason: appt.reason,
+            code: appt.uniqueIdentifier
+          }));
+          setAppointments(mappedAppointments);
+        } catch (error) {
+          console.error('Error fetching appointments:', error);
+          // Handle error, maybe set an error message in state and display it
+        }
+        setIsLoading(false); // Stop loading regardless of the outcome
+      };
+    
+      fetchAppointments();
+    }, [currentUser]);
+    
       
     const [search, setSearch] = useState(""); // Add this line
-
-    // useEffect(() => {
-    //     axios.get('http://localhost:8080/api/hospital/all')
-    //       .then(response => {
-    //         setHospitals(response.data); 
-    //       })
-    //       .catch(error => {
-    //         console.error('Error:', error);
-    //       });
-    //   }, []);
 
     const filteredAppointments = appoitnments.filter(
         appointment =>
@@ -81,14 +55,14 @@ const AppointmentList = () => {
     );
 
     const columns = [
-        { field: 'id', headerName: 'ID', flex: 1, headerAlign: 'left',  },
+        { field: 'id', headerName: 'ID', flex: .3, headerAlign: 'left',  },
         { field: 'name', headerName: 'Patient Name', flex: 1, headerAlign: 'left', },
         { field: 'arrivedAt', headerName: 'Arrived at', type: 'time', flex: 1, headerAlign: 'left', },
         { field: 'reason', headerName: 'Reason', flex: 1, headerAlign: 'left', },
         {
             field: 'actions',
             headerName: 'Actions',
-            flex: 1,
+            flex: .3,
             sortable: false,
             renderCell: (params) => (
               <>

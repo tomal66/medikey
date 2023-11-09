@@ -45,4 +45,5 @@ public interface MedicalHistoryRepository extends JpaRepository<MedicalHistory, 
     List<MedicalHistory> findByNotesContaining(String notesDetail);
 
     List<MedicalHistory> findAllByPatient_PatientId(Long patientId);
+    MedicalHistory findByMedicalHistoryId(Long medicalHistoryId);
 }

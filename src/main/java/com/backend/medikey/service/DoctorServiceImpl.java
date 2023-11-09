@@ -58,7 +58,7 @@ public class DoctorServiceImpl implements DoctorService {
         existingDoctor.setStartTime(doctorDto.getStartTime()); // Update the startTime
         existingDoctor.setUser(userRepository.findByUserId(doctorDto.getUserId()));
         existingDoctor.setHospital(hospitalRepository.findByHospitalId(doctorDto.getHospitalId()));
-
+        existingDoctor.setProfileImage(doctorDto.getProfileImage());
         // Save the updated doctor info
         Doctor updatedDoctor = doctorRepository.save(existingDoctor);
 
@@ -107,10 +107,12 @@ public class DoctorServiceImpl implements DoctorService {
         dto.setDepartment(doctor.getDepartment());
         dto.setTitle(doctor.getTitle()); // Set the title
         dto.setMaxPatients(doctor.getMaxPatients()); // Set the maxPatients
+        dto.setMinutes(doctor.getMinutes());
         dto.setDaysOfWeek(doctor.getDaysOfWeek()); // Set the daysOfWeek
         dto.setStartTime(doctor.getStartTime()); // Set the startTime
         dto.setUserId(doctor.getUser().getUserId());
         dto.setHospitalId(doctor.getHospital().getHospitalId());
+        dto.setProfileImage(doctor.getProfileImage());
         return dto;
     }
 
@@ -126,11 +128,14 @@ public class DoctorServiceImpl implements DoctorService {
         doctor.setDepartment(doctorDto.getDepartment());
         doctor.setTitle(doctorDto.getTitle()); // Get the title
         doctor.setMaxPatients(doctorDto.getMaxPatients()); // Get the maxPatients
+        doctor.setMinutes(doctorDto.getMinutes());
         doctor.setDaysOfWeek(doctorDto.getDaysOfWeek()); // Get the daysOfWeek
         doctor.setStartTime(doctorDto.getStartTime()); // Get the startTime
         doctor.setUser(userRepository.findByUserId(doctorDto.getUserId()));
         doctor.setHospital(hospitalRepository.findByHospitalId(doctorDto.getHospitalId()));
-
+        if(doctorDto.getProfileImage() != null) {
+            doctor.setProfileImage(doctor.getProfileImage());
+        }
         // Fetch and set the User and Hospital entities here
 
         return doctor;

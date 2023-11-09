@@ -4,6 +4,8 @@ import com.backend.medikey.model.Patient;
 import com.backend.medikey.model.User;
 import com.backend.medikey.model.Visit;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 
 import java.util.Date;
 import java.util.List;
@@ -24,13 +26,7 @@ public interface VisitRepository extends JpaRepository<Visit, Long> {
     // Find all visits within a date range
     List<Visit> findByVisitDateBetween(Date startDate, Date endDate);
 
-    // Find all visits to a specific hospital
-    //List<Visit> findByHospital(String hospital);
-
-    // Find all visits to a specific doctor
-   // List<Visit> findByDoctor(String doctor);
-
-    // Find all visits with a specific reason
+    List<Visit> findAllByVisitDateAndDoctor_DoctorId(Date visitDate, Long doctorId);
     List<Visit> findByReason(String reason);
 
     // Find visits by the username of the User associated with the Patient
@@ -42,5 +38,8 @@ public interface VisitRepository extends JpaRepository<Visit, Long> {
     // Find all visits before a specific follow-up date
     List<Visit> findByFollowUpDateBefore(Date followUpDate);
     int countByDoctor_DoctorIdAndVisitDate(Long doctorId, Date visitDate);
+    @Query("SELECT MAX(v.slNo) FROM Visit v WHERE v.doctor.doctorId = :doctorId AND v.visitDate = :visitDate")
+    Integer findMaxSlNoByDoctorAndDate(@Param("doctorId") Long doctorId, @Param("visitDate") Date visitDate);
+
 
 }

@@ -31,6 +31,7 @@ const AddDoctor = () => {
   const [startTime, setStartTime] = React.useState(dayjs()); // Initializes with the current time
   const [title, setTitle] = useState('');
   const [maxPatients, setMaxPatients] = useState('');
+  const [minutes, setMinutes] = useState('');
   // Additional state for the image file
   const [image, setImage] = useState(null);
   const [preview, setPreview] = useState(null); // For the image preview
@@ -175,6 +176,7 @@ const AddDoctor = () => {
           department: department,
           title: title, // Include title
           maxPatients: parseInt(maxPatients), // Convert maxPatients to a number
+          minutes: parseInt(minutes),
           daysOfWeek: selectedDays.join(','), // Convert array of days to a comma-separated string
           startTime: startTime.format('HH:mm:ss'), // Format startTime to a string
           hospitalId: currentUser.hospitalId,
@@ -410,6 +412,8 @@ const AddDoctor = () => {
               ))}
             </TextField>
           </FormControl>
+
+          <StyledRow>          
           <FormControl sx={{ m: 1, width: 350 }}>
             <TextField
               type="number"
@@ -423,6 +427,21 @@ const AddDoctor = () => {
               inputProps={{ style: { textTransform: 'none' } }}
             />
           </FormControl>
+          <FormControl sx={{ m: 1, width: 350 }}>
+            <TextField
+              type="number"
+              name="minutes"
+              variant="outlined"
+              required
+              id="minutes"
+              label="Minutes"
+              value={minutes}
+              onChange={(e) => setMinutes(e.target.value)}
+              inputProps={{ style: { textTransform: 'none' } }}
+            />
+          </FormControl>
+          </StyledRow>
+
           <StyledRow>
 
           
@@ -495,7 +514,6 @@ const AddDoctor = () => {
             variant="contained"
             size="large"
             loading={loading}
-            
             sx={{ backgroundColor: '#3d96ff', '&:hover': { backgroundColor: '#2176ff' }, width: '350px' }}
           >
             Add Doctor

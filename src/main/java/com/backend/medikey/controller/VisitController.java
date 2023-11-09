@@ -11,10 +11,12 @@ import com.backend.medikey.repository.MedicationRepository;
 import com.backend.medikey.repository.PatientRepository;
 import com.backend.medikey.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -25,158 +27,51 @@ public class VisitController {
 
     @Autowired
     private VisitService visitService;
-    @Autowired
-    private MedicalHistoryRepository medicalHistoryRepository;
-
-    @Autowired
-    private PatientRepository patientRepository;
-    @Autowired
-    private DoctorService doctorService;
-
-    @Autowired
-    private PatientService patientService;
-
-    @Autowired
-    private MedicationService medicationService;
-
-    @Autowired
-    private MedicalHistoryService medicalHistoryService;
-
-    @Autowired
-    private HospitalService hospitalService;
-
-    @Autowired
-    private MedicationRepository medicationRepository;
-    // Convert entity to DTO
-    // Convert entity to DTO
-   /* private VisitDto convertToDto(Visit visit) {
-        VisitDto dto = new VisitDto();
-        dto.setVisitId(visit.getVisitId());
-        dto.setDoctorId(visit.getDoctor().getDoctorId());
-        dto.setPatientId(visit.getPatient().getPatientId());
-        dto.setPatientName(visit.getPatient().getFirstName() + " " + visit.getPatient().getLastName());
-        dto.setMedicalHistoryId(visit.getMedicalHistory().getMedicalHistoryId()); // Assuming MedicalHistory has a getMedicalHistoryId method
-        dto.setHospitalId(visit.getHospital().getHospitalId());
-        dto.setVisitDate(visit.getVisitDate());
-        dto.setArrivalTime(visit.getArrivalTime());
-        dto.setCheckingTime(visit.getCheckingTime());
-        dto.setReason(visit.getReason());
-        dto.setTests(visit.getTests());
-        dto.setFollowUpDate(visit.getFollowUpDate());
-        return dto;
-    }*/
-
-    // Convert DTO to entity
-   /* private Visit convertToEntity(VisitDto dto) {
-        Visit visit = new Visit();
-        visit.setVisitId(dto.getVisitId());
-        visit.setDoctor(doctorService.getDoctorById(dto.getDoctorId()));
-        visit.setPatient(patientService.getPatientById(dto.getPatientId()));
-        visit.setMedicalHistory(medicalHistoryService.getMedicalHistoriesByUserId(dto.getpatientId())); // Assuming you have a findMedicalHistoryById method
-        visit.setHospital(hospitalService.findByHospitalId(dto.getHospitalId()));
-        visit.setVisitDate(dto.getVisitDate());
-        visit.setArrivalTime(dto.getArrivalTime());
-        visit.setCheckingTime(dto.getCheckingTime());
-        visit.setReason(dto.getReason());
-        visit.setTests(dto.getTests());
-        visit.setFollowUpDate(dto.getFollowUpDate());
-        return visit;
-    }*/
-
-   /* private Visit convertToEntity(VisitDto dto) {
-        Visit visit = new Visit();
-        visit.setVisitId(dto.getVisitId());
-
-        // Assuming getDoctorById and findByHospitalId return the actual entity and not DTOs
-        visit.setDoctor(doctorService.getDoctorById(dto.getDoctorId()));
-        visit.setHospital(hospitalService.findByHospitalId(dto.getHospitalId()));
-
-        // Convert PatientDto to Patient entity
-        PatientDto patientDto = patientService.getPatientById(dto.getPatientId());
-        Patient patient = convertPatientDtoToEntity(patientDto);  // Use a different method for PatientDto
-        visit.setPatient(patient);
-
-        // Assuming getMedicalHistoriesByUserId returns a list of MedicalHistory entities
-        visit.setMedicalHistory((MedicalHistory) medicalHistoryService.getMedicalHistoriesByUserId(dto.getPatientId()));
-
-        visit.setVisitDate(dto.getVisitDate());
-        visit.setArrivalTime(dto.getArrivalTime());
-        visit.setCheckingTime(dto.getCheckingTime());
-        visit.setReason(dto.getReason());
-        visit.setTests(dto.getTests());
-        visit.setFollowUpDate(dto.getFollowUpDate());
-        return visit;
-    }
-*/
-
-    private Visit convertToEntity(VisitDto dto) {
-        Visit visit = new Visit();
-        visit.setVisitId(dto.getVisitId());
-        visit.setDoctor(doctorService.getDoctorById(dto.getDoctorId())); // Assuming this method returns a Doctor entity
-        visit.setPatient(patientRepository.findByPatientId(dto.getPatientId())); // Assuming this method returns a Patient entity
-        visit.setMedicalHistory(medicalHistoryRepository.findByVisit_VisitId(visit.getVisitId())); // Assuming this method returns a MedicalHistory entity
-        visit.setHospital(hospitalService.findByHospitalId(dto.getHospitalId())); // Assuming this method returns a Hospital entity
-        visit.setVisitDate(dto.getVisitDate());
-        visit.setArrivalTime(dto.getArrivalTime());
-        visit.setCheckingTime(dto.getCheckingTime());
-        visit.setReason(dto.getReason());
-        visit.setTests(dto.getTests());
-        visit.setFollowUpDate(dto.getFollowUpDate());
-
-        // Assuming medicationService.findMedicationById returns a Medication entity
-        List<Medication> medications = medicationRepository.findByVisit(visit);
-        visit.setMedications(medications);
-
-        return visit;
-    }
-
-    private VisitDto convertToDto(Visit entity) {
-        VisitDto dto = new VisitDto();
-        dto.setVisitId(entity.getVisitId());
-        dto.setDoctorId(entity.getDoctor().getDoctorId());
-        dto.setPatientId(entity.getPatient().getPatientId());
-        dto.setPatientName(entity.getPatient().getFirstName() + " " + entity.getPatient().getLastName());
-        dto.setMedicalHistoryId(entity.getMedicalHistory().getMedicalHistoryId());
-        dto.setHospitalId(entity.getHospital().getHospitalId());
-        dto.setVisitDate(entity.getVisitDate());
-        dto.setArrivalTime(entity.getArrivalTime());
-        dto.setCheckingTime(entity.getCheckingTime());
-        dto.setReason(entity.getReason());
-        dto.setTests(entity.getTests());
-        dto.setFollowUpDate(entity.getFollowUpDate());
-
-        List<Long> medicationIds = entity.getMedications().stream()
-                .map(Medication::getMedicationId)
-                .collect(Collectors.toList());
-        dto.setMedicationIds(medicationIds);
-
-        return dto;
-    }
-
 
     // Get all visits
     @GetMapping
     public ResponseEntity<List<VisitDto>> getAllVisits() {
-        List<Visit> visits = visitService.getAllVisits();
-        List<VisitDto> visitDtos = visits.stream().map(this::convertToDto).collect(Collectors.toList());
+        List<VisitDto> visitDtos = visitService.getAllVisits();
         return new ResponseEntity<>(visitDtos, HttpStatus.OK);
     }
 
     // Get a specific visit by ID
     @GetMapping("/{id}")
     public ResponseEntity<VisitDto> getVisitById(@PathVariable Long id) {
-        Optional<Visit> visit = visitService.getVisitById(id);
-        return visit.map(value -> new ResponseEntity<>(convertToDto(value), HttpStatus.OK))
+        Optional<VisitDto> visitDto = visitService.getVisitById(id);
+        return visitDto.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+    @GetMapping("/doctor/{doctorId}")
+    public ResponseEntity<List<VisitDto>> getVisitsByDoctorAndDate(
+            @PathVariable Long doctorId,
+            @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date visitDate) {
+        try {
+            List<VisitDto> visits = visitService.getVisitsByDoctorAndVisitDate(visitDate, doctorId);
+            return ResponseEntity.ok(visits);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
+        }
+    }
+
+    // Endpoint to check if a doctor is available on a specific date
+    @GetMapping("/doctor/{doctorId}/availability")
+    public ResponseEntity<?> checkDoctorAvailability(@PathVariable Long doctorId, @RequestParam @DateTimeFormat(pattern = "yyyy-MM-dd") Date date) {
+        boolean isAvailable = visitService.isDoctorAvailable(doctorId, date);
+        if (isAvailable) {
+            return new ResponseEntity<>("Doctor is available on the selected date.", HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>("No slot available on selected date!", HttpStatus.OK);
+        }
     }
 
     // Add a new visit
     @PostMapping
     public ResponseEntity<?> addVisit(@RequestBody VisitDto visitDto) {
         try {
-            Visit visit = convertToEntity(visitDto);
-            Visit savedVisit = visitService.addVisit(visit);
-            return new ResponseEntity<>(convertToDto(savedVisit), HttpStatus.CREATED);
+            VisitDto savedVisitDto = visitService.addVisit(visitDto);
+            return new ResponseEntity<>(savedVisitDto, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
         }
@@ -184,13 +79,16 @@ public class VisitController {
 
     // Update an existing visit
     @PutMapping("/{id}")
-    public ResponseEntity<VisitDto> updateVisit(@PathVariable Long id, @RequestBody VisitDto visitDto) {
+    public ResponseEntity<?> updateVisit(@PathVariable Long id, @RequestBody VisitDto visitDto) {
         if (!id.equals(visitDto.getVisitId())) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        Visit visit = convertToEntity(visitDto);
-        Visit updatedVisit = visitService.updateVisit(visit);
-        return new ResponseEntity<>(convertToDto(updatedVisit), HttpStatus.OK);
+        try {
+            VisitDto updatedVisitDto = visitService.updateVisit(visitDto);
+            return new ResponseEntity<>(updatedVisitDto, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.NOT_FOUND);
+        }
     }
 
     // Delete a visit by ID
