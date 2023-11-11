@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
 import { TextField, Button, FormControl, Typography } from '@mui/material';
 import axios from 'axios';
+import { LoadingButton } from '@mui/lab';
 
 const AddHospital = () => {
   //const { login, isAuthenticated, error, role } = useAuthContext();
@@ -20,6 +21,7 @@ const AddHospital = () => {
   const [phoneNumber, setPhoneNumber] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
+  const [loading, setLoading] = useState(false);
   const nav = useNavigate();
 
   const error = null;
@@ -33,6 +35,7 @@ const AddHospital = () => {
     e.preventDefault();
 
     if (username && password && password.length >= 8 && doPasswordsMatch()) {
+      setLoading(true)
         try {
             // Register the user
             const userResponse = await axios.post(API+'auth/register', {
@@ -69,7 +72,7 @@ const AddHospital = () => {
 
           // Send the email
           await axios.post(API+'mail/sendingEmail', emailData);
-
+            setLoading(false)
             Swal.fire({
                 title: 'Success',
                 text: 'Hospital Added!',
@@ -83,6 +86,7 @@ const AddHospital = () => {
                 }
             });
         } catch (error) {
+          setLoading(false)
             Swal.fire({
                 title: 'Error',
                 text: 'Failed to add hospital',
@@ -292,7 +296,15 @@ const AddHospital = () => {
               />
             </FormControl>
 
-            <Button type="submit" variant='contained' fullWidth sx={{backgroundColor:'#3D96FF'}}>Add Hospital</Button>
+            <LoadingButton
+            type="submit"
+            variant="contained"
+            size="large"
+            loading={loading}
+            sx={{ backgroundColor: '#3d96ff', '&:hover': { backgroundColor: '#2176ff' }, width: '350px' }}
+          >
+            Add Hospital
+          </LoadingButton>
         </Form>
       </Container>
     </Wrapper>

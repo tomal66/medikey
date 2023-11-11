@@ -32,7 +32,8 @@ const AppointmentList = () => {
             name: appt.patientName,
             arrivedAt: appt.arrivalTime || 'Not yet', // Replace null with 'Not yet'
             reason: appt.reason,
-            code: appt.uniqueIdentifier
+            code: appt.uniqueIdentifier,
+            visitId: appt.visitId
           }));
           setAppointments(mappedAppointments);
         } catch (error) {
@@ -90,11 +91,11 @@ const AppointmentList = () => {
 
   const onNewScanResult = (decodedText, decodedResult) => {
     setIsLoading(true);  // Begin loading state
-
+    
     if (selectedAppointment && decodedText === selectedAppointment.code) {
         setIsLoading(false); // End loading state before navigation
         closeModal();
-        nav(`/consult/${selectedAppointment.id}`);
+        nav(`/consult/${selectedAppointment.visitId}/${selectedAppointment.code}`);
     } else {
         setIsLoading(false); // End loading state before showing the alert
         setShowAlert(true);

@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import ConsultationForm from './ConsultationForm';
 import styled from 'styled-components';
 import { useParams } from 'react-router-dom'; // Import useParams from react-router-dom
 import Loading from '../style/Loading';
 import ErrorPage from '../ErrorPage';
+import HistoryForm from './HistoryForm';
 
-const Consultation = () => {
+const TakeHistory = () => {
     const { id, code } = useParams(); // Get id and code from URL
     const [visitData, setVisitData] = useState(null);
     const [loading, setLoading] = useState(true);
@@ -55,7 +55,7 @@ const Consultation = () => {
     return (
         <Wrapper>
             <div className='container'>
-                {visitData && <ConsultationForm inputs={inputs} title={title} visitData={visitData} />}
+                {visitData && <HistoryForm inputs={inputs} title={title} visitData={visitData} />}
             </div>
         </Wrapper>
     );
@@ -75,4 +75,4 @@ const Loader = styled.div`
 `;
 
 
-export default Consultation;
+export default TakeHistory;

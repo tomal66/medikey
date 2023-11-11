@@ -1,5 +1,6 @@
 package com.backend.medikey.service;
 
+import com.backend.medikey.dto.MedicalHistoryDto;
 import com.backend.medikey.model.MedicalHistory;
 import com.backend.medikey.model.Patient;
 
@@ -9,25 +10,13 @@ import java.util.Optional;
 
 public interface MedicalHistoryService {
 
-    List<MedicalHistory> getAllMedicalHistories();
-    List<MedicalHistory> getMedicalHistoryByPatientId(Long patientId);
+    List<MedicalHistoryDto> getAllMedicalHistories();
+    List<MedicalHistoryDto> getMedicalHistoryByPatientId(Long patientId);
 
+    MedicalHistoryDto addMedicalHistory(MedicalHistoryDto medicalHistoryDto);
 
-    //List<MedicalHistory> getMedicalHistoryById(Patient patient);
-    List<MedicalHistory> getMedicalHistoriesByPatient(Patient patient);
-    List<MedicalHistory> getMedicalHistoriesByUserId(Long userId);
-
-    List<MedicalHistory> getMedicalHistoriesByDiagnosis(String diagnosis);
-
-    List<MedicalHistory> getMedicalHistoriesByDateRecorded(Date dateRecorded);
-
-    List<MedicalHistory> getMedicalHistoriesByRecordedBy(Long recordedById);
-
-    MedicalHistory addMedicalHistory(MedicalHistory medicalHistory);
-
-    MedicalHistory updateMedicalHistory(MedicalHistory medicalHistory);
+    MedicalHistoryDto updateMedicalHistory(MedicalHistoryDto medicalHistoryDto);
 
     void deleteMedicalHistory(Long id);
 
-    // ... any other methods you want to declare
 }

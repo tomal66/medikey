@@ -1,5 +1,6 @@
 package com.backend.medikey.service;
 
+import com.backend.medikey.dto.MedicalHistoryDto;
 import com.backend.medikey.dto.VisitDto;
 import com.backend.medikey.model.Visit;
 
@@ -20,9 +21,14 @@ public interface VisitService {
 
     List<VisitDto> getVisitsByDoctorAndVisitDate(Date visitDate, Long doctorId);
 
+    Optional<VisitDto> findByCode(String code);
+
     VisitDto addVisit(VisitDto visitDto) throws Exception;
 
     VisitDto updateVisit(VisitDto visitDto);
+
+    void linkMedicalHistory(Long medicalHistoryId, Long visitId);
+
     boolean isDoctorAvailable(Long doctorId, Date date);
 
     void deleteVisit(Long id);

@@ -15,35 +15,11 @@ import java.util.Optional;
 @Repository
 public interface MedicalHistoryRepository extends JpaRepository<MedicalHistory, Long> {
 
-    List<MedicalHistory> findByPatient(Patient patient);
-
-    List<MedicalHistory> findByDiagnosisContainingIgnoreCase(String diagnosis);
-
-    List<MedicalHistory> findBySymptomsContainingIgnoreCase(String symptoms);
-
-    List<MedicalHistory> findByAllergiesContainingIgnoreCase(String allergies);
-
-    List<MedicalHistory> findByChronicDiseasesContainingIgnoreCase(String chronicDiseases);
-
-    List<MedicalHistory> findByFamilyHistoryContainingIgnoreCase(String familyHistory);
-
-    List<MedicalHistory> findByDateRecorded(Date dateRecorded);
-
-    List<MedicalHistory> findByRecordedBy_MpId(Long mpId);
-
-    List<MedicalHistory> findByImmunizationsContainingIgnoreCase(String immunizations);
-
-    List<MedicalHistory> findByPreviousSurgeriesContainingIgnoreCase(String previousSurgeries);
-
-    List<MedicalHistory> findByLifestyleFactorsContainingIgnoreCase(String lifestyleFactors);
-
-    List<MedicalHistory> findByGeneticFactorsContainingIgnoreCase(String geneticFactors);
-
-    MedicalHistory findByVisit_VisitId(Long visitId);
-    // Custom query to search for medical history records based on notes
+    List<MedicalHistory> findByPatient_PatientId(Long patientId);
     @Query("SELECT mh FROM MedicalHistory mh WHERE mh.notes LIKE %?1%")
     List<MedicalHistory> findByNotesContaining(String notesDetail);
 
     List<MedicalHistory> findAllByPatient_PatientId(Long patientId);
     MedicalHistory findByMedicalHistoryId(Long medicalHistoryId);
+
 }

@@ -34,6 +34,8 @@ import PatientForm from './PatientForm';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';
 import { useAuthContext } from './context/auth_context';
+import MPDashboard from './Staff/MPDashboard.js';
+import TakeHistory from './Staff/TakeHistory.js';
 
 
 function App() {
@@ -122,12 +124,15 @@ function App() {
 
           {/* Doctor Dashboard */}
           <Route path = "/doctor-dashboard" element={<DoctorDashboard/>}/>
-          <Route path = "/consult/:id" element={<Consultation/>}/>
+          <Route path = "/consult/:id/:code" element={<Consultation/>}/>
 
           {/* Patient Dashboard */}
           <Route path = "/patient-dashboard" element={<PatientDashboard/>}/>
           <Route path = "/patient-form" element={<PatientForm/>}/>
-          
+
+          {/* Staff Dashboard */}
+          <Route path = "/mp-dashboard" element={<MPDashboard/>}/>
+          <Route path = "/take-history/:id/:code" element={<TakeHistory/>}/>
 
           {/* <Route element={<RequireAuth allowedRole={"ROLE_USER"} />}>
             <Route path="/cart" element={<Cart/>}/>

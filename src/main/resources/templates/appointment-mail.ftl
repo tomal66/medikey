@@ -255,10 +255,10 @@
                                                     <p style="line-height: 140%;"><strong>${hospitalName}</strong></p>
                                                     <p style="line-height: 140%;">${city}, ${country}</p>
                                                     <p style="line-height: 140%;">Date: <strong>${date}</strong></p>
-                                                    <p style="line-height: 140%;">Starting Time: <strong>${startTime}</strong></p>
+                                                    <p style="line-height: 140%;">Starting Time: ${startTime}</p>
                                                     <p style="line-height: 140%;">Scheduled Time: <strong>${time}</strong></p>
                                                     <p style="line-height: 140%;">Serial:<strong> ${serial}</strong></p>
-                                                    <p style="line-height: 140%;">Hotline:<strong> ${call}</strong></p>
+                                                    <p style="line-height: 140%;">Hotline: ${call}</p>
                                                     <p style="line-height: 140%;">&nbsp;</p>
                                                     <p style="line-height: 140%;">You are requested to be present on time to avoid unnecessary delay. <span style="color: #e03e2d; line-height: 19.6px;">Please show the attached QR code to the front desk and doctor when requested.</span></p>
                                                 </div>

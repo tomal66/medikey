@@ -1,14 +1,13 @@
-/*
 package com.backend.medikey.controller;
 
-import com.backend.medikey.model.MedicalHistory;
+import com.backend.medikey.dto.MedicalHistoryDto;
 import com.backend.medikey.service.MedicalHistoryService;
+import com.backend.medikey.service.VisitService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -17,62 +16,42 @@ public class MedicalHistoryController {
 
     @Autowired
     private MedicalHistoryService medicalHistoryService;
-
-    @GetMapping("/hello")
-    public String getHello(){return "Hello";}
-
+    @Autowired
+    private VisitService visitService;
     // Get all medical histories
     @GetMapping
-    public ResponseEntity<List<MedicalHistory>> getAllMedicalHistories() {
-        return new ResponseEntity<>(medicalHistoryService.getAllMedicalHistories(), HttpStatus.OK);
+    public ResponseEntity<List<MedicalHistoryDto>> getAllMedicalHistories() {
+        List<MedicalHistoryDto> medicalHistories = medicalHistoryService.getAllMedicalHistories();
+        return new ResponseEntity<>(medicalHistories, HttpStatus.OK);
     }
 
-    // Get a specific medical history by ID
-    @GetMapping("/{id}")
-    public ResponseEntity<MedicalHistory> getMedicalHistoryById(@PathVariable Long id) {
-        return medicalHistoryService.getMedicalHistoryById(id)
-                .map(medicalHistory -> new ResponseEntity<>(medicalHistory, HttpStatus.OK))
-                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
-    }
-
-    // Get all medical histories for a specific user
-    @GetMapping("/user/{userId}")
-    public ResponseEntity<List<MedicalHistory>> getMedicalHistoriesByUserId(@PathVariable Long userId) {
-        return new ResponseEntity<>(medicalHistoryService.getMedicalHistoriesByUserId(userId), HttpStatus.OK);
-    }
-
-    // Get all medical histories with a specific diagnosis
-    @GetMapping("/diagnosis/{diagnosis}")
-    public ResponseEntity<List<MedicalHistory>> getMedicalHistoriesByDiagnosis(@PathVariable String diagnosis) {
-        return new ResponseEntity<>(medicalHistoryService.getMedicalHistoriesByDiagnosis(diagnosis), HttpStatus.OK);
-    }
-
-    // Get all medical histories recorded on a specific date
-    @GetMapping("/date/{dateRecorded}")
-    public ResponseEntity<List<MedicalHistory>> getMedicalHistoriesByDateRecorded(@PathVariable Date dateRecorded) {
-        return new ResponseEntity<>(medicalHistoryService.getMedicalHistoriesByDateRecorded(dateRecorded), HttpStatus.OK);
-    }
-
-    // Get all medical histories recorded by a specific person/doctor
-    @GetMapping("/recordedBy/{recordedBy}")
-    public ResponseEntity<List<MedicalHistory>> getMedicalHistoriesByRecordedBy(@PathVariable String recordedBy) {
-        return new ResponseEntity<>(medicalHistoryService.getMedicalHistoriesByRecordedBy(recordedBy), HttpStatus.OK);
+    // Get a specific medical history by patient ID
+    @GetMapping("/{patientId}")
+    public ResponseEntity<List<MedicalHistoryDto>> getMedicalHistoriesByPatientId(@PathVariable Long patientId) {
+        List<MedicalHistoryDto> medicalHistories = medicalHistoryService.getMedicalHistoryByPatientId(patientId);
+        if (!medicalHistories.isEmpty()) {
+            return new ResponseEntity<>(medicalHistories, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     // Add a new medical history
     @PostMapping
-    public ResponseEntity<MedicalHistory> addMedicalHistory(@RequestBody MedicalHistory medicalHistory) {
-        return new ResponseEntity<>(medicalHistoryService.addMedicalHistory(medicalHistory), HttpStatus.CREATED);
+    public ResponseEntity<MedicalHistoryDto> addMedicalHistory(@RequestBody MedicalHistoryDto medicalHistoryDto) {
+        MedicalHistoryDto newMedicalHistory = medicalHistoryService.addMedicalHistory(medicalHistoryDto);
+        visitService.linkMedicalHistory(newMedicalHistory.getMedicalHistoryId(), medicalHistoryDto.getVisitId());
+        return new ResponseEntity<>(newMedicalHistory, HttpStatus.CREATED);
     }
 
     // Update an existing medical history
     @PutMapping("/{id}")
-    public ResponseEntity<MedicalHistory> updateMedicalHistory(@PathVariable Long id, @RequestBody MedicalHistory medicalHistory) {
-        // Ensure the ID from the path matches the ID of the medical history object
-        if (!id.equals(medicalHistory.getMedical_history_Id())) {
+    public ResponseEntity<MedicalHistoryDto> updateMedicalHistory(@PathVariable Long id, @RequestBody MedicalHistoryDto medicalHistoryDto) {
+        if (!id.equals(medicalHistoryDto.getMedicalHistoryId())) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        return new ResponseEntity<>(medicalHistoryService.updateMedicalHistory(medicalHistory), HttpStatus.OK);
+        MedicalHistoryDto updatedMedicalHistory = medicalHistoryService.updateMedicalHistory(medicalHistoryDto);
+        return new ResponseEntity<>(updatedMedicalHistory, HttpStatus.OK);
     }
 
     // Delete a medical history by ID
@@ -80,135 +59,5 @@ public class MedicalHistoryController {
     public ResponseEntity<Void> deleteMedicalHistory(@PathVariable Long id) {
         medicalHistoryService.deleteMedicalHistory(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-}
-*/
-
-package com.backend.medikey.controller;
-
-import com.backend.medikey.dto.MedicalHistoryDto;
-import com.backend.medikey.model.MedicalHistory;
-import com.backend.medikey.repository.MedicalProfessionalRepository;
-import com.backend.medikey.repository.PatientRepository;
-import com.backend.medikey.repository.VisitRepository;
-import com.backend.medikey.service.MedicalHistoryService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
-@RestController
-@RequestMapping("/api/medicalHistories")
-@RequiredArgsConstructor
-public class MedicalHistoryController {
-
-    @Autowired
-    private final MedicalHistoryService medicalHistoryService;
-
-    @Autowired
-    private PatientRepository patientRepository;
-
-    @Autowired
-    private VisitRepository visitRepository;
-
-    @Autowired
-    private MedicalProfessionalRepository medicalProfessionalRepository;
-
-    @GetMapping("/")
-    public ResponseEntity<List<MedicalHistoryDto>> getAllMedicalHistories() {
-        List<MedicalHistory> medicalHistories = medicalHistoryService.getAllMedicalHistories();
-        List<MedicalHistoryDto> dtos = medicalHistories.stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
-        return new ResponseEntity<>(dtos, HttpStatus.OK);
-    }
-
- /*   @GetMapping("/{id}")
-    public ResponseEntity<MedicalHistoryDto> getMedicalHistoryById(@PathVariable Long id) {
-        List<MedicalHistory>  medicalHistory = medicalHistoryService.getMedicalHistoryById(id);
-        return medicalHistory.map(value -> new ResponseEntity<>(convertToDto(value), HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
-    }
-*/
-    @GetMapping("/{patientId}")
-    public ResponseEntity<List<MedicalHistoryDto>> getMedicalHistoryById(@PathVariable Long patientId) {
-        List<MedicalHistory> medicalHistories = medicalHistoryService.getMedicalHistoryByPatientId(patientId);
-        if (medicalHistories != null && !medicalHistories.isEmpty()) {
-            List<MedicalHistoryDto> medicalHistoryDtos = medicalHistories.stream()
-                    .map(this::convertToDto)
-                    .collect(Collectors.toList());
-            return new ResponseEntity<>(medicalHistoryDtos, HttpStatus.OK);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
-
-
-    @PostMapping("/")
-    public ResponseEntity<MedicalHistoryDto> createMedicalHistory(@RequestBody MedicalHistoryDto medicalHistoryDto) {
-        MedicalHistory medicalHistory = convertToEntity(medicalHistoryDto);
-        MedicalHistory newMedicalHistory = medicalHistoryService.addMedicalHistory(medicalHistory);
-        return new ResponseEntity<>(convertToDto(newMedicalHistory), HttpStatus.CREATED);
-    }
-
-    @PutMapping("/{id}")
-    public ResponseEntity<MedicalHistoryDto> updateMedicalHistory(@PathVariable Long id, @RequestBody MedicalHistoryDto medicalHistoryDto) {
-        MedicalHistory updatedMedicalHistory = medicalHistoryService.updateMedicalHistory(convertToEntity(medicalHistoryDto));
-        return new ResponseEntity<>(convertToDto(updatedMedicalHistory), HttpStatus.OK);
-    }
-
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteMedicalHistory(@PathVariable Long id) {
-        medicalHistoryService.deleteMedicalHistory(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-    }
-
-    private MedicalHistoryDto convertToDto(MedicalHistory medicalHistory) {
-        MedicalHistoryDto dto = new MedicalHistoryDto();
-        dto.setMedicalHistoryId(medicalHistory.getMedicalHistoryId());
-        dto.setPatientId(medicalHistory.getPatient().getPatientId());
-        dto.setVisitId(medicalHistory.getVisit().getVisitId());
-        dto.setDiagnosis(medicalHistory.getDiagnosis());
-        dto.setSymptoms(medicalHistory.getSymptoms());
-        dto.setAllergies(medicalHistory.getAllergies());
-        dto.setChronicDiseases(medicalHistory.getChronicDiseases());
-        dto.setFamilyHistory(medicalHistory.getFamilyHistory());
-        dto.setDateRecorded(medicalHistory.getDateRecorded());
-        dto.setRecordedById(medicalHistory.getRecordedBy().getMpId());
-        dto.setNotes(medicalHistory.getNotes());
-        dto.setImmunizations(medicalHistory.getImmunizations());
-        dto.setPreviousSurgeries(medicalHistory.getPreviousSurgeries());
-        dto.setLifestyleFactors(medicalHistory.getLifestyleFactors());
-        dto.setGeneticFactors(medicalHistory.getGeneticFactors());
-
-        // Add other fields as needed
-        return dto;
-    }
-
-    private MedicalHistory convertToEntity(MedicalHistoryDto medicalHistoryDto) {
-        MedicalHistory medicalHistory = new MedicalHistory();
-        medicalHistory.setMedicalHistoryId(medicalHistoryDto.getMedicalHistoryId());
-        medicalHistory.setPatient(patientRepository.findByPatientId(medicalHistoryDto.getPatientId()));
-        medicalHistory.setVisit(visitRepository.findByVisitId(medicalHistoryDto.getVisitId()));
-        medicalHistory.setDiagnosis(medicalHistoryDto.getDiagnosis());
-        medicalHistory.setSymptoms(medicalHistoryDto.getSymptoms());
-        medicalHistory.setAllergies(medicalHistoryDto.getAllergies());
-        medicalHistory.setChronicDiseases(medicalHistoryDto.getChronicDiseases());
-        medicalHistory.setFamilyHistory(medicalHistoryDto.getFamilyHistory());
-        medicalHistory.setDateRecorded(medicalHistoryDto.getDateRecorded());
-        medicalHistory.setRecordedBy(medicalProfessionalRepository.findByMpId(medicalHistoryDto.getRecordedById()));
-        medicalHistory.setNotes(medicalHistoryDto.getNotes());
-        medicalHistory.setImmunizations(medicalHistoryDto.getImmunizations());
-        medicalHistory.setPreviousSurgeries(medicalHistoryDto.getPreviousSurgeries());
-        medicalHistory.setLifestyleFactors(medicalHistoryDto.getLifestyleFactors());
-        medicalHistory.setGeneticFactors(medicalHistoryDto.getGeneticFactors());
-
-        // Set other fields, you would typically fetch these entities from their respective services before setting them
-        return medicalHistory;
     }
 }

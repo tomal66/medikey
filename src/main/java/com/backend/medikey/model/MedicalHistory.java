@@ -15,22 +15,18 @@ public class MedicalHistory {
     private Long medicalHistoryId;
     @ManyToOne
     private Patient patient;
-    @OneToOne(mappedBy = "medicalHistory")
+    @OneToOne
     private Visit visit;
     private String diagnosis;
     private String symptoms;
     private String allergies;
     private String chronicDiseases;
     private String familyHistory;
-    @Column(name = "date_recorded", nullable = false)
-    @Temporal(TemporalType.DATE)
-    private Date dateRecorded;
     @ManyToOne
     private MedicalProfessional recordedBy;
     private String notes;
     private String immunizations;
     private String previousSurgeries;
-    private String lifestyleFactors;
-    private String geneticFactors;
-
+    private String weight;
+    private String height;
 }

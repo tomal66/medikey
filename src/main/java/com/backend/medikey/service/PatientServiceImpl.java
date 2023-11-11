@@ -181,7 +181,7 @@ public class PatientServiceImpl implements PatientService {
         patient.setUser(user);
         patient.setDateOfBirth(patientDto.getDateOfBirth());
         patient.setPatientVisits(visitRepository.findByPatient(patientRepository.findByPatientId(patientDto.getPatientId())));
-        patient.setMedicalHistories(medicalHistoryRepository.findByPatient(patientRepository.findByPatientId(patientDto.getPatientId())));
+        patient.setMedicalHistories(medicalHistoryRepository.findByPatient_PatientId(patientDto.getPatientId()));
         patient.setTests(testRepository.findByPatient(patientRepository.findByPatientId(patientDto.getPatientId())));
         patient.setMedications(medicationRepository.findByPatient(patientRepository.findByPatientId(patientDto.getPatientId())));
         // Fetch and set User and Hospital entities here

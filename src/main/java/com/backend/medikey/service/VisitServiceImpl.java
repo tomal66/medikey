@@ -46,6 +46,12 @@ public class VisitServiceImpl implements VisitService {
     }
 
     @Override
+    public Optional<VisitDto> findByCode(String code) {
+        Optional<Visit> visit = visitRepository.findByUniqueIdentifier(code);
+        return visit.map(this::convertToDto);
+    }
+
+    @Override
     public List<VisitDto> getVisitsByUsername(String username) {
         List<Visit> visits = visitRepository.findByPatient_User_Username(username);
         return visits.stream().map(this::convertToDto).collect(Collectors.toList());
@@ -118,6 +124,14 @@ public class VisitServiceImpl implements VisitService {
     }
 
     @Override
+    public void linkMedicalHistory(Long medicalHistoryId, Long visitId) {
+        Visit visit = visitRepository.findByVisitId(visitId);
+        VisitDto visitDto = convertToDto(visit);
+        visitDto.setMedicalHistoryId(medicalHistoryId);
+        updateVisit(visitDto);
+    }
+
+    @Override
     public boolean isDoctorAvailable(Long doctorId, Date date) {
         int existingVisits = visitRepository.countByDoctor_DoctorIdAndVisitDate(doctorId, date);
         return existingVisits < doctorRepository.findByDoctorId(doctorId).getMaxPatients();
@@ -171,7 +185,9 @@ public class VisitServiceImpl implements VisitService {
         if (dto.getFollowUpDate() != null) {
             visit.setFollowUpDate(dto.getFollowUpDate());
         }
-        // slNo should be handled separately in the addVisit method, not directly from DTO
+        if (dto.getSlNo() != null) {
+            visit.setSlNo(dto.getSlNo());
+        }
         // Medications are handled based on the visit, which could be a new entity without an ID yet
         if (visit.getVisitId() != null) {
             List<Medication> medications = medicationRepository.findByVisit(visit);

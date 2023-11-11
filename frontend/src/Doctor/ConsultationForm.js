@@ -156,7 +156,7 @@ const names = [
 
 
 
-const ConsultationForm = ({ inputs, title }) => {
+const ConsultationForm = ({ inputs, title, visitData }) => {
   const [diagnosis, setDiagnosis] = useState('');
   const [selectedTests, setSelectedTests] = useState([]); // State for selected tests
   const [medications, setMedications] = useState([]);
@@ -167,8 +167,9 @@ const ConsultationForm = ({ inputs, title }) => {
   const [dosage, setDosage] = useState('');
   const [frequency, setFrequency] = useState('');
   const [duration, setDuration] = useState('');
-  const [patientName, setPatientName] = useState("");
-  const [reasonToVisit, setReasonToVisit] = useState("");
+  
+  const [patientName, setPatientName] = useState(visitData.patientName);
+  const [reasonToVisit, setReasonToVisit] = useState(visitData.reason);
   const [symptoms, setSymptoms] = useState("");
   const [allergies, setAllergies] = useState("");
   const [chronicDiseases, setChronicDiseases] = useState("");

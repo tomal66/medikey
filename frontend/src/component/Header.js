@@ -8,6 +8,7 @@ import MuiNavBar from './MuiNavBar';
 import AdminNav from './AdminNav';
 import HospitalNav from './HospitalNav';
 import DoctorNav from './DoctorNav';
+import MpNav from './MpNav';
 
 const Header = ({toggleChatbot}) => {
   const { role } = useAuthContext();
@@ -23,6 +24,8 @@ const Header = ({toggleChatbot}) => {
         <HospitalNav /> // Render AdminNav for admin user
       ) :role === 'ROLE_DOCTOR' ? ( // Check if the user has ROLE_ADMIN
         <DoctorNav /> // Render AdminNav for admin user
+      ) :role === 'ROLE_STAFF' ? ( // Check if the user has ROLE_ADMIN
+        <MpNav /> // Render AdminNav for admin user
       ) : (
         <MuiNavBar toggleChatbot={toggleChatbot}/>
       )}

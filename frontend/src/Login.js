@@ -2,30 +2,47 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useAuthContext } from './context/auth_context';
 import { NavLink, useNavigate } from 'react-router-dom';
-import { TextField } from '@mui/material';
 import Html5QrcodePlugin from './Html5QrcodePlugin';
 import {toast} from 'react-toastify';
 import "react-toastify/dist/ReactToastify.css";
+import { TextField, FormControl } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
+import OutlinedInput from '@mui/material/OutlinedInput';
+import InputLabel from '@mui/material/InputLabel';
+import InputAdornment from '@mui/material/InputAdornment';
+import IconButton from '@mui/material/IconButton';
+import Visibility from '@mui/icons-material/Visibility';
+import VisibilityOff from '@mui/icons-material/VisibilityOff';
 
 const Login = () => {
   const { login, isAuthenticated, error, role, currentUser } = useAuthContext();
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
   const [message, setMessage] = useState('');
   const nav = useNavigate();
+  const [showPassword, setShowPassword] = useState(false);
+
+  const handleClickShowPassword = () => {
+    setShowPassword(!showPassword);
+  };
+
+  const handleMouseDownPassword = (event) => {
+    event.preventDefault();
+  };
 
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    login(username, password)
-    //login(username, password)
-    // .then(() => {
-    //   console.log('Logged in successfully');
-    // })
-    // .catch((error) => {
-    //   setMessage('Invalid credentials. Please try again.');
-    //   console.log('Error:', error);
-    // });
+    setLoading(true);
+    try {
+      await login(username, password);
+      // Additional logic after successful login
+    } catch (error) {
+      setMessage('Invalid credentials. Please try again.');
+      console.error('Error:', error);
+    }
+    setLoading(false);
   }; 
 
   useEffect(() => {
@@ -37,18 +54,6 @@ const Login = () => {
             
             nav("/patient-form");
             break;
-          case "ROLE_DOCTOR":
-            nav("/doctor-form");
-            break;
-          case "ROLE_STAFF":
-            nav("/staff-form");
-            break;
-          case "ROLE_HOSPITAL":
-            nav("/hospital-form");
-            break;
-          // case "ROLE_ADMIN":
-          //   nav("/admin-form");
-          //   break;
           default:
             nav("/default-form"); // A fallback form if needed
             break;
@@ -93,26 +98,52 @@ const Login = () => {
           )
         }
         <Form onSubmit={handleSubmit}>
-          <Input
-            type="username"
-            id="username"
-            name="username"
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
+        <FormControl sx={{ m: 1, width: '100%' }}>
+            <TextField
+              type="text"
+              id="username"
+              name="username"
+              label="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+              inputProps={{ style: { textTransform: 'none' } }}
+            />
+          </FormControl>
           
-          <Input
-            type="password"
-            id="password"
-            name="password"
-            placeholder="Password"
+          <FormControl sx={{ m: 1, width: '100%' }} variant="outlined">
+          <InputLabel htmlFor="outlined-adornment-password">Password</InputLabel>
+          <OutlinedInput
+            id="outlined-adornment-password"
+            type={showPassword ? 'text' : 'password'}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            required
+            endAdornment={
+              <InputAdornment position="end">
+                <IconButton
+                  aria-label="toggle password visibility"
+                  onClick={handleClickShowPassword}
+                  onMouseDown={handleMouseDownPassword}
+                  edge="end"
+                >
+                  {showPassword ? <VisibilityOff /> : <Visibility />}
+                </IconButton>
+              </InputAdornment>
+            }
+            label="Password"
+            inputProps={{ style: { textTransform: 'none' } }}
           />
-          <Button type="submit">Sign In</Button>
+        </FormControl>
+
+          <LoadingButton
+            type="submit"
+            variant="contained"
+            size="large"
+            loading={loading}
+            sx={{ backgroundColor: '#3d96ff', '&:hover': { backgroundColor: '#2176ff' }, width: '100%', mt: 2 }}
+          >
+            Sign In
+          </LoadingButton>
         </Form>
         <Options>
           <Option href="#">Forgot Password?</Option>
@@ -170,44 +201,6 @@ const Form = styled.form`
   align-items: center;
 `;
 
-const Input = styled.input`
-  display: block;
-  width: 100%;
-  padding: 10px;
-  font-size: 16px;
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: 3px;
-  margin-bottom: 10px;
-  outline: none;
-  text-transform: none;
-  &:focus {
-    border-color: ${({ theme }) => theme.colors.helper};
-  }
-`;
-
-const Button = styled.button`
-  display: block;
-  width: 100%;
-  padding: 7.5px;
-  font-size: 18px;
-  color: ${({ theme }) => theme.colors.white};
-  background-color: ${({ theme }) => theme.colors.btn};
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  -webkit-transition: all 0.3s ease 0s;
-  -moz-transition: all 0.3s ease 0s;
-  -o-transition: all 0.3s ease 0s;
-
-  &:hover,
-  &:active {
-    box-shadow: 0 20px 20px 0 rgb(132 144 255 / 30%);
-    box-shadow: ${({ theme }) => theme.colors.shadowSupport};
-    transform: scale(0.96);
-  }
-
-`;
 
 const Options = styled.div`
 margin-top: 30px;

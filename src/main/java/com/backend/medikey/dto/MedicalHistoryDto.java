@@ -15,12 +15,11 @@ public class MedicalHistoryDto {
     private String allergies;
     private String chronicDiseases;
     private String familyHistory;
-    private Date dateRecorded;
-    private Long recordedById;
+    private Long recordedByMPId;
     private String notes;
     private String immunizations;
     private String previousSurgeries;
-    private String lifestyleFactors;
-    private String geneticFactors;
+    private String height;
+    private String weight;
 
 }

@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useAuthContext } from './context/auth_context';
 import { NavLink, useNavigate } from 'react-router-dom';
-
+import { TextField, FormControl } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
 
 const Register = () => {
   const { register, isAuthenticated, error } = useAuthContext();
@@ -11,6 +12,7 @@ const Register = () => {
   const [confirmPassword, setConfirmPassword] = useState('');
   const [role, setRole] = useState('ROLE_PATIENT');
   const [message, setMessage] = useState('');
+  const [loading, setLoading] = useState(false);
   const nav = useNavigate();
   
   useEffect(() => {
@@ -45,8 +47,11 @@ const Register = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    
     if (username && password && password.length >= 8 && doPasswordsMatch()) {
+      setLoading(true);
       register(username, password, role)
+      setLoading(false);
 
       
     } else {
@@ -74,47 +79,55 @@ const Register = () => {
     <Wrapper>
       <Container>
         <Title>Sign Up</Title>
-        {
-          message && (
-            <Alert>
-              {message}
-            </Alert>
-          )
-        }
+        {message && <Alert>{message}</Alert>}
         <Form onSubmit={handleSubmit}>
-          <Input
-            type="username"
-            id="username"
-            name="username"
-            placeholder="Username"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
-            required
-          />
-          <Input
+          <FormControl sx={{ m: 1, width: '100%' }}>
+            <TextField
+              type="text"
+              id="username"
+              label="Username"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+              inputProps={{ style: { textTransform: 'none' } }}
+            />
+          </FormControl>
+          <FormControl sx={{ m: 1, width: '100%' }}>
+            <TextField
               type="password"
               id="password"
-              name="password"
-              placeholder="Password"
+              label="Password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
               required
+              inputProps={{ style: { textTransform: 'none' } }}
             />
-           <Input
+          </FormControl>
+          <FormControl sx={{ m: 1, width: '100%' }}>
+            <TextField
               type="password"
               id="confirmPassword"
-              name="confirmPassword"
-              placeholder="Confirm Password"
+              label="Confirm Password"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
+              inputProps={{ style: { textTransform: 'none' } }}
             />
-          <Button type="submit">Register</Button>
+          </FormControl>
+          <LoadingButton
+            type="submit"
+            variant="contained"
+            size="large"
+            loading={loading}
+            sx={{ backgroundColor: '#3d96ff', '&:hover': { backgroundColor: '#2176ff' }, width: '100%', mt: 2 }}
+          >
+            Register
+          </LoadingButton>
         </Form>
         <Options>
           <Option href="#">Forgot Password?</Option>
           <NavLink to="/login">
-            <Option >Already have an account?</Option>
+            <Option>Already have an account?</Option>
           </NavLink>
         </Options>
       </Container>

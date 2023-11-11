@@ -3,6 +3,10 @@ import styled from 'styled-components';
 //import { useAuthContext } from './context/auth_context';
 import { NavLink, useNavigate } from 'react-router-dom';
 import Swal from 'sweetalert2';
+import { TextField, FormControl } from '@mui/material';
+import { LoadingButton } from '@mui/lab';
+import axios from 'axios';
+import { useAuthContext } from '../context/auth_context';
 
 const AddMP = () => {
   //const { login, isAuthenticated, error, role } = useAuthContext();
@@ -14,24 +18,61 @@ const AddMP = () => {
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
+  const [loading, setLoading] = useState(false);
   const nav = useNavigate();
-
-  const isAuthenticated = false;
-  const role = null;
-  const error = null;
+  const {currentUser} = useAuthContext();
+  const API = 'http://localhost:8567/api/'
 
   const doPasswordsMatch = () => {
     return password === confirmPassword;
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true);
     if (username && password && password.length >= 8 && doPasswordsMatch()) {
         try{
-            //await addProduct(productData, images);
+
+          console.log(username+password);
+
+          const userResponse = await axios.post(API + 'auth/register', {
+            username: username,
+            password: password,
+            role: 'ROLE_STAFF',
+          });
+    
+          const userId = userResponse.data;
+    
+          const mpDto = {
+            userId: userId, // Assuming the backend expects the userId separately
+            firstName: firstName.trim(),
+            lastName: lastName.trim(),
+            email: email,
+            phone: phone,
+            hospitalId: currentUser.hospitalId,
+          };
+    
+          await axios.post(API + 'medicalProfessionals', mpDto);
+  
+          // Prepare the email data
+          const emailData = {
+            to: email,
+            from: "medikey.health@gmail.com",
+            subject: "Account Created",
+            name: `${firstName} ${lastName}`, // Consider including the last name as well
+            role: 'Medical Professional',
+            username: username,
+            password: password,
+          };
+    
+          // Send the email
+          await axios.post(API + 'mail/sendingEmail', emailData);
+          
+          // Success alert
+          setLoading(false);
             Swal.fire({
                 title: 'Success',
-                text: 'Staff Added!',
+                text: 'Staff Added and Email sent!',
                 icon: 'success',
                 confirmButtonColor: '#3D96FF',
                 confirmButtonText: 'Done',
@@ -61,27 +102,6 @@ const AddMP = () => {
     
   };
 
-  useEffect(() => {
-    if (isAuthenticated) {
-      if(role==="ROLE_SELLER")
-      {
-        nav("/seller-dashboard");
-      }
-      else if(role==="ROLE_ADMIN"){
-        nav("/admin-dashboard");
-      }
-      else{
-        nav("/");
-      }
-
-    }
-  }, [isAuthenticated, nav]);
-
-  useEffect(() => {
-    if(error){
-      setMessage("Invalid Credentials")
-    }
-  }, [error, setMessage])
 
   useEffect(() => {
     setMessage('');
@@ -91,87 +111,113 @@ const AddMP = () => {
     <Wrapper>
       <Container>
         <Title>Register Staff</Title>
-        {
-          message && (
-            <Alert>
-              {message}
-            </Alert>
-          )
-        }
+        {message && <Alert>{message}</Alert>}
         <Form onSubmit={handleSubmit}>
-            
-
-            <Input
+          <FormControl sx={{ m: 1, width: 350 }}>
+            <TextField
               type="username"
               id="username"
               name="username"
-              placeholder="Staff Username"
+              label="Staff Username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
+              inputProps={{ style: { textTransform: 'none' } }}
               required
+              fullWidth
             />
-            
-            <StyledRow>
-            <Input
-              type="password"
-              id="password"
-              name="password"
-              placeholder="Password"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-            <Input
-              type="password"
-              id="confirmPassword"
-              name="confirmPassword"
-              placeholder="Confirm Password"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-            />
-            </StyledRow>
-            <StyledRow>
-            <Input
-              type="text"
-              id="firstName"
-              name="firstName"
-              placeholder="First Name"
-              value={firstName}
-              onChange={(e) => setFirstName(e.target.value)}
-              required
-            />
+          </FormControl>
 
-            <Input
-              type="text"
-              id="lastName"
-              name="lastName"
-              placeholder="Last Name"
-              value={lastName}
-              onChange={(e) => setLastName(e.target.value)}
-              required
-            />
-            </StyledRow>
-            
-            <Input
+          <StyledRow>
+            <FormControl sx={{ m: 1, width: 350 }}>
+              <TextField
+                type="password"
+                id="password"
+                name="password"
+                label="Password"
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
+                required
+                inputProps={{ style: { textTransform: 'none' } }}
+              />
+            </FormControl>
+            <FormControl sx={{ m: 1, width: 350 }}>
+              <TextField
+                type="password"
+                id="confirmPassword"
+                name="confirmPassword"
+                label="Confirm Password"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+                inputProps={{ style: { textTransform: 'none' } }}
+              />
+            </FormControl>
+          </StyledRow>
+
+          <StyledRow>
+            <FormControl sx={{ m: 1, width: 350 }}>
+              <TextField
+                type="text"
+                id="firstName"
+                name="firstName"
+                label="First Name"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+                required
+                inputProps={{ style: { textTransform: 'none' } }}
+              />
+            </FormControl>
+            <FormControl sx={{ m: 1, width: 350 }}>
+              <TextField
+                type="text"
+                id="lastName"
+                name="lastName"
+                label="Last Name"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+                required
+                inputProps={{ style: { textTransform: 'none' } }}
+              />
+            </FormControl>
+          </StyledRow>
+
+          <FormControl sx={{ m: 1, width: 350 }}>
+            <TextField
               type="tel"
               id="phone"
               name="phone"
-              placeholder="Phone"
+              label="Phone"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               required
+              fullWidth
+              inputProps={{ style: { textTransform: 'none' } }}
             />
-            <Input
+          </FormControl>
+
+          <FormControl sx={{ m: 1, width: 350 }}>
+            <TextField
               type="email"
               id="email"
               name="email"
-              placeholder="Email"
+              label="Email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               required
+              fullWidth
+              inputProps={{ style: { textTransform: 'none' } }}
             />
-          <Button type="submit">Add Staff</Button>
+          </FormControl>
+
+          <LoadingButton
+            type="submit"
+            variant="contained"
+            size="large"
+            loading={loading}
+            sx={{ backgroundColor: '#3d96ff', '&:hover': { backgroundColor: '#2176ff' }, width: '350px' }}
+          >
+            Add Staff
+          </LoadingButton>
         </Form>
       </Container>
     </Wrapper>
@@ -201,21 +247,6 @@ const Input = styled.input`
   }
 `;
 
-const Select = styled.select`
-  display: block;
-  width: 100%;
-  padding: 10px;
-  font-size: 16px;
-  border: 1px solid ${({ theme }) => theme.colors.border};
-  border-radius: 3px;
-  margin-bottom: 10px;
-  outline: none;
-  text-transform: none;
-  &:focus {
-    border-color: ${({ theme }) => theme.colors.helper};
-  }
-`;
-
 const Alert = styled.div`
   width: 100%;
   padding: 10px;
@@ -230,12 +261,13 @@ const Alert = styled.div`
 
 const Container = styled.div`
   width: 100%;
-  max-width: 400px;
+  max-width: 450px;
   padding: 40px;
   background-color: #fff;
   border-radius: 15px;
-  margin-top: 100px;
+  margin-top: 50px;
   box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
+  margin-bottom: 50px;
 `;
 
 const Title = styled.h1`
@@ -260,50 +292,6 @@ const StyledRow = styled.div`
 
   ${Input} {
     width: calc(50% - 5px);  // Adjust width of individual Input components
-  }
-`;
-
-
-
-const Button = styled.button`
-  display: block;
-  width: 100%;
-  padding: 7.5px;
-  font-size: 18px;
-  color: ${({ theme }) => theme.colors.white};
-  background-color: ${({ theme }) => theme.colors.btn};
-  border: none;
-  border-radius: 3px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  -webkit-transition: all 0.3s ease 0s;
-  -moz-transition: all 0.3s ease 0s;
-  -o-transition: all 0.3s ease 0s;
-
-  &:hover,
-  &:active {
-    box-shadow: 0 20px 20px 0 rgb(132 144 255 / 30%);
-    box-shadow: ${({ theme }) => theme.colors.shadowSupport};
-    transform: scale(0.96);
-  }
-
-`;
-
-const Options = styled.div`
-margin-top: 30px;
-  display: flex;
-  justify-content: space-between;
-  
-`;
-
-const Option = styled.a`
-  font-size: 14px;
-  color: ${({ theme }) => theme.colors.helper};
-  text-decoration: none;
-  cursor: pointer;
-
-  &:hover {
-    text-decoration: underline;
   }
 `;
 

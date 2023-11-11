@@ -11,21 +11,8 @@ import java.util.Optional;
 @Repository
 public interface MedicalProfessionalRepository extends JpaRepository<MedicalProfessional, Long> {
 
-    // Find by email
-    Optional<MedicalProfessional> findByEmail(String email);
-
     MedicalProfessional findByMpId(Long mpId);
-
-    // Find by phone number
-    Optional<MedicalProfessional> findByPhone(String phone);
-
-    // Find by first name
-    List<MedicalProfessional> findByFirstName(String firstName);
-
-    // Find by last name
-    List<MedicalProfessional> findByLastName(String lastName);
-
-    // Find by hospital
-
+    MedicalProfessional findByUser_UserId(Long userId);
+    List<MedicalProfessional> findAllByHospital_HospitalId(Long hospitalId);
 
 }

@@ -43,6 +43,14 @@ public class VisitController {
                 .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
+    @GetMapping("/code/{code}")
+    public ResponseEntity<VisitDto> getVisitByCode(@PathVariable String code) {
+        Optional<VisitDto> visitDto = visitService.findByCode(code);
+        return visitDto.map(value -> new ResponseEntity<>(value, HttpStatus.OK))
+                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    }
+
+
     @GetMapping("/doctor/{doctorId}")
     public ResponseEntity<List<VisitDto>> getVisitsByDoctorAndDate(
             @PathVariable Long doctorId,

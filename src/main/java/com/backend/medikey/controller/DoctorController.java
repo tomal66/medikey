@@ -39,7 +39,7 @@ public class DoctorController {
     }
 
 
-    @GetMapping("/{id}")
+    @GetMapping("/id/{id}")
     public ResponseEntity<DoctorDto> getDoctorById(@PathVariable Long id) {
         Doctor doctor = doctorService.getDoctorById(id);
         return new ResponseEntity<>(convertToDto(doctor), HttpStatus.OK);
