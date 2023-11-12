@@ -17,7 +17,7 @@ import java.util.Date;
 public class Test {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long testsId;
+    private Long testId;
     @ManyToOne
     private Patient patient;
     @Column(name = "date_recorded", nullable = false)
@@ -25,11 +25,7 @@ public class Test {
     private Date dateRecorded; // date of test
     @ManyToOne
     private Hospital testLocation; // hospital or clinic
-    private String testType; // blood test, urine test, etc
-    private String testResults;
-    private String followUpAction; // medication, surgery, etc
-    @ManyToOne
-    private Doctor doctorReferred; // test referenced by doctor or hospital
-    private String notes;
+    private String testType;
+    private String doctorName; // test referenced by doctor or hospital
     private String testReport;
 }

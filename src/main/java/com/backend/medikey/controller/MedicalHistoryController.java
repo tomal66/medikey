@@ -25,6 +25,13 @@ public class MedicalHistoryController {
         return new ResponseEntity<>(medicalHistories, HttpStatus.OK);
     }
 
+    @GetMapping("/id/{id}")
+    public ResponseEntity<MedicalHistoryDto> getById(@PathVariable Long id) {
+        MedicalHistoryDto dto = medicalHistoryService.getById(id);
+        return new ResponseEntity<>(dto, HttpStatus.OK);
+    }
+
+
     // Get a specific medical history by patient ID
     @GetMapping("/{patientId}")
     public ResponseEntity<List<MedicalHistoryDto>> getMedicalHistoriesByPatientId(@PathVariable Long patientId) {

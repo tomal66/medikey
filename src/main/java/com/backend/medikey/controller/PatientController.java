@@ -24,19 +24,10 @@ public class PatientController {
         return new ResponseEntity<>(patientService.getAllPatients(), HttpStatus.OK);
     }
 
-   /* @GetMapping("/{id}")
-    public ResponseEntity<PatientDto> getPatientById(@PathVariable Long patientId) {
-        Optional<PatientDto> patientDto = patientService.getPatientById(patientId);
-        return patientDto.map(dto -> new ResponseEntity<>(dto, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
-    }*/
-
-    /*@GetMapping("/{patientId}")
-    public ResponseEntity<PatientDto> getPatientById(@PathVariable Long patientId) {
-        PatientDto patientDto = patientService.getPatientById(patientId);
-        return patientDto.map(dto -> new ResponseEntity<>(dto, HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
-    }*/
+    @GetMapping("/age/{id}")
+    public ResponseEntity<String> getPatientAge(@PathVariable Long id) {
+        return new ResponseEntity<>(patientService.getAge(id), HttpStatus.OK);
+    }
 
     @GetMapping("/patient/{patientId}")
     public ResponseEntity<PatientDto> getPatientById(@PathVariable Long patientId) {
@@ -51,6 +42,16 @@ public class PatientController {
     @GetMapping("/user/{userId}")
     public ResponseEntity<PatientDto> getPatientByUserId(@PathVariable Long userId) {
         PatientDto patientDto = patientService.getPatientByUserId(userId);
+        if (patientDto!=null) {
+            return new ResponseEntity<>(patientDto, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/phone/{phone}")
+    public ResponseEntity<PatientDto> getPatientByPhone(@PathVariable String phone) {
+        PatientDto patientDto = patientService.getByPhone(phone);
         if (patientDto!=null) {
             return new ResponseEntity<>(patientDto, HttpStatus.OK);
         } else {

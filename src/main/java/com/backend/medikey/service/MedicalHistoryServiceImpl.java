@@ -90,6 +90,11 @@ public class MedicalHistoryServiceImpl implements MedicalHistoryService {
     }
 
     @Override
+    public MedicalHistoryDto getById(Long id) {
+        return convertToDto(medicalHistoryRepository.findByMedicalHistoryId(id));
+    }
+
+    @Override
     public MedicalHistoryDto addMedicalHistory(MedicalHistoryDto medicalHistoryDto) {
         MedicalHistory medicalHistory = convertToEntity(medicalHistoryDto);
         medicalHistory = medicalHistoryRepository.save(medicalHistory);

@@ -1,16 +1,16 @@
 package com.backend.medikey.service;
 
+import com.backend.medikey.dto.TestDto;
 import com.backend.medikey.model.Test;
 
 import java.util.List;
 import java.util.Optional;
 
 public interface TestService {
-    Test createTest(Test test);
-    Test getTestById(Long testsId);
-    List<Test> getTestsByUsername(String username); // get all tests for a user
-
-    Test updateTest(Long testId, Test updatedTest);
+    TestDto createTest(TestDto testDto);
+    TestDto getTestById(Long testId);
+    List<TestDto> getTestsByPatient(Long patientId);
+    TestDto updateTest(Long testId, TestDto updatedTestDto);
 
     void deleteTest(Long testId); // delete a test
 

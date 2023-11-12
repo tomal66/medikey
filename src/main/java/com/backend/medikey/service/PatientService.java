@@ -9,6 +9,10 @@ public interface PatientService {
 
     List<PatientDto> getAllPatients();
 
+    String getAge(Long patientId);
+
+    PatientDto getByPhone(String phone);
+
     PatientDto getPatientById(Long patientId);
 
     PatientDto createPatient(PatientDto patientDto);

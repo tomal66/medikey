@@ -17,4 +17,6 @@ public class MailRequest {
     private String username;
     private String password;
 
+    private PrescriptionData prescriptionData;
+
 }

@@ -3,6 +3,8 @@ package com.backend.medikey.controller;
 import com.backend.medikey.dto.MailRequest;
 import com.backend.medikey.dto.MailResponse;
 import com.backend.medikey.service.EmailService;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.zxing.WriterException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
@@ -10,6 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -32,6 +35,15 @@ public class EmailController {
         return service.sendEmail(request, model);
 
     }
+
+    @PostMapping("/sendPrescriptionEmail")
+    public MailResponse sendPrescriptionEmail(@RequestBody MailRequest request) {
+        Map<String, Object> model = new HashMap<>();
+
+        return service.sendPrescriptionEmail(request, model);
+
+    }
+
     @GetMapping("/generate-qr-code")
     public ResponseEntity<byte[]> generateQRCodeDownload(@RequestParam String text) {
         try {

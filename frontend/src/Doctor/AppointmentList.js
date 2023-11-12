@@ -12,6 +12,8 @@ import Html5QrcodePlugin from '../Html5QrcodePlugin';
 import Loading from '../style/Loading'
 import { useAuthContext } from '../context/auth_context';
 import format from 'date-fns/format';
+import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+
 
 const AppointmentList = () => {
   const [isModalOpen, setModalOpen] = useState(false);
@@ -33,7 +35,8 @@ const AppointmentList = () => {
             arrivedAt: appt.arrivalTime || 'Not yet', // Replace null with 'Not yet'
             reason: appt.reason,
             code: appt.uniqueIdentifier,
-            visitId: appt.visitId
+            visitId: appt.visitId,
+            isCompleted: !!appt.checkingTime
           }));
           setAppointments(mappedAppointments);
         } catch (error) {
@@ -61,19 +64,25 @@ const AppointmentList = () => {
         { field: 'arrivedAt', headerName: 'Arrived at', type: 'time', flex: 1, headerAlign: 'left', },
         { field: 'reason', headerName: 'Reason', flex: 1, headerAlign: 'left', },
         {
-            field: 'actions',
-            headerName: 'Actions',
-            flex: .3,
-            sortable: false,
-            renderCell: (params) => (
-              <>
-                <AiFillEye
-                  className="icon edit-icon"
-                  onClick={() => handleView(params.row.id)} // Assumes 'id' is the unique identifier for each row
-                />
-              </>
-            ),
+          field: 'actions',
+          headerName: 'Actions',
+          flex: .3,
+          sortable: false,
+          renderCell: (params) => {
+              if (params.row.isCompleted) {
+                  return (
+                      <CheckCircleIcon style={{ color: '#07CA1F' }} />
+                  );
+              } else {
+                  return (
+                      <AiFillEye
+                          className="icon edit-icon"
+                          onClick={() => handleView(params.row.id)} // Assumes 'id' is the unique identifier for each row
+                      />
+                  );
+              }
           },
+        },
       ];
 
   const nav = useNavigate();

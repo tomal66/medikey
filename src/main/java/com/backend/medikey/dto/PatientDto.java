@@ -16,8 +16,5 @@ public class PatientDto {
     private String phone;
     private Long userId;
     private Date dateOfBirth;
-    private List<Long> patientVisitIds;
-    private List<Long> medicalHistoryIds;
-    private List<Long> testIds;
-    private List<Long> medicationIds;
+
 }

@@ -8,6 +8,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.ZoneId;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -38,10 +41,26 @@ public class PatientServiceImpl implements PatientService {
                 .collect(Collectors.toList());
     }
 
-    /*@Override
-    public PatientDto getPatientById(Long patientId) {
-        return patientRepository.findByPatientId(patientId).map(this::convertToDto);
-    }*/
+    @Override
+    public String getAge(Long patientId) {
+        Patient patient = patientRepository.findByPatientId(patientId);
+        // Convert Date to LocalDate
+        LocalDate birthDate = patient.getDateOfBirth().toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+
+        // Get the current date
+        LocalDate currentDate = LocalDate.now();
+
+        // Calculate the period between the current date and date of birth
+        Period period = Period.between(birthDate, currentDate);
+
+        // Format and return the age as a string
+        return period.getYears() + " yrs " + period.getMonths() + " months";
+    }
+
+    @Override
+    public PatientDto getByPhone(String phone) {
+        return convertToDto(patientRepository.findByPhone(phone));
+    }
 
     @Override
     public PatientDto getPatientById(Long patientId) {
@@ -107,67 +126,19 @@ public class PatientServiceImpl implements PatientService {
     public void delete(Long id) {
         patientRepository.deleteById(id);
     }
-    /*
-    private PatientDto convertToDto(Patient patient) {
-        PatientDto dto = new PatientDto();
-        dto.setPatientId(patient.getPatientId());
-        dto.setFirstName(patient.getFirstName());
-        dto.setLastName(patient.getLastName());
-        dto.setEmail(patient.getEmail());
-        dto.setPhone(patient.getPhone());
-        dto.setUserId(patient.getUser().getUserId());
-        dto.setHospitalId(patient.getHospital().getHospitalId());
-        // Add other fields as needed
-        return dto;
-    }
-*/
-    private PatientDto convertToDto(Patient patient) {
-        PatientDto dto = new PatientDto();
-        dto.setPatientId(patient.getPatientId());
-        dto.setFirstName(patient.getFirstName());
-        dto.setLastName(patient.getLastName());
-        dto.setEmail(patient.getEmail());
-        dto.setPhone(patient.getPhone());
 
+    private PatientDto convertToDto(Patient patient) {
+        PatientDto dto = new PatientDto();
+        dto.setPatientId(patient.getPatientId());
+        dto.setFirstName(patient.getFirstName());
+        dto.setLastName(patient.getLastName());
+        dto.setEmail(patient.getEmail());
+        dto.setPhone(patient.getPhone());
+        dto.setDateOfBirth(patient.getDateOfBirth());
         if(patient.getUser() != null) {
             dto.setUserId(patient.getUser().getUserId());
         }
 
-
-
-        //Patient patient = patientRepository.findByPatientId(patientId);
-        /*dto.setPatientVisitIds(patient.getPatientVisitIds());
-        dto.setMedicalHistoryIds(patient.getMedicalHistoryIds());
-        dto.setTestIds(patient.getTestIds());
-        dto.setMedicationIds(patient.getMedicationIds());*/
-        // Assuming patient.getPatientVisits() returns List<Visit>
-        Visit visit = new Visit();
-        List<Long> patientVisitIds = patient.getPatientVisits().stream()
-                .map(Visit::getVisitId)
-                .collect(Collectors.toList());
-        dto.setPatientVisitIds(patientVisitIds);
-
-// Assuming patient.getMedicalHistories() returns List<MedicalHistory>
-        MedicalHistory medicalHistory = new MedicalHistory();
-        List<Long> medicalHistoryIds = patient.getMedicalHistories().stream()
-                .map(MedicalHistory::getMedicalHistoryId)
-                .collect(Collectors.toList());
-        dto.setMedicalHistoryIds(medicalHistoryIds);
-
-// Assuming patient.getTests() returns List<Test>
-        Test test = new Test();
-        List<Long> testIds = patient.getTests().stream()
-                .map(Test::getTestsId)
-                .collect(Collectors.toList());
-        dto.setTestIds(testIds);
-
-// Assuming patient.getMedications() returns List<Medication>
-        List<Long> medicationIds = patient.getMedications().stream()
-                .map(Medication::getMedicationId)
-                .collect(Collectors.toList());
-        dto.setMedicationIds(medicationIds);
-
-        // Add other fields as needed
         return dto;
     }
 
@@ -180,10 +151,7 @@ public class PatientServiceImpl implements PatientService {
         User user = userRepository.findByUserId(patientDto.getUserId());
         patient.setUser(user);
         patient.setDateOfBirth(patientDto.getDateOfBirth());
-        patient.setPatientVisits(visitRepository.findByPatient(patientRepository.findByPatientId(patientDto.getPatientId())));
-        patient.setMedicalHistories(medicalHistoryRepository.findByPatient_PatientId(patientDto.getPatientId()));
-        patient.setTests(testRepository.findByPatient(patientRepository.findByPatientId(patientDto.getPatientId())));
-        patient.setMedications(medicationRepository.findByPatient(patientRepository.findByPatientId(patientDto.getPatientId())));
+
         // Fetch and set User and Hospital entities here
         // Add other fields as needed
         return patient;

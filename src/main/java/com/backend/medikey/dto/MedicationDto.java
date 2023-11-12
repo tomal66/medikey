@@ -15,6 +15,4 @@ public class MedicationDto {
     private String frequency;
     private String duration;
     private String status;
-    private String sideEffects;
-    private String notes;
 }

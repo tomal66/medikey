@@ -14,6 +14,16 @@ import {FaHistory} from 'react-icons/fa';
 import {BiTestTube} from 'react-icons/bi'
 import HistoryTable from './HistoryTable';
 import TextField from '@mui/material/TextField';
+import axios from 'axios';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
+import dayjs from 'dayjs';
+import { LoadingButton } from '@mui/lab';
+import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
+
+
 
 const New = styled.div`
   width: 100%;
@@ -117,7 +127,7 @@ const Right = styled.div`
     justify-content: space-around;
     margin-top: 30px;
 
-    button {
+    .add-button {
       width: 150px;
       padding: 10px;
       border: none;
@@ -167,43 +177,190 @@ const ConsultationForm = ({ inputs, title, visitData }) => {
   const [dosage, setDosage] = useState('');
   const [frequency, setFrequency] = useState('');
   const [duration, setDuration] = useState('');
-  
+  const [followUpDate, setFollowUpDate] = useState(dayjs().add(7, 'day'));
+  const [loading, setLoading] = useState(false);
   const [patientName, setPatientName] = useState(visitData.patientName);
   const [reasonToVisit, setReasonToVisit] = useState(visitData.reason);
-  const [symptoms, setSymptoms] = useState("");
-  const [allergies, setAllergies] = useState("");
-  const [chronicDiseases, setChronicDiseases] = useState("");
-  const [immunization, setImmunization] = useState("");
-  const [previousSurgeries, setPreviousSurgeries] = useState("");
-  const [familyHistory, setFamilyHistory] = useState("");
+  const [age, setAge] = useState("");
+  const [note, setNote] = useState("");
+  const nav = useNavigate();
+
+  const [medicalHistory, setMedicalHistory] = useState({
+    symptoms: '',
+    allergies: '',
+    chronicDiseases: '',
+    familyHistory: '',
+    immunizations: '',
+    previousSurgeries: '',
+    height: '',
+    weight: ''
+  });
+
+  useEffect(() => {
+    const fetchMedicalHistory = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8567/api/medicalHistories/id/${visitData.medicalHistoryId}`);
+        setMedicalHistory(response.data);
+      } catch (error) {
+        console.error('Error fetching medical history:', error);
+      }
+    };
+
+    fetchMedicalHistory();
+  }, [visitData.medicalHistoryId]);
+
+  useEffect(() => {
+    const fetchMedicalHistory = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8567/api/patients/age/${visitData.patientId}`);
+        setAge(response.data);
+      } catch (error) {
+        console.error('Error fetching age:', error);
+      }
+    };
+
+    fetchMedicalHistory();
+  }, [visitData.patientId]);
 
 
   const handleModal = () => {
     setModalOpen(true);
   };
 
-  const handleSubmit = (e) => {
+  const mapMedicationsToDto = () => {
+    return medications.map(medication => {
+      return {
+        patientId: visitData.patientId,
+        prescribedById: visitData.doctorId,
+        visitId: visitData.visitId,
+        datePrescribed: visitData.visitDate,
+        medicationName: medication.medicationName,
+        dosage: medication.dosage,
+        frequency: medication.frequency,
+        duration: medication.duration,
+        status: 'Active',
+      };
+    });
+  };
+
+  function createTimeString(timeString) {
+    // Get the current date
+    let now = new Date();
+
+    // Extract hours, minutes, and seconds from the time string
+    let parts = timeString.split(':');
+    let hours = parseInt(parts[0], 10);
+    let minutes = parseInt(parts[1], 10);
+    let seconds = parseFloat(parts[2]);
+
+    // Set hours, minutes, and seconds to the current date
+    now.setHours(hours);
+    now.setMinutes(minutes);
+    now.setSeconds(seconds);
+    now.setMilliseconds(seconds % 1 * 1000); // Convert fractional seconds to milliseconds
+
+    // Return the ISO string
+    return now.toISOString();
+}
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log("Submitted "+diagnosis+" "+selectedTests);
-    //login(username, password)
-    // .then(() => {
-    //   console.log('Logged in successfully');
-    // })
-    // .catch((error) => {
-    //   setMessage('Invalid credentials. Please try again.');
-    //   console.log('Error:', error);
-    // });
+    setLoading(true);
+
+    try {
+
+      const medicationDtos = mapMedicationsToDto();
+
+      // Update medicalHistory object
+      const updatedMedicalHistoryDto = {
+        ...medicalHistory,
+        diagnosis: diagnosis,
+        notes: note
+      };
+
+      // Update visitData object
+      const updatedVisitDto = {
+        ...visitData,
+        tests: selectedTests.join(', '), // Assuming tests are stored as an array
+        arrivalTime: createTimeString(visitData.arrivalTime),
+        checkingTime: new Date().toISOString(),
+        followUpDate: followUpDate.format('YYYY-MM-DD') // Format date as needed
+      }
+      //console.log(updatedVisitDto)
+
+      // Update Medical History
+      await axios.put(`http://localhost:8567/api/medicalHistories/${medicalHistory.medicalHistoryId}`, updatedMedicalHistoryDto);
+
+      // Update Visit
+      await axios.put(`http://localhost:8567/api/visits/${visitData.visitId}`, updatedVisitDto);
+
+      // Add Medications
+      if (medicationDtos.length > 0) {
+        await axios.post('http://localhost:8567/api/medications/batch', medicationDtos);
+      }
+
+      // Prepare MailRequest object
+      const mailRequest = {
+        subject: 'Your Prescription Details',
+        prescriptionData: {
+            // Add all necessary prescription data
+            doctorId: updatedVisitDto.doctorId, // Assuming you have the doctor's ID
+            patientId: updatedVisitDto.patientId, // Assuming you have the doctor's ID
+            patientName: updatedVisitDto.patientName, // Assuming you have the patient's name
+            date: updatedVisitDto.visitDate, // Current date in YYYY-MM-DD format
+            reason: updatedVisitDto.reason, // Assuming diagnosis is the reason for the prescription
+            symptoms: updatedMedicalHistoryDto.symptoms, // Assuming you have symptoms data
+            diagnosis: updatedMedicalHistoryDto.diagnosis,
+            followUpDate: followUpDate.format('YYYY-MM-DD'),
+            note: note,
+            tests: selectedTests.join(', '),
+            medications: medicationDtos
+        }
+    };
+
+    // Send Prescription Email
+    await axios.post('http://localhost:8567/api/mail/sendPrescriptionEmail', mailRequest);
+
+
+      Swal.fire({
+          title: 'Success',
+          text: 'Appointment Completed!',
+          icon: 'success',
+          confirmButtonColor: '#3D96FF',
+          confirmButtonText: 'Done',
+          heightAuto: true,
+      }).then((result) => {
+          if (result.isConfirmed) {
+              nav('/doctor-dashboard'); // Navigate to doctor-dashboard on success
+          }
+      });
+
+    } catch (error) {
+      console.error('Error updating data:', error);
+      Swal.fire({
+          title: 'Error',
+          text: 'Failed to save appointment',
+          icon: 'error',
+          confirmButtonText: 'Try Again',
+          heightAuto: true,
+      });
+    } finally {
+      setLoading(false);
+    }
+
+    
   }; 
+
+  const handleMUIDateChange = async (newValue) => {
+    const formattedDate = newValue.format('YYYY-MM-DD');
+    setFollowUpDate(newValue)
+  };
 
   const removeMedication = (medicationName) => {
     const newMedications = medications.filter(med => med.medicationName !== medicationName);
     setMedications(newMedications);
   };
   
-
-  useEffect(() => {
-    console.log(medications);
-  }, [medications]);
 
   const addMedication = () => {
     const newMedication = {
@@ -253,12 +410,15 @@ const ConsultationForm = ({ inputs, title, visitData }) => {
               <h3 className='patient-card-header'>Patient Details</h3>
               <PatientDetail><strong>Name:</strong> {patientName}</PatientDetail>
               <PatientDetail><strong>Reason to visit:</strong> {reasonToVisit}</PatientDetail>
-              <PatientDetail><strong>Symptoms:</strong> {symptoms}</PatientDetail>
-              <PatientDetail><strong>Allergies:</strong> {allergies}</PatientDetail>
-              <PatientDetail><strong>Chronic Diseases:</strong> {chronicDiseases}</PatientDetail>
-              <PatientDetail><strong>Immunization:</strong> {immunization}</PatientDetail>
-              <PatientDetail><strong>Previous Surgeries:</strong> {previousSurgeries}</PatientDetail>
-              <PatientDetail><strong>Family History:</strong> {familyHistory}</PatientDetail>
+              <PatientDetail><strong>Age:</strong> {age}</PatientDetail>
+              <PatientDetail><strong>Height:</strong> {medicalHistory.height}</PatientDetail>
+              <PatientDetail><strong>Weight:</strong> {medicalHistory.weight}</PatientDetail>
+              <PatientDetail><strong>Symptoms:</strong> {medicalHistory.symptoms}</PatientDetail>
+              <PatientDetail><strong>Allergies:</strong> {medicalHistory.allergies}</PatientDetail>
+              <PatientDetail><strong>Chronic Diseases:</strong> {medicalHistory.chronicDiseases}</PatientDetail>
+              <PatientDetail><strong>Immunization:</strong> {medicalHistory.immunizations}</PatientDetail>
+              <PatientDetail><strong>Previous Surgeries:</strong> {medicalHistory.previousSurgeries}</PatientDetail>
+              <PatientDetail><strong>Family History:</strong> {medicalHistory.familyHistory}</PatientDetail>
               <div style={{ textAlign: 'center', marginTop: '30px' }}>
 
               <FaHistory
@@ -313,6 +473,32 @@ const ConsultationForm = ({ inputs, title, visitData }) => {
                       ))}
                     </Select>
                   </FormControl>
+                  
+                    <LocalizationProvider dateAdapter={AdapterDayjs}>
+                    <FormControl sx={{ m: 1, width: 300 }}>
+                      <DatePicker
+                        value={followUpDate}
+                        onChange={handleMUIDateChange}
+                        label="Follow-Up day"
+                        renderInput={(params) => <TextField {...params} />}
+                        minDate={dayjs()}
+                        required
+                      />
+                    </FormControl>
+                    </LocalizationProvider>
+                  
+
+                  <FormControl sx={{ m: 1, width: 300 }}>
+                    <TextField
+                          label="Note"
+                          variant="outlined" // You can choose other variants like "filled" if you prefer
+                          placeholder="Note"
+                          value={note}
+                          onChange={(e) => setNote(e.target.value)}
+                          
+                          inputProps={{ style: { textTransform: 'none' } }}
+                        />  
+                  </FormControl> 
 
 
                 {medications.map((medication) => (
@@ -322,8 +508,17 @@ const ConsultationForm = ({ inputs, title, visitData }) => {
                 ))}
 
               <div style={{ width: '100%', textAlign: 'center', paddingLeft: '30px' }}>
-                <Button onClick={handleModal}>+ Medication</Button>
-                <Button type='submit'>Save</Button>
+                <Button className="add-button" type="button" onClick={handleModal}>+ Medication</Button>
+                <LoadingButton
+                type="submit"
+                variant="contained"
+                size="large"
+                loading={loading}
+                sx={{ backgroundColor: '#3d96ff', '&:hover': { backgroundColor: '#2176ff' }, width: '150px', mt: 2 }}
+              >
+                Save
+              </LoadingButton>
+
               </div>
             </form>
           </Right>
@@ -341,7 +536,7 @@ const ConsultationForm = ({ inputs, title, visitData }) => {
                   <TextField
                     label="Medication Name"
                     variant="outlined"
-                    placeholder="Medication Name"
+                    placeholder="ie. Napa"
                     value={medicationName}
                     onChange={(e) => setMedicationName(e.target.value)}
                     required
@@ -355,7 +550,7 @@ const ConsultationForm = ({ inputs, title, visitData }) => {
                   <TextField
                     label="Dosage"
                     variant="outlined"
-                    placeholder="Dosage"
+                    placeholder="ie. 500mg"
                     value={dosage}
                     onChange={(e) => setDosage(e.target.value)}
                     required
@@ -369,7 +564,7 @@ const ConsultationForm = ({ inputs, title, visitData }) => {
                   <TextField
                     label="Frequency"
                     variant="outlined"
-                    placeholder="Frequency"
+                    placeholder="ie. 1-1-1"
                     value={frequency}
                     onChange={(e) => setFrequency(e.target.value)}
                     required
@@ -383,7 +578,7 @@ const ConsultationForm = ({ inputs, title, visitData }) => {
                   <TextField
                     label="Duration"
                     variant="outlined"
-                    placeholder="Duration"
+                    placeholder="ie. 7 days"
                     value={duration}
                     onChange={(e) => setDuration(e.target.value)}
                     required
@@ -393,7 +588,7 @@ const ConsultationForm = ({ inputs, title, visitData }) => {
                   />
                 </FormControl>
                 <FormControl sx={{ m: 1, width: 250 }}>
-                  <Button onClick={addMedication}>Add</Button>
+                  <Button className="add-button" onClick={addMedication}>Add</Button>
                 </FormControl>
                 
 

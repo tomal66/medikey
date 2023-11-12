@@ -20,7 +20,6 @@ public interface TestRepository extends JpaRepository<Test, Long> {
 
     Test save(Test testToUpdate);
 
-    @Query("SELECT t FROM Test t JOIN t.patient p JOIN p.user u WHERE u.username = :username")
-    List<Test> findTestsByUsername(@Param("username") String username);
+    List<Test> findAllByPatient_PatientId(Long patientId);
 
 }

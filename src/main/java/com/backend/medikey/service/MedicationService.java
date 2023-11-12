@@ -1,5 +1,6 @@
 package com.backend.medikey.service;
 
+import com.backend.medikey.dto.MedicationDto;
 import com.backend.medikey.model.Medication;
 
 import java.util.Date;
@@ -8,19 +9,20 @@ import java.util.Optional;
 
 public interface MedicationService {
 
-    List<Medication> getAllMedications();
+    List<MedicationDto> getAllMedications();
 
-    Optional<Medication> getMedicationById(Long id);
+    MedicationDto getMedicationById(Long id);
 
     //List<Medication> getMedicationsByUserId(Long userId);
 
-    List<Medication> getMedicationsByDatePrescribed(Date datePrescribed);
+    List<MedicationDto> getMedicationsByDatePrescribed(Date datePrescribed);
 
-    Medication addMedication(Medication medication);
+    MedicationDto addMedication(MedicationDto medicationDto);
+    List<MedicationDto> addMultipleMedications(List<MedicationDto> medicationDtos);
 
-    Medication updateMedication(Medication medication);
+    MedicationDto updateMedication(MedicationDto medicationDto);
 
     void deleteMedication(Long id);
 
-    List<Medication> getMedicationsByUsername(String username);
+    List<MedicationDto> getMedicationsByUsername(String username);
 }

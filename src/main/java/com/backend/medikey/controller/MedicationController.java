@@ -23,64 +23,32 @@ public class MedicationController {
     @Autowired
     private MedicationService medicationService;
 
-    // Convert entity to DTO
-    private MedicationDto convertToDto(Medication medication) {
-        MedicationDto dto = new MedicationDto();
-        dto.setMedicationId(medication.getMedicationId());
-        dto.setPatientId(medication.getPatient().getPatientId());
-        dto.setPrescribedById(medication.getPrescribedBy().getDoctorId());
-        dto.setVisitId(medication.getVisit().getVisitId());
-        dto.setDatePrescribed(medication.getDatePrescribed());
-        dto.setMedicationName(medication.getMedicationName());
-        dto.setDosage(medication.getDosage());
-        dto.setFrequency(medication.getFrequency());
-        dto.setDuration(medication.getDuration());
-        dto.setStatus(medication.getStatus());
-        dto.setSideEffects(medication.getSideEffects());
-        dto.setNotes(medication.getNotes());
-        return dto;
-    }
-
-    // Convert DTO to entity
-    private Medication convertToEntity(MedicationDto dto) {
-        Medication medication = new Medication();
-        // Note: You should fetch the related entities (Patient, Doctor, Visit) here
-        medication.setMedicationId(dto.getMedicationId());
-        medication.setPatient(new Patient(dto.getPatientId()));
-        //medication.setPrescribedBy(new Doctor(dto.getPrescribedById()));
-        //medication.setVisit(new Visit(dto.getVisitId()));
-        medication.setDatePrescribed(dto.getDatePrescribed());
-        medication.setMedicationName(dto.getMedicationName());
-        medication.setDosage(dto.getDosage());
-        medication.setFrequency(dto.getFrequency());
-        medication.setDuration(dto.getDuration());
-        medication.setStatus(dto.getStatus());
-        medication.setSideEffects(dto.getSideEffects());
-        medication.setNotes(dto.getNotes());
-        return medication;
-    }
-
     @GetMapping
     public ResponseEntity<List<MedicationDto>> getAllMedications() {
-        List<Medication> medications = medicationService.getAllMedications();
-        List<MedicationDto> medicationDtos = medications.stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
+        List<MedicationDto> medicationDtos = medicationService.getAllMedications();
         return new ResponseEntity<>(medicationDtos, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<MedicationDto> getMedicationById(@PathVariable Long id) {
-        Optional<Medication> medication = medicationService.getMedicationById(id);
-        return medication.map(value -> new ResponseEntity<>(convertToDto(value), HttpStatus.OK))
-                .orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
+        MedicationDto medicationDto = medicationService.getMedicationById(id);
+        if (medicationDto != null) {
+            return new ResponseEntity<>(medicationDto, HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
     }
 
     @PostMapping
     public ResponseEntity<MedicationDto> addMedication(@RequestBody MedicationDto medicationDto) {
-        Medication medication = convertToEntity(medicationDto);
-        Medication savedMedication = medicationService.addMedication(medication);
-        return new ResponseEntity<>(convertToDto(savedMedication), HttpStatus.CREATED);
+        MedicationDto savedMedicationDto = medicationService.addMedication(medicationDto);
+        return new ResponseEntity<>(savedMedicationDto, HttpStatus.CREATED);
+    }
+
+    @PostMapping("/batch")
+    public ResponseEntity<List<MedicationDto>> addMultipleMedications(@RequestBody List<MedicationDto> medicationDtos) {
+        List<MedicationDto> savedMedicationDtos = medicationService.addMultipleMedications(medicationDtos);
+        return new ResponseEntity<>(savedMedicationDtos, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")
@@ -88,9 +56,8 @@ public class MedicationController {
         if (!id.equals(medicationDto.getMedicationId())) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
-        Medication medication = convertToEntity(medicationDto);
-        Medication updatedMedication = medicationService.updateMedication(medication);
-        return new ResponseEntity<>(convertToDto(updatedMedication), HttpStatus.OK);
+        MedicationDto updatedMedicationDto = medicationService.updateMedication(medicationDto);
+        return new ResponseEntity<>(updatedMedicationDto, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")

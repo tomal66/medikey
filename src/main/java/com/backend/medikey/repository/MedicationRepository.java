@@ -15,6 +15,7 @@ import java.util.Optional;
 
 @Repository
 public interface MedicationRepository extends JpaRepository<Medication, Long> {
+    Medication findByMedicationId(Long medicationId);
 
     // Find all medications by a specific user
     List<Medication> findByPatient(Patient patient);
@@ -27,10 +28,6 @@ public interface MedicationRepository extends JpaRepository<Medication, Long> {
     // Custom query to find medications by a specific doctor or hospital
     @Query("SELECT m FROM Medication m WHERE m.prescribedBy = ?1")
     List<Medication> findByPrescribedBy(String prescribedBy);
-
-    // Custom query to find medications based on side effects
-    @Query("SELECT m FROM Medication m WHERE m.sideEffects LIKE %?1%")
-    List<Medication> findBySideEffectsContaining(String sideEffect);
 
     @Query("SELECT m FROM Medication m JOIN m.patient p JOIN p.user u WHERE u.username = :username")
     List<Medication> findMedicationsByUsername(@Param("username") String username);

@@ -36,8 +36,5 @@ public class Medication {
     private String duration;
     @Column(name = "status")
     private String status; // Active, Completed, Discontinued
-    @Column(name = "side_effects")
-    private String sideEffects;
-    @Column(name = "notes", length = 2000)
-    private String notes;
+
 }

@@ -1,6 +1,7 @@
 import styled from "styled-components";
 import {BsFillCalendarCheckFill, BsFillPersonCheckFill} from "react-icons/bs"
 import {BiEditAlt} from "react-icons/bi"
+import {TbReportMedical} from "react-icons/tb"
 import { NavLink, useNavigate } from "react-router-dom";
 import { Modal, Button } from '@mui/material';
 import Html5QrcodePlugin from '../Html5QrcodePlugin';
@@ -127,10 +128,21 @@ const MPDashboardItems = () => {
 
                 <div className="services-2">
                 <div className="services-colum-2">
-                    <NavLink to="/all-appointments">
+                    <NavLink to="/appointments">
                     <div>
                     <BsFillCalendarCheckFill className="icon" />
                     <h3>Appointments</h3>
+                    </div>
+                    </NavLink>
+                </div>
+                </div>
+
+                <div className="services-2">
+                <div className="services-colum-2">
+                    <NavLink to="/add-test">
+                    <div>
+                    <TbReportMedical className="icon" />
+                    <h3>Upload Report</h3>
                     </div>
                     </NavLink>
                 </div>

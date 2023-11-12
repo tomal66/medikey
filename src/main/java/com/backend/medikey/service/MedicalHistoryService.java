@@ -12,6 +12,7 @@ public interface MedicalHistoryService {
 
     List<MedicalHistoryDto> getAllMedicalHistories();
     List<MedicalHistoryDto> getMedicalHistoryByPatientId(Long patientId);
+    MedicalHistoryDto getById(Long id);
 
     MedicalHistoryDto addMedicalHistory(MedicalHistoryDto medicalHistoryDto);
 

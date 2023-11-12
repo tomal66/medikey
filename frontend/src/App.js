@@ -36,6 +36,8 @@ import { ToastContainer } from 'react-toastify';
 import { useAuthContext } from './context/auth_context';
 import MPDashboard from './Staff/MPDashboard.js';
 import TakeHistory from './Staff/TakeHistory.js';
+import Appointments from './Staff/Appointments.js';
+import AddTest from './Staff/AddTest.js';
 
 
 function App() {
@@ -133,6 +135,8 @@ function App() {
           {/* Staff Dashboard */}
           <Route path = "/mp-dashboard" element={<MPDashboard/>}/>
           <Route path = "/take-history/:id/:code" element={<TakeHistory/>}/>
+          <Route path = "/appointments" element={<Appointments/>}/>
+          <Route path = "/add-test" element={<AddTest/>}/>
 
           {/* <Route element={<RequireAuth allowedRole={"ROLE_USER"} />}>
             <Route path="/cart" element={<Cart/>}/>
