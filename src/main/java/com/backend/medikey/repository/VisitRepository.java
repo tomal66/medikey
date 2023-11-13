@@ -34,6 +34,8 @@ public interface VisitRepository extends JpaRepository<Visit, Long> {
 
     // Find visits by the patientId of the Patient
     List<Visit> findByPatient_PatientId(Long patientId);
+    List<Visit> findByPatient_PatientIdAndAndCheckingTimeIsNotNull(Long patientId);
+
 
     // Find all visits before a specific follow-up date
     List<Visit> findByFollowUpDateBefore(Date followUpDate);

@@ -1,6 +1,8 @@
 package com.backend.medikey.service;
 
+import com.backend.medikey.dto.MedicationDto;
 import com.backend.medikey.dto.PatientDto;
+import com.backend.medikey.dto.PatientHistoryDto;
 import com.backend.medikey.model.*;
 import com.backend.medikey.repository.*;
 import jakarta.transaction.Transactional;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -26,6 +29,8 @@ public class PatientServiceImpl implements PatientService {
     private HospitalRepository hospitalRepository;
     @Autowired
     private VisitRepository visitRepository;
+    @Autowired
+    private MedicationService medicationService;
     @Autowired
     private MedicalHistoryRepository medicalHistoryRepository;
     @Autowired
@@ -98,6 +103,47 @@ public class PatientServiceImpl implements PatientService {
     @Override
     public void deletePatient(Long id) {
         patientRepository.deleteById(id);
+    }
+
+    @Override
+    public List<PatientHistoryDto> getPatientHistoryById(Long patientId) {
+        List<PatientHistoryDto> patientHistories = new ArrayList<>();
+
+        // Fetch visits by patient ID
+        List<Visit> visits = visitRepository.findByPatient_PatientIdAndAndCheckingTimeIsNotNull(patientId);
+
+        for (Visit visit : visits) {
+            PatientHistoryDto historyDto = new PatientHistoryDto();
+            historyDto.setVisitId(visit.getVisitId());
+            historyDto.setDoctorName("Dr. "+visit.getDoctor().getFirstName()+" "+visit.getDoctor().getLastName());
+            historyDto.setPatientName(visit.getPatient().getFirstName()+" "+visit.getPatient().getLastName());
+            historyDto.setVisitDate(visit.getVisitDate());
+            historyDto.setHospitalName(visit.getHospital().getName());
+            historyDto.setReason(visit.getReason());
+            historyDto.setTests(visit.getTests());
+
+            if(visit.getMedicalHistory()!=null){
+                MedicalHistory medicalHistory = visit.getMedicalHistory();
+                historyDto.setDiagnosis(medicalHistory.getDiagnosis());
+                historyDto.setSymptoms(medicalHistory.getSymptoms());
+                historyDto.setFamilyHistory(medicalHistory.getFamilyHistory());
+                historyDto.setHeight(medicalHistory.getHeight());
+                historyDto.setAllergies(medicalHistory.getAllergies());
+                historyDto.setDiagnosis(medicalHistory.getDiagnosis());
+                historyDto.setImmunizations(medicalHistory.getDiagnosis());
+                historyDto.setChronicDiseases(medicalHistory.getChronicDiseases());
+                historyDto.setWeight(medicalHistory.getWeight());
+                historyDto.setNotes(medicalHistory.getNotes());
+                historyDto.setPreviousSurgeries(medicalHistory.getPreviousSurgeries());
+            }
+
+            List<MedicationDto> medicationDtos = medicationService.getMedicationsByVisitId(visit.getVisitId());
+            historyDto.setMedications(medicationDtos);
+
+            patientHistories.add(historyDto);
+        }
+
+        return patientHistories;
     }
 
     @Override

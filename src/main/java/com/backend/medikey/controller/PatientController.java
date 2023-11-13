@@ -1,6 +1,7 @@
 package com.backend.medikey.controller;
 
 import com.backend.medikey.dto.PatientDto;
+import com.backend.medikey.dto.PatientHistoryDto;
 import com.backend.medikey.model.Patient;
 import com.backend.medikey.service.PatientService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -46,6 +47,19 @@ public class PatientController {
             return new ResponseEntity<>(patientDto, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+        }
+    }
+    @GetMapping("/history/{patientId}")
+    public ResponseEntity<List<PatientHistoryDto>> getPatientHistory(@PathVariable Long patientId) {
+        try {
+            List<PatientHistoryDto> patientHistory = patientService.getPatientHistoryById(patientId);
+            if (patientHistory.isEmpty()) {
+                return ResponseEntity.noContent().build();
+            }
+            return ResponseEntity.ok(patientHistory);
+        } catch (Exception e) {
+            // Log the exception details
+            return ResponseEntity.internalServerError().build();
         }
     }
 

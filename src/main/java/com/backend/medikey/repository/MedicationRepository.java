@@ -21,7 +21,7 @@ public interface MedicationRepository extends JpaRepository<Medication, Long> {
     List<Medication> findByPatient(Patient patient);
 
     List<Medication> findByVisit(Visit visit);
-
+    List<Medication> findAllByVisit_VisitId(Long visitId);
     // Find all medications prescribed on a specific date
     List<Medication> findByDatePrescribed(Date datePrescribed);
 

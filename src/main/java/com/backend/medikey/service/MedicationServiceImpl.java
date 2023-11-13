@@ -38,6 +38,13 @@ public class MedicationServiceImpl implements MedicationService {
     }
 
     @Override
+    public List<MedicationDto> getMedicationsByVisitId(Long visitId) {
+        return medicationRepository.findAllByVisit_VisitId(visitId).stream()
+                .map(this::convertToDto)
+                .collect(Collectors.toList());
+    }
+
+    @Override
     public List<MedicationDto> getMedicationsByUsername(String username) {
         return medicationRepository.findMedicationsByUsername(username).stream()
                 .map(this::convertToDto)

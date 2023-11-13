@@ -12,6 +12,7 @@ public interface MedicationService {
     List<MedicationDto> getAllMedications();
 
     MedicationDto getMedicationById(Long id);
+    List<MedicationDto> getMedicationsByVisitId(Long visitId);
 
     //List<Medication> getMedicationsByUserId(Long userId);
 

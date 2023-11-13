@@ -431,11 +431,6 @@ const ConsultationForm = ({ inputs, title, visitData }) => {
                 className="icon my-icon"
                 onClick={() => handleIconClick('Test')}
               />
-              <BsCapsule
-                className="icon my-icon"
-                onClick={() => handleIconClick('Medication')}
-              />
-
                 
               </div>
             </Card>
@@ -606,7 +601,7 @@ const ConsultationForm = ({ inputs, title, visitData }) => {
         >
           <TableModalContainer>
             <h3>{modalContent}</h3>
-            {modalContent === 'History' && <HistoryTable />}
+            {modalContent === 'History' && <HistoryTable patientId={visitData.patientId}/>}
             {modalContent === 'Test' && <TestTable patientId={visitData.patientId}/>}
             {modalContent === 'Medication' && <MedicationTable />}
           </TableModalContainer>
@@ -668,7 +663,8 @@ const TableModalContainer = styled.div`
   overflow-x: auto;
 
   h3 {
-    font-size: 18px;
+    font-size: 25px;
+    font-weight: bold;
     margin-bottom: 5px;
   }
 
