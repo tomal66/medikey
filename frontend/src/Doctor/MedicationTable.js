@@ -4,7 +4,7 @@ import { DataGrid } from '@mui/x-data-grid';
 import styled from 'styled-components';
 import { Modal } from '@mui/material';
 
-const HistoryTable = () => {
+const MedicationTable = () => {
   const [medicalHistories, setMedicalHistories] = useState([
     {
       id: 1,
@@ -56,7 +56,7 @@ const HistoryTable = () => {
         <div className="container"> 
       <div style={{ height: 400, width: '100%' }}>
         <DataGrid
-          rows={medicalHistories.sort((a, b) => new Date(b.dateRecorded) - new Date(a.dateRecorded))}
+          rows={medicalHistories}
           columns={columns}
           initialState={{
             pagination: {
@@ -122,4 +122,4 @@ const ModalContainer = styled.div`
   max-width: 500px;
 `;
 
-export default HistoryTable;
+export default MedicationTable;

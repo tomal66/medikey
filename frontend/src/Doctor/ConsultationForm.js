@@ -22,6 +22,8 @@ import dayjs from 'dayjs';
 import { LoadingButton } from '@mui/lab';
 import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
+import TestTable from './TestTable';
+import MedicationTable from './MedicationTable';
 
 
 
@@ -605,8 +607,8 @@ const ConsultationForm = ({ inputs, title, visitData }) => {
           <TableModalContainer>
             <h3>{modalContent}</h3>
             {modalContent === 'History' && <HistoryTable />}
-            {/* {modalContent === 'Test' && <TestTable />}
-            {modalContent === 'Medication' && <MedicationTable />} */}
+            {modalContent === 'Test' && <TestTable patientId={visitData.patientId}/>}
+            {modalContent === 'Medication' && <MedicationTable />}
           </TableModalContainer>
         </Modal>
         
@@ -649,7 +651,7 @@ const ModalContainer = styled.div`
 
 const TableModalContainer = styled.div`
   position: absolute;
-  top: 25%;
+  top: 15%;
   left: 15%;
   
 
@@ -661,18 +663,18 @@ const TableModalContainer = styled.div`
   text-align: center;
   width: 70%;
   max-width: 70%;
-  height: 50vh;
+  height: 70vh;
   overflow-y: auto;
   overflow-x: auto;
 
   h3 {
     font-size: 18px;
-    margin-bottom: 15px;
+    margin-bottom: 5px;
   }
 
   p {
     font-size: 16px;
-    margin-bottom: 10px;
+    margin-bottom: 5px;
     text-align: left; /* Added to align the order info to the left */
   }
   p strong {

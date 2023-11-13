@@ -42,8 +42,25 @@ public class StorageController {
             return ResponseEntity.ok()
                     .contentLength(data.length)
                     .header("Content-type", mimeType)
-                    .header("Content-disposition", "attachment; filename=\"" + fileName + "\"")
+                    .header("Content-disposition", "inline; filename=\"" + fileName + "\"")
                     .body(resource);
+        } catch (RuntimeException e) {
+            return new ResponseEntity<>(new ByteArrayResource(new byte[0]), HttpStatus.BAD_REQUEST);
+        } catch (IOException e) {
+            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @GetMapping("/view/{category}/{id}/{fileName}")
+    public ResponseEntity<?> viewFile(@PathVariable String category,
+                                                          @PathVariable Long id,
+                                                          @PathVariable String fileName) {
+        try {
+            byte[] data = storageService.downloadFile(category, id, fileName);
+            //ByteArrayResource resource = new ByteArrayResource(data);
+            //String mimeType = determineMimeType(fileName);
+
+            return new ResponseEntity<>(data, HttpStatus.OK);
         } catch (RuntimeException e) {
             return new ResponseEntity<>(new ByteArrayResource(new byte[0]), HttpStatus.BAD_REQUEST);
         } catch (IOException e) {
