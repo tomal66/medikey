@@ -99,11 +99,11 @@ public class StorageService {
     public String deleteFile(String category, Long id, String fileName){
         String fileKey = category + "/" + id + "/" + fileName;
         s3Client.deleteObject(bucketName, fileKey);
-        if ("doctors".equals(category)) {
-            Doctor doctor = doctorRepository.findByUser_UserId(id);
-            doctor.setProfileImage(null);
-            doctorRepository.save(doctor);
-        }
+//        if ("doctors".equals(category)) {
+//            Doctor doctor = doctorRepository.findByUser_UserId(id);
+//            doctor.setProfileImage(null);
+//            doctorRepository.save(doctor);
+//        }
         return fileName+" removed ...";
     }
 

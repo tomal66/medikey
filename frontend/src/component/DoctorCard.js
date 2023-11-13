@@ -5,12 +5,38 @@ import styled from 'styled-components';
 import Loading from '../style/Loading';
 import { Button } from '@mui/material';
 import Rating from '@mui/material/Rating';
+import { useNavigate } from 'react-router-dom/';
+import { useAuthContext } from '../context/auth_context';
+import Swal from 'sweetalert2';
 
 const DoctorCard = ({ doctor, handleOpenModal }) => {
   const [hospital, setHospital] = useState({});
   const [profileImageUrl, setProfileImageUrl] = useState('');
   const [loadingImage, setLoadingImage] = useState(true);
+  const {currentUser} = useAuthContext();
+  const nav = useNavigate();
   const defaultProfileImg = 'images/doctor.jpg'
+
+  const handleButtonClick = () => {
+    if (currentUser) {
+      handleOpenModal(doctor);
+    } else {
+      Swal.fire({
+        title: 'Error',
+        text: 'You need to login first',
+        icon: 'error',
+        confirmButtonColor: '#3D96FF',
+        confirmButtonText: 'Login',
+        heightAuto: true,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          nav('/login'); // Replace '/some-path' with the path you want to redirect to after successful update
+        }
+      });
+
+    }
+  };
+
   useEffect(() => {
     const fetchHospital = async () => {
       try {
@@ -70,7 +96,7 @@ const DoctorCard = ({ doctor, handleOpenModal }) => {
 
       <div className="doctor-info">
             <h4 className="doctor-name">{`Dr. ${doctor.firstName} ${doctor.lastName}`}</h4>
-            <Rating name="half-rating-read" value={3.5} precision={0.5} readOnly size='small' />
+            {/* <Rating name="half-rating-read" value={3.5} precision={0.5} readOnly size='small' /> */}
             <p className="title">{doctor.title}</p>
             <p className="department"><Button>{doctor.department}</Button></p>
             <p className="hospital">{hospital.name}</p>
@@ -79,7 +105,7 @@ const DoctorCard = ({ doctor, handleOpenModal }) => {
         <Button
         variant='contained'
         sx={{ backgroundColor: '#3d96ff', '&:hover': { backgroundColor: '#2176ff' }, width: '100%', marginTop: '5px' }}
-        onClick={() => handleOpenModal(doctor)}>
+        onClick={handleButtonClick}>
             Check Availability
         </Button>
       

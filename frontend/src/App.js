@@ -38,6 +38,8 @@ import MPDashboard from './Staff/MPDashboard.js';
 import TakeHistory from './Staff/TakeHistory.js';
 import Appointments from './Staff/Appointments.js';
 import AddTest from './Staff/AddTest.js';
+import EditHospital from './Admin/EditHospital.js';
+import EditDoctor from './Hospital/EditDoctor.js';
 
 
 function App() {
@@ -116,11 +118,13 @@ function App() {
           <Route path="/admin-dashboard" element={<AdminDashboard/>}/>
           <Route path="/add-hospital" element={<AddHospital/>}/>
           <Route path="/all-hospitals" element={<AllHospitals/>}/>
+          <Route path="/edit-hospital/:id" element={<EditHospital/>}/>
 
           {/* Hospital Dashboard */}
           <Route path = "/hospital-dashboard" element={<HospitalDashboard/>}/>
           <Route path = "/add-doctor" element={<AddDoctor/>}/>
           <Route path = "/all-doctors" element={<AllDoctors/>}/>
+          <Route path="/edit-doctor/:id" element={<EditDoctor/>}/>
           <Route path = "/add-mp" element={<AddMP/>}/>
           <Route path = "/all-mp" element={<AllMPs/>}/>
 

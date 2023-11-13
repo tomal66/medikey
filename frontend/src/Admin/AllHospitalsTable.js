@@ -7,49 +7,40 @@ import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { DataGrid } from '@mui/x-data-grid';
+import { TextField } from '@mui/material';
 
 const AllHospitalsTable = () => {
 
 
-    const [hospitals, setHospitals] = useState([
-        {
-          id: '1',
-          name: 'Sample Hospital2',
-          city: 'Sample City',
-          phoneNumber: '123-456-7890'
-        },
-        {
-            id: '2',
-            name: 'Sample Hospital222',
-            city: 'Sample City',
-            phoneNumber: '123-456-7890'
-          }
-        
-      ]); // Initialize state 
-      
-    const [search, setSearch] = useState(""); // Add this line
+  const [hospitals, setHospitals] = useState([]);
+  const [search, setSearch] = useState("");
 
-    // useEffect(() => {
-    //     axios.get('http://localhost:8080/api/hospital/all')
-    //       .then(response => {
-    //         setHospitals(response.data); 
-    //       })
-    //       .catch(error => {
-    //         console.error('Error:', error);
-    //       });
-    //   }, []);
+  useEffect(() => {
+      axios.get('http://localhost:8567/api/hospitals')
+        .then(response => {
+          const formattedData = response.data.map(hospital => ({
+            ...hospital,
+            id: hospital.hospitalId
+          }));
+          setHospitals(formattedData);
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+    }, []);
+
 
     const filteredHospitals = hospitals.filter(
         hospital =>
-        hospital.id.toLowerCase().includes(search.toLowerCase()) ||
+        hospital.id.toString().toLowerCase().includes(search.toLowerCase()) ||
         hospital.name.toLowerCase().includes(search.toLowerCase()) ||
         hospital.city.toLowerCase().includes(search.toLowerCase())
     );
 
     const columns = [
-        { field: 'id', headerName: 'ID', flex: 1, headerAlign: 'left',  },
+        { field: 'id', headerName: 'ID', flex: .3, headerAlign: 'left',  },
         { field: 'name', headerName: 'Hospital Name', flex: 1, headerAlign: 'left', },
-        { field: 'city', headerName: 'City', flex: 1, headerAlign: 'left',  },
+        { field: 'city', headerName: 'City', flex: .7, headerAlign: 'left',  },
         {
           field: 'phoneNumber',
           headerName: 'Phone',
@@ -58,23 +49,22 @@ const AllHospitalsTable = () => {
           headerAlign: 'left',
         },
         {
+          field: 'email',
+          headerName: 'Email',
+          type: 'phone',
+          flex: 1,
+          headerAlign: 'left',
+        },
+        {
             field: 'actions',
             headerName: 'Actions',
-            flex: 1,
+            flex: .5,
             sortable: false,
             renderCell: (params) => (
               <>
-                <AiFillEye
-                  className="icon edit-icon"
-                  onClick={() => handleView(params.row.id)} // Assumes 'id' is the unique identifier for each row
-                />
                 <FiEdit2 
                   className="icon edit-icon" 
-                  // Add your edit logic here
-                />
-                <FiTrash2
-                  className="icon delete-icon"
-                  // Add your delete logic here
+                  onClick={() => handleEdit(params.row.id)}
                 />
               </>
             ),
@@ -82,8 +72,8 @@ const AllHospitalsTable = () => {
       ];
 
   const nav = useNavigate();
-  const handleView = (id) => {
-    nav(`/singleHospital/${id}`);
+  const handleEdit = (id) => {
+    nav(`/edit-hospital/${id}`);
   };
 
     
@@ -91,11 +81,17 @@ const AllHospitalsTable = () => {
     return (
       <Wrapper>
         <div className="container"> 
-        <SearchInput
+        <TextField
           type="text"
-          placeholder="Search Hospitals"
+          label="Search Hospitals"
+          variant="outlined"
           value={search}
           onChange={e => setSearch(e.target.value)}
+          sx={{
+            marginBottom: '10px',           
+          }}
+          inputProps={{ 
+          style: { textTransform: 'none' } }}
         />
         <div style={{ height: 400, width: '100%',}}>
             <DataGrid

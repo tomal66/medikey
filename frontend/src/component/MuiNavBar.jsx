@@ -19,7 +19,10 @@ const MuiNavBar = ({toggleChatbot}) => {
                 <NavLink to="/">
                     <Button  sx={{fontSize: '18px', color:'#255a99'}} >Home</Button>
                 </NavLink>
-                <Button  sx={{fontSize: '18px', color:'#255a99'}} onClick={toggleChatbot}>Make Appointment</Button>
+                <NavLink to="/make-appointment">
+                    <Button  sx={{fontSize: '18px', color:'#255a99'}} >Make Appointment</Button>
+                </NavLink>
+                <Button  sx={{fontSize: '18px', color:'#255a99'}} onClick={toggleChatbot}>Assist</Button>
                 <NavLink to="/login">
                     <Button  sx={{fontSize: '15px', backgroundColor:'#3d96ff'}} variant='contained'>Login</Button>
                 </NavLink>

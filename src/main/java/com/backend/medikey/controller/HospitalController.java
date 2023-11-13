@@ -24,12 +24,10 @@ public class HospitalController {
     private HospitalService hospitalService;
     @Autowired
     private UserService userService;
-    @Autowired
-    private AuthController authController;
 
-    // Convert Hospital to HospitalDto
     private HospitalDto convertToDto(Hospital hospital) {
         HospitalDto dto = new HospitalDto();
+        dto.setUserId(hospital.getUser().getUserId());
         dto.setHospitalId(hospital.getHospitalId());
         dto.setName(hospital.getName());
         dto.setAddress(hospital.getAddress());
@@ -81,12 +79,6 @@ public class HospitalController {
         return new ResponseEntity<>(hospitalDtos, HttpStatus.OK);
     }
 
-    // Get a specific hospital by ID
-    /*@GetMapping("/{id}")
-    public ResponseEntity<HospitalDto> getHospitalById(@PathVariable Long hospitalId) {
-        Hospital hospital = hospitalService.findByHospitalId(hospitalId);
-        return hospital.map(value -> new ResponseEntity<>(convertToDto(value), HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
-    }*/
 
     @GetMapping("/{hospitalId}")
     public ResponseEntity<HospitalDto> getHospitalById(@PathVariable Long hospitalId) {

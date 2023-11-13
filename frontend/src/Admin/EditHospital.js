@@ -6,13 +6,10 @@ import { TextField, Button, FormControl, Typography } from '@mui/material';
 import axios from 'axios';
 import { LoadingButton } from '@mui/lab';
 import LinearProgress from '@mui/material/LinearProgress';
+import { useParams } from 'react-router-dom';
 
-const AddHospital = () => {
-  //const { login, isAuthenticated, error, role } = useAuthContext();
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [confirmPassword, setConfirmPassword] = useState('');
-  const [role, setRole] = useState('ROLE_HOSPITAL');
+const EditHospital = () => {
+  const [hospitalData, setHospitalData] = useState({});
   const [name, setName] = useState('');
   const [address, setAddress] = useState('');
   const [city, setCity] = useState('');
@@ -21,95 +18,93 @@ const AddHospital = () => {
   const [postalCode, setPostalCode] = useState('');
   const [phoneNumber, setPhoneNumber] = useState('');
   const [email, setEmail] = useState('');
+
   const [message, setMessage] = useState('');
   const [loading, setLoading] = useState(false);
   const nav = useNavigate();
-
+  const { id } = useParams();
   const error = null;
-  const API = 'http://localhost:8567/api/'
+  const API = 'http://localhost:8567/api/hospitals/'
 
-  const doPasswordsMatch = () => {
-    return password === confirmPassword;
-  };
+  useEffect(() => {
+    const fetchHospitalData = async () => {
+      setLoading(true);
+      try {
+        const response = await axios.get(`${API}${id}`);
+        const data = response.data;
+        setHospitalData(data);
+        setName(data.name);
+        setAddress(data.address);
+        setCity(data.city);
+        setState(data.state);
+        setCountry(data.country);
+        setPostalCode(data.postalCode);
+        setPhoneNumber(data.phoneNumber);
+        setEmail(data.email);
+        setLoading(false);
+      } catch (error) {
+        console.error('Error fetching hospital data:', error);
+        setLoading(false);
+      }
+    };
+  
+    fetchHospitalData();
+  }, [id]);
+  
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    if (username && password && password.length >= 8 && doPasswordsMatch()) {
-      setLoading(true)
-        try {
-            // Register the user
-            const userResponse = await axios.post(API+'auth/register', {
-                username: username,
-                password: password,
-                role: role
-            });
-
-            const userId = userResponse.data;
-
-            // Register the hospital with the received userId
-            await axios.post(API+'hospitals', {
-                userId: userId,
-                name: name,
-                address: address,
-                city: city,
-                state: state,
-                country: country,
-                postalCode: postalCode,
-                phoneNumber: phoneNumber,
-                email: email
-            });
-
-            // Prepare the email data
-            const emailData = {
-              to: email,
-              from: "medikey.health@gmail.com",
-              subject: "Account Created",
-              name: `${name}`,
-              role: 'Hospital',
-              username: username,
-              password: password 
-          };
-
-          // Send the email
-          await axios.post(API+'mail/sendingEmail', emailData);
-            setLoading(false)
-            Swal.fire({
-                title: 'Success',
-                text: 'Hospital Added!',
-                icon: 'success',
-                confirmButtonColor: '#3D96FF',
-                confirmButtonText: 'Done',
-                heightAuto: true,
-            }).then((result) => {
-                if (result.isConfirmed) {
-                    nav('/admin-dashboard'); // Replace '/' with the desired path
-                }
-            });
-        } catch (error) {
-          setLoading(false)
-            Swal.fire({
-                title: 'Error',
-                text: 'Failed to add hospital',
-                icon: 'error',
-                confirmButtonText: 'Try Again',
-                heightAuto: true,
-            });
+    setLoading(true);
+  
+    const updatedHospitalData = {
+      ...hospitalData,
+      name,
+      address,
+      city,
+      state,
+      country,
+      postalCode,
+      phoneNumber,
+      email
+      
+    };
+  
+    try {
+      await axios.put(`${API}${id}`, updatedHospitalData);
+      Swal.fire({
+        title: 'Success',
+        text: 'Hospital Updated Successfully!',
+        icon: 'success',
+        confirmButtonColor: '#3D96FF',
+        confirmButtonText: 'Done',
+        heightAuto: true,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          nav('/admin-dashboard'); // Replace '/some-path' with the path you want to redirect to after successful update
         }
-    } else {
-        // Error alert message if any of the required fields are missing or invalid
-        if (!username) setMessage("Please enter a username!");
-        else if (!password) setMessage("Please enter a password!");
-        else if (password.length < 8) setMessage("Password must be at least 8 characters long!");
-        else if (!doPasswordsMatch()) setMessage("Passwords do not match!");
+      });
+    } catch (error) {
+      console.error('Error updating hospital data:', error);
+      Swal.fire({
+        title: 'Error',
+        text: 'Failed to update hospital',
+        icon: 'error',
+        confirmButtonText: 'Try Again',
+        heightAuto: true,
+      });
+    } finally {
+      setLoading(false);
     }
-};
+    
+  };
+  
 
 
 
   useEffect(() => {
     if(error){
-      setMessage("Invalid Credentials")
+      setMessage("API Error")
     }
   }, [error, setMessage])
 
@@ -121,7 +116,7 @@ const AddHospital = () => {
     <Wrapper>
       <Container>
       
-        <Title>Register Hospital</Title>
+        <Title>Edit Hospital</Title>
         {
           message && (
             <Alert>
@@ -131,21 +126,6 @@ const AddHospital = () => {
         }
         <Form onSubmit={handleSubmit}>
         
-
-        <FormControl sx={{ m: 1, width: 350 }}>
-            <TextField
-              autoComplete="username"
-              name="username"
-              variant="outlined"
-              required
-              fullWidth
-              id="username"
-              label="Username"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              inputProps={{ style: { textTransform: 'none' } }}
-            />
-          </FormControl>
           <FormControl sx={{ m: 1, width: 350 }}>
             <TextField
               autoComplete="name"
@@ -160,39 +140,6 @@ const AddHospital = () => {
               inputProps={{ style: { textTransform: 'none' } }}
             />
           </FormControl>
-
-            <StyledRow>
-              <FormControl sx={{ m: 1, width: 350 }}>
-                <TextField
-                  autoComplete="name"
-                  name="name"
-                  variant="outlined"
-                  required
-                  fullWidth
-                  id="name"
-                  label="Password"
-                  type='password'
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  inputProps={{ style: { textTransform: 'none' } }}
-                />
-              </FormControl>
-              <FormControl sx={{ m: 1, width: 350 }}>
-                <TextField
-                  autoComplete="password"
-                  name="password"
-                  variant="outlined"
-                  required
-                  fullWidth
-                  id="password"
-                  type='password'
-                  label="Confirm Password"
-                  value={confirmPassword}
-                  onChange={(e) => setConfirmPassword(e.target.value)}
-                  inputProps={{ style: { textTransform: 'none' } }}
-                />
-              </FormControl>
-            </StyledRow>
             
               <FormControl sx={{ m: 1, width: 350 }}>
                 <TextField
@@ -305,7 +252,7 @@ const AddHospital = () => {
             loading={loading}
             sx={{ backgroundColor: '#3d96ff', '&:hover': { backgroundColor: '#2176ff' }, width: '350px' }}
           >
-            Add Hospital
+            Update
           </LoadingButton>
         </Form>
       </Container>
@@ -318,7 +265,7 @@ const Wrapper = styled.div`
   justify-content: center;
   align-items: flex-start;
   min-height: 100vh;
-  background-color: ${({ theme }) => theme.colors.bg};
+  /* background-color: ${({ theme }) => theme.colors.bg}; */
 `;
 
 const Input = styled.input`
@@ -384,4 +331,4 @@ const StyledRow = styled.div`
 `;
 
 
-export default AddHospital;
+export default EditHospital;

@@ -15,24 +15,7 @@ const AllDoctorsTable = () => {
   const {currentUser} = useAuthContext();
   const [doctors, setDoctors] = useState([]);
   const authState = JSON.parse(localStorage.getItem("authState"));
-  const hospitalId = authState?.currentUser?.hospitalId;
-
-
-  // useEffect(() => {
-  //   const fetchDoctors = async () => {
-  //     try {
-  //       const response = await axios.get(`http://localhost:8567/api/doctors/hospital/${hospitalId}`);
-  //       setDoctors(response.data);
-  //       console.log(hospitalId)
-  //     } catch (error) {
-  //       console.error("Error fetching doctors:", error);
-  //       // Handle error here, e.g., set error message in state
-  //     }
-  //   };
-
-  //   fetchDoctors();
-  // }, []);
-      
+  const hospitalId = authState?.currentUser?.hospitalId;    
       
       
     const [search, setSearch] = useState(""); // Add this line
@@ -86,30 +69,24 @@ const AllDoctorsTable = () => {
         {
             field: 'actions',
             headerName: 'Actions',
-            flex: .7,
+            flex: .5,
             sortable: false,
             renderCell: (params) => (
               <>
-                <AiFillEye
-                  className="icon edit-icon"
-                  onClick={() => handleView(params.row.id)} // Assumes 'id' is the unique identifier for each row
-                />
+
                 <FiEdit2 
                   className="icon edit-icon" 
-                  // Add your edit logic here
+                  onClick={() => handleEdit(params.row.id)}
                 />
-                <FiTrash2
-                  className="icon delete-icon"
-                  // Add your delete logic here
-                />
+
               </>
             ),
           },
       ];
 
   const nav = useNavigate();
-  const handleView = (id) => {
-    nav(`/singleHospital/${id}`);
+  const handleEdit = (id) => {
+    nav(`/edit-doctor/${id}`);
   };
 
     

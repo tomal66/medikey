@@ -41,8 +41,8 @@ public class DoctorController {
 
     @GetMapping("/id/{id}")
     public ResponseEntity<DoctorDto> getDoctorById(@PathVariable Long id) {
-        Doctor doctor = doctorService.getDoctorById(id);
-        return new ResponseEntity<>(convertToDto(doctor), HttpStatus.OK);
+        DoctorDto doctor = doctorService.getDoctorById(id);
+        return new ResponseEntity<>(doctor, HttpStatus.OK);
     }
 
     @GetMapping("/{department}")
@@ -76,23 +76,5 @@ public class DoctorController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    private DoctorDto convertToDto(Doctor doctor) {
-        DoctorDto doctorDto = new DoctorDto();
-        doctorDto.setDoctorId(doctor.getDoctorId());
-        doctorDto.setFirstName(doctor.getFirstName());
-        doctorDto.setLastName(doctor.getLastName());
-        doctorDto.setEmail(doctor.getEmail());
-        doctorDto.setPhone(doctor.getPhone());
-        doctorDto.setDepartment(doctor.getDepartment());
-        doctorDto.setTitle(doctor.getTitle()); // Include title
-        doctorDto.setMaxPatients(doctor.getMaxPatients()); // Include maxPatients
-        doctorDto.setDaysOfWeek(doctor.getDaysOfWeek()); // Include daysOfWeek
-        // Format the LocalTime to a string
-        doctorDto.setStartTime(LocalTime.parse(doctor.getStartTime().format(DateTimeFormatter.ofPattern("HH:mm:ss")))); // Include startTime
-        doctorDto.setUserId(doctor.getUser().getUserId());
-        doctorDto.setHospitalId(doctor.getHospital().getHospitalId());
-        // Since doctorVisits relationship is removed, doctorVisitIds should also be removed
-        return doctorDto;
-    }
 
 }

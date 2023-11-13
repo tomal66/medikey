@@ -31,8 +31,8 @@ public class DoctorServiceImpl implements DoctorService {
     }
 
     @Override
-    public Doctor getDoctorById(Long doctorId) {
-        return doctorRepository.findByDoctorId(doctorId);
+    public DoctorDto getDoctorById(Long doctorId) {
+        return convertToDto(doctorRepository.findByDoctorId(doctorId));
     }
 
     @Override

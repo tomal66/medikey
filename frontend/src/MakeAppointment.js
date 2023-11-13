@@ -182,11 +182,17 @@ const MakeAppointment = () => {
   return (
     <Wrapper>
         <div className='container'>
-        <SearchInput
+        <TextField
           type="text"
-          placeholder="Search Doctors"
+          label="Search Doctors"
+          variant="outlined"
           value={search}
           onChange={e => setSearch(e.target.value)}
+          sx={{
+            marginBottom: '10px',           
+          }}
+          inputProps={{ 
+          style: { textTransform: 'none' } }}
         />
         
         

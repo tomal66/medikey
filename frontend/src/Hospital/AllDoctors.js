@@ -13,7 +13,7 @@ const AllDoctors = () => {
 
 const Wrapper = styled.div`
   min-height: 80vh;
-  background-color: ${({ theme }) => theme.colors.bg};
+  /* background-color: ${({ theme }) => theme.colors.bg}; */
 `;
 
 export default AllDoctors
