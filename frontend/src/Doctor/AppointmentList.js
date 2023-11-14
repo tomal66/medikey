@@ -13,7 +13,7 @@ import Loading from '../style/Loading'
 import { useAuthContext } from '../context/auth_context';
 import format from 'date-fns/format';
 import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-
+import { TextField } from '@mui/material';
 
 const AppointmentList = () => {
   const [isModalOpen, setModalOpen] = useState(false);
@@ -117,11 +117,18 @@ const AppointmentList = () => {
     return (
       <Wrapper>
         <div className="container"> 
-        <SearchInput
+        <h2>Patients</h2>
+        <TextField
           type="text"
-          placeholder="Search Patient"
+          label="Search Patient"
+          variant="outlined"
           value={search}
           onChange={e => setSearch(e.target.value)}
+          sx={{
+            marginBottom: '10px',           
+          }}
+          inputProps={{ 
+          style: { textTransform: 'none' } }}
         />
         <div style={{ height: 400, width: '100%',}}>
             <DataGrid
@@ -239,6 +246,15 @@ const Wrapper = styled.section`
 .delete-icon:hover {
   color: red;
 }
+
+h2 {
+    text-align: center;
+    text-transform: none;
+    color: ${({ theme }) => theme.colors.text};
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 30px;
+  }
 
 `;
 

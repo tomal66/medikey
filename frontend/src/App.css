@@ -5,6 +5,7 @@
   transform-origin: bottom; /* ensures the scaling is from the bottom */
   transform: scaleY(0);
   transition: transform 0.2s ease-in-out;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3); /* Shadow effect */
   z-index: 1500;
 }
 

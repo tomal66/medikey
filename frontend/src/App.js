@@ -42,6 +42,7 @@ import EditHospital from './Admin/EditHospital.js';
 import EditDoctor from './Hospital/EditDoctor.js';
 import EditMP from './Hospital/EditMP.js';
 import ChangePassword from './ChangePassword.js';
+import AppointmentList from './Doctor/AppointmentList.js';
 
 
 function App() {
@@ -136,6 +137,7 @@ function App() {
           <Route path = "/doctor-dashboard" element={<DoctorDashboard/>}/>
           <Route path = "/consult/:id/:code" element={<Consultation/>}/>
           <Route path="/change-password" element={<ChangePassword/>}/>
+          <Route path="/doctor-appointments" element={<AppointmentList/>}/>
 
           {/* Patient Dashboard */}
           <Route path = "/patient-dashboard" element={<PatientDashboard/>}/>

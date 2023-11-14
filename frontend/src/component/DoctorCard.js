@@ -22,9 +22,9 @@ const DoctorCard = ({ doctor, handleOpenModal }) => {
       handleOpenModal(doctor);
     } else {
       Swal.fire({
-        title: 'Error',
+        title: 'Warning',
         text: 'You need to login first',
-        icon: 'error',
+        icon: 'warning',
         confirmButtonColor: '#3D96FF',
         confirmButtonText: 'Login',
         heightAuto: true,

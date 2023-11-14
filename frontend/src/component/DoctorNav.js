@@ -21,8 +21,8 @@ const DoctorNav = ({toggleChatbot}) => {
                     MediKey
                 </Typography>
                 <Stack direction='row' spacing={2}>
-                    <NavLink to="/hospital-dashboard">
-                        <Button  sx={{fontSize: '18px', color:'#255a99'}} > Patients </Button>
+                    <NavLink to="/doctor-dashboard">
+                        <Button  sx={{fontSize: '18px', color:'#255a99'}} > Dashboard </Button>
                     </NavLink>
                     
                     
