@@ -40,6 +40,8 @@ import Appointments from './Staff/Appointments.js';
 import AddTest from './Staff/AddTest.js';
 import EditHospital from './Admin/EditHospital.js';
 import EditDoctor from './Hospital/EditDoctor.js';
+import EditMP from './Hospital/EditMP.js';
+import ChangePassword from './ChangePassword.js';
 
 
 function App() {
@@ -127,20 +129,25 @@ function App() {
           <Route path="/edit-doctor/:id" element={<EditDoctor/>}/>
           <Route path = "/add-mp" element={<AddMP/>}/>
           <Route path = "/all-mp" element={<AllMPs/>}/>
+          <Route path="/edit-staff/:id" element={<EditMP/>}/>
+          <Route path="/change-password" element={<ChangePassword/>}/>
 
           {/* Doctor Dashboard */}
           <Route path = "/doctor-dashboard" element={<DoctorDashboard/>}/>
           <Route path = "/consult/:id/:code" element={<Consultation/>}/>
+          <Route path="/change-password" element={<ChangePassword/>}/>
 
           {/* Patient Dashboard */}
           <Route path = "/patient-dashboard" element={<PatientDashboard/>}/>
           <Route path = "/patient-form" element={<PatientForm/>}/>
+          <Route path="/change-password" element={<ChangePassword/>}/>
 
           {/* Staff Dashboard */}
           <Route path = "/mp-dashboard" element={<MPDashboard/>}/>
           <Route path = "/take-history/:id/:code" element={<TakeHistory/>}/>
           <Route path = "/appointments" element={<Appointments/>}/>
           <Route path = "/add-test" element={<AddTest/>}/>
+          <Route path="/change-password" element={<ChangePassword/>}/>
 
           {/* <Route element={<RequireAuth allowedRole={"ROLE_USER"} />}>
             <Route path="/cart" element={<Cart/>}/>

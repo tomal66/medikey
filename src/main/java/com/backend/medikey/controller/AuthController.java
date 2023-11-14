@@ -117,6 +117,25 @@ public class AuthController {
     }
 
     @CrossOrigin(origins = "http://localhost:3000")
+    @PutMapping("changePassword")
+    public ResponseEntity<?> changePassword(@RequestBody ChangePasswordDto changePasswordDto) {
+        User user = userRepository.findByUsername(changePasswordDto.getUsername());
+
+        if (user == null) {
+            return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+        }
+
+        if (!passwordEncoder.matches(changePasswordDto.getCurrentPassword(), user.getPassword())) {
+            return new ResponseEntity<>("Current password is incorrect", HttpStatus.BAD_REQUEST);
+        }
+
+        user.setPassword(passwordEncoder.encode(changePasswordDto.getNewPassword()));
+        userRepository.save(user);
+
+        return new ResponseEntity<>("Password updated successfully", HttpStatus.OK);
+    }
+
+    @CrossOrigin(origins = "http://localhost:3000")
     @GetMapping("getUser")
     public ResponseEntity<?> getUser(@RequestParam Long userId, @RequestParam String role) {
         Object userDetails = null;

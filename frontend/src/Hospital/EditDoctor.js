@@ -119,6 +119,7 @@ const EditDoctor = () => {
 
   const nav = useNavigate();
   const API = 'http://localhost:8567/api/'
+  const {currentUser} = useAuthContext();
 
   useEffect(() => {
     const fetchDoctorData = async () => {
@@ -126,6 +127,7 @@ const EditDoctor = () => {
       try {
         const response = await axios.get(`${API}doctors/id/${id}`);
         const data = response.data;
+
         setDoctorData(data);
         setFirstName(data.firstName);
         setLastName(data.lastName);

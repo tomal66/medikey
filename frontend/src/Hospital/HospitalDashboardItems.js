@@ -1,7 +1,7 @@
 import styled from "styled-components";
 import {HiUserAdd} from "react-icons/hi"
 import {FaUserDoctor, FaUserNurse} from "react-icons/fa6"
-import {BsFillCalendarCheckFill, BsCalendarPlus} from "react-icons/bs"
+import {BiSolidKey} from "react-icons/bi"
 import { NavLink } from "react-router-dom";
 
 const AdminDashboardItems = () => {
@@ -34,10 +34,10 @@ const AdminDashboardItems = () => {
 
                 <div className="services-2">
                 <div className="services-colum-2">
-                    <NavLink to="/add-appointment">
+                    <NavLink to="/change-password">
                     <div>
-                    <BsCalendarPlus className="icon" />
-                    <h3>Create Appointment</h3>
+                    <BiSolidKey className="icon" />
+                    <h3>Change Password</h3>
                     </div>
                     </NavLink>
                 </div>
@@ -67,16 +67,7 @@ const AdminDashboardItems = () => {
                 </div>
                 </div>
 
-                <div className="services-2">
-                <div className="services-colum-2">
-                    <NavLink to="/all-appointments">
-                    <div>
-                    <BsFillCalendarCheckFill className="icon" />
-                    <h3>Appointments</h3>
-                    </div>
-                    </NavLink>
-                </div>
-                </div>
+                
 
                 
                

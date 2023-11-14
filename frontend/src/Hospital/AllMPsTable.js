@@ -7,66 +7,29 @@ import Swal from 'sweetalert2';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { DataGrid } from '@mui/x-data-grid';
+import { TextField } from '@mui/material';
 
 const AllMPsTable = () => {
 
 
-    const [mps, setMps] = useState([
-        {
-          id: '1',
-          firstName: 'John',
-          lastName: 'Doe',
-          
-          email: 'john.doe@example.com',
-          phone: '123-456-7890'
-        },
-        {
-          id: '2',
-          firstName: 'Jane',
-          lastName: 'Doe',
-          
-          email: 'jane.doe@example.com',
-          phone: '098-765-4321'
-        },
-        {
-          id: '3',
-          firstName: 'Emily',
-          lastName: 'Smith',
-          
-          email: 'emily.smith@example.com',
-          phone: '111-222-3333'
-        },
-        {
-          id: '4',
-          firstName: 'Robert',
-          lastName: 'Brown',
-          
-          email: 'robert.brown@example.com',
-          phone: '444-555-6666'
-        },
-        {
-          id: '5',
-          firstName: 'Karen',
-          lastName: 'Williams',
-          
-          email: 'karen.williams@example.com',
-          phone: '777-888-9999'
-        }
-      ]);
-      
-      
-      
-    const [search, setSearch] = useState(""); // Add this line
+  const [mps, setMps] = useState([]);
 
-    // useEffect(() => {
-    //     axios.get('http://localhost:8080/api/hospital/all')
-    //       .then(response => {
-    //         setHospitals(response.data); 
-    //       })
-    //       .catch(error => {
-    //         console.error('Error:', error);
-    //       });
-    //   }, []);
+  const [search, setSearch] = useState("");
+
+  useEffect(() => {
+      axios.get('http://localhost:8567/api/medicalProfessionals/hospital/1')
+        .then(response => {
+          const fetchedMPs = response.data.map(mp => ({
+            ...mp,
+            id: mp.mpId.toString(), // Convert mpId to string and assign to id
+          }));
+          setMps(fetchedMPs);
+        })
+        .catch(error => {
+          console.error('Error fetching medical professionals:', error);
+        });
+  }, []);
+
 
     const filteredStaffs = mps.filter(
         staff =>
@@ -96,21 +59,13 @@ const AllMPsTable = () => {
         {
             field: 'actions',
             headerName: 'Actions',
-            flex: 1,
+            flex: .5,
             sortable: false,
             renderCell: (params) => (
               <>
-                <AiFillEye
-                  className="icon edit-icon"
-                  onClick={() => handleView(params.row.id)} // Assumes 'id' is the unique identifier for each row
-                />
                 <FiEdit2 
                   className="icon edit-icon" 
-                  // Add your edit logic here
-                />
-                <FiTrash2
-                  className="icon delete-icon"
-                  // Add your delete logic here
+                  onClick={() => handleEdit(params.row.id)} // Assumes 'id' is the unique identifier for each row
                 />
               </>
             ),
@@ -118,8 +73,8 @@ const AllMPsTable = () => {
       ];
 
   const nav = useNavigate();
-  const handleView = (id) => {
-    nav(`/singleHospital/${id}`);
+  const handleEdit = (id) => {
+    nav(`/edit-staff/${id}`);
   };
 
     
@@ -127,11 +82,17 @@ const AllMPsTable = () => {
     return (
       <Wrapper>
         <div className="container"> 
-        <SearchInput
+        <TextField
           type="text"
-          placeholder="Search Staffs"
+          label="Search"
+          variant="outlined"
           value={search}
           onChange={e => setSearch(e.target.value)}
+          sx={{
+            marginBottom: '10px',           
+          }}
+          inputProps={{ 
+          style: { textTransform: 'none' } }}
         />
         <div style={{ height: 400, width: '100%',}}>
             <DataGrid
