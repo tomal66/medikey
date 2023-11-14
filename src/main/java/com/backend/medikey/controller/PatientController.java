@@ -1,5 +1,6 @@
 package com.backend.medikey.controller;
 
+import com.backend.medikey.dto.AppointmentDto;
 import com.backend.medikey.dto.PatientDto;
 import com.backend.medikey.dto.PatientHistoryDto;
 import com.backend.medikey.model.Patient;
@@ -49,6 +50,20 @@ public class PatientController {
             return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
         }
     }
+
+    @GetMapping("/today/{patientId}")
+    public ResponseEntity<List<AppointmentDto>> getTodaysAppointments(@PathVariable Long patientId) {
+        try {
+            List<AppointmentDto> appointments = patientService.getTodaysAppointments(patientId);
+            if (appointments.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+            return new ResponseEntity<>(appointments, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
     @GetMapping("/history/{patientId}")
     public ResponseEntity<List<PatientHistoryDto>> getPatientHistory(@PathVariable Long patientId) {
         try {

@@ -1,0 +1,154 @@
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import styled from "styled-components";
+import { HiUserAdd } from "react-icons/hi";
+import Grid from '@mui/material/Unstable_Grid2';
+import Card from '@mui/material/Card';
+import CardContent from '@mui/material/CardContent';
+import Typography from '@mui/material/Typography';
+import AppointmentCard from './AppointmentCard';
+import { useAuthContext } from '../context/auth_context';
+import LinearProgress from '@mui/material/LinearProgress';
+import Loading from '../style/Loading';
+
+const PatientDashboard = () => {
+  const [appointments, setAppointments] = useState([]);
+  const {currentUser} = useAuthContext();
+  const [loading, setLoading] = useState(false);
+  useEffect(() => {
+    const fetchAppointments = async () => {
+      setLoading(true)
+      try {
+        const response = await axios.get(`http://localhost:8567/api/patients/today/${currentUser.patientId}`);
+        setAppointments(response.data);
+        setLoading(false)
+      } catch (error) {
+        console.error('Error fetching appointments:', error);
+        setLoading(false)
+      }
+    };
+
+    fetchAppointments();
+  }, [currentUser.patientId]);
+
+  return (
+    <Wrapper>
+      <div className="container">
+        <Grid container spacing={2}>
+          <Grid xs={8}>
+            {/* Content for the first column */}
+            <div className="services-1">
+              <HiUserAdd className="icon" />
+              <h3>Service 1</h3>
+            </div>
+          </Grid>
+          <Grid xs={4}>
+            <Card sx={{ minWidth: 275, minHeight: 100, borderRadius: 3, boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.5)' }}>
+              <CardContent>
+                <Typography sx={{ fontSize: 17 }} color="text.secondary" gutterBottom>
+                  Today's Appointments
+                </Typography>
+                {loading ? (
+                  <Loading />
+                ) : appointments.length > 0 ? (
+                  appointments.map((appointment) => (
+                    <AppointmentCard key={appointment.visitId} appointment={appointment} />
+                  ))
+                ) : (
+                  <Typography sx={{ mt: 2 }}>No appointment today!</Typography>
+                )}
+              </CardContent>
+            </Card>
+          </Grid>
+        </Grid>
+      </div>
+    </Wrapper>
+  );
+};
+
+const Wrapper = styled.section`
+  padding: 90px 0;
+  min-height: 80vh;
+  .grid {
+    gap: 48px;
+  }
+
+  .services-1,
+  .services-2,
+  .services-3 {
+    width: auto;
+    height: 200px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-content: center;
+    background: ${({ theme }) => theme.colors.bg};
+    text-align: center;
+    border-radius: 20px;
+    box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
+  }
+
+  .services-2 {
+    gap: 40px;
+    background-color: transparent;
+    box-shadow: none;
+
+    .services-colum-2 {
+      background: ${({ theme }) => theme.colors.bg};
+      display: flex;
+      flex-direction: row;
+      flex: 1;
+      justify-content: center;
+      align-items: center;
+      border-radius: 20px;
+      box-shadow: rgba(0, 0, 0, 0.05) 0px 1px 2px 0px;
+      transition: all 0.2s ease;
+
+      div {
+        display: flex;
+        flex-direction: row;
+        justify-content: center;
+        align-items: center;
+        gap: 10px;
+        padding: 10px;
+      }
+    }
+
+    .services-colum-2:hover {
+        box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
+        transform: scale(1.1);
+    }
+    
+    .services-colum-2:active {
+        box-shadow: none;
+        transform: scale(0.9);
+      }
+
+  }
+
+  h2 {
+    text-align: center;
+    text-transform: none;
+    color: ${({ theme }) => theme.colors.text};
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 30px;
+  }
+
+  h3 {
+    margin-top: 14px;
+    font-size: 20px;
+  }
+
+  .icon {
+    /* font-size: rem; */
+    width: 80px;
+    height: 80px;
+    padding: 20px;
+    border-radius: 30%;
+    background-color: #fff;
+    color: #3D96FF;
+  }
+`;
+
+export default PatientDashboard

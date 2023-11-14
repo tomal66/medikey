@@ -19,7 +19,6 @@ import Register from './Register.js'
 import AdminDashboard from './Admin/AdminDashboard';
 import AddHospital from './Admin/AddHospital';
 import AllHospitals from './Admin/AllHospitals';
-import AllHospitalsTable from './Admin/AllHospitalsTable';
 import HospitalDashboard from './Hospital/HospitalDashboard';
 import AddDoctor from './Hospital/AddDoctor';
 import AllDoctors from './Hospital/AllDoctors';
@@ -28,8 +27,7 @@ import AllMPs from './Hospital/AllMPs';
 import DoctorDashboard from './Doctor/DoctorDashboard';
 import Consultation from './Doctor/Consultation';
 import MakeAppointment from './MakeAppointment';
-import MuiNavBar from './component/MuiNavBar';
-import PatientDashboard from './PatientDashboard';
+import PatientDashboard from './Patient/PatientDashboard.js'
 import PatientForm from './PatientForm';
 import 'react-toastify/dist/ReactToastify.css';
 import { ToastContainer } from 'react-toastify';

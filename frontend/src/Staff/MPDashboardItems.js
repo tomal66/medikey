@@ -1,6 +1,6 @@
 import styled from "styled-components";
-import {BsFillCalendarCheckFill, BsFillPersonCheckFill} from "react-icons/bs"
-import {BiEditAlt} from "react-icons/bi"
+import {BsFillCalendarCheckFill, BsFillPersonCheckFill } from "react-icons/bs"
+import {BiEditAlt, BiSolidKey} from "react-icons/bi"
 import {TbReportMedical} from "react-icons/tb"
 import { NavLink, useNavigate } from "react-router-dom";
 import { Modal, Button } from '@mui/material';
@@ -147,6 +147,17 @@ const MPDashboardItems = () => {
                     </NavLink>
                 </div>
                 </div>
+
+                <div className="services-2">
+                <div className="services-colum-2">
+                    <NavLink to="/change-password">
+                    <div>
+                    <BiSolidKey className="icon" />
+                    <h3>Change Password</h3>
+                    </div>
+                    </NavLink>
+                </div>
+                </div>  
 
                 
                

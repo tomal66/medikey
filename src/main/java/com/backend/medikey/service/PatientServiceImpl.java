@@ -1,5 +1,6 @@
 package com.backend.medikey.service;
 
+import com.backend.medikey.dto.AppointmentDto;
 import com.backend.medikey.dto.MedicationDto;
 import com.backend.medikey.dto.PatientDto;
 import com.backend.medikey.dto.PatientHistoryDto;
@@ -13,7 +14,9 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.ZoneId;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -155,6 +158,27 @@ public class PatientServiceImpl implements PatientService {
         }
         else return null;
 
+    }
+
+    @Override
+    public List<AppointmentDto> getTodaysAppointments(Long patientId) {
+        List<Visit> visits = visitRepository.findAllByPatient_PatientIdAndVisitDate(patientId, new Date());
+        List<AppointmentDto> dtos = visits.stream().map(visit -> {
+            AppointmentDto dto = new AppointmentDto();
+            dto.setVisitId(visit.getVisitId());
+            dto.setDoctorName("Dr. "+visit.getDoctor().getFirstName()+" "+visit.getDoctor().getLastName());
+            dto.setHospitalName(visit.getHospital().getName());
+            dto.setSlNo(visit.getSlNo());
+            DateTimeFormatter timeFormatter = DateTimeFormatter.ofPattern("h:mm a");
+            int additionalTime = (visit.getSlNo() - 1) * visit.getDoctor().getMinutes();
+            dto.setScheduledTime(visit.getDoctor().getStartTime().plusMinutes(additionalTime).format(timeFormatter));
+            Optional<Visit> earliestUnattendedVisit = visitRepository.findFirstByDoctor_DoctorIdAndVisitDateAndArrivalTimeIsNotNullAndCheckingTimeIsNullOrderBySlNoAsc(
+                    visit.getDoctor().getDoctorId(), visit.getVisitDate());
+            dto.setCurrentSl(earliestUnattendedVisit.map(Visit::getSlNo).orElse(null));
+
+            return dto;
+        }).toList();
+        return dtos;
     }
 
     @Override

@@ -4,7 +4,6 @@ import axios from 'axios';
 import styled from 'styled-components';
 import Loading from '../style/Loading';
 import { Button } from '@mui/material';
-import Rating from '@mui/material/Rating';
 import { useNavigate } from 'react-router-dom/';
 import { useAuthContext } from '../context/auth_context';
 import Swal from 'sweetalert2';
@@ -30,7 +29,7 @@ const DoctorCard = ({ doctor, handleOpenModal }) => {
         heightAuto: true,
       }).then((result) => {
         if (result.isConfirmed) {
-          nav('/login'); // Replace '/some-path' with the path you want to redirect to after successful update
+          nav('/login'); 
         }
       });
 
@@ -57,7 +56,7 @@ const DoctorCard = ({ doctor, handleOpenModal }) => {
         const response = await axios({
           method: 'GET',
           url: imageUrl,
-          responseType: 'blob', // Important for getting the image data
+          responseType: 'blob', 
         });
   
         // Create a local URL for the image

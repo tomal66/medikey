@@ -2,9 +2,6 @@ import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { useAuthContext } from './context/auth_context';
 import { NavLink, useNavigate } from 'react-router-dom';
-import Html5QrcodePlugin from './Html5QrcodePlugin';
-import {toast} from 'react-toastify';
-import "react-toastify/dist/ReactToastify.css";
 import { TextField, FormControl } from '@mui/material';
 import { LoadingButton } from '@mui/lab';
 import OutlinedInput from '@mui/material/OutlinedInput';
@@ -13,6 +10,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import IconButton from '@mui/material/IconButton';
 import Visibility from '@mui/icons-material/Visibility';
 import VisibilityOff from '@mui/icons-material/VisibilityOff';
+import { ToastContainer, toast } from 'react-toastify';
 
 const Login = () => {
   const { login, isAuthenticated, error, role, currentUser } = useAuthContext();
@@ -59,13 +57,52 @@ const Login = () => {
             break;
         }
       } else if (role === "ROLE_PATIENT") {
-        
+        toast.success(`Welcome back, ${currentUser.firstName} ${currentUser.lastName}!`, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          });
         nav("/patient-dashboard");
       } else if (role === "ROLE_DOCTOR") {
+        toast.success(`Welcome back, Dr. ${currentUser.firstName} ${currentUser.lastName}!`, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          });
         nav("/doctor-dashboard");
       } else if (role === "ROLE_STAFF") {
+        toast.success(`Welcome back, ${currentUser.firstName} ${currentUser.lastName}!`, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          });
         nav("/mp-dashboard");
       } else if (role === "ROLE_HOSPITAL") {
+        toast.success(`Welcome back, ${currentUser.name}!`, {
+          position: "top-right",
+          autoClose: 4000,
+          hideProgressBar: false,
+          closeOnClick: true,
+          pauseOnHover: true,
+          draggable: true,
+          progress: undefined,
+          theme: "light",
+          });
         nav("/hospital-dashboard");
       } else if (role === "ROLE_ADMIN") {
         nav("/admin-dashboard");
