@@ -5,6 +5,8 @@ import TextField from '@mui/material/TextField';
 import axios from 'axios';
 import { LoadingButton } from '@mui/lab';
 import { useAuthContext } from '../context/auth_context';
+import Swal from 'sweetalert2';
+import { useNavigate } from 'react-router-dom';
 
 const New = styled.div`
   width: 100%;
@@ -143,6 +145,7 @@ const HistoryForm = ({ inputs, title, visitData }) => {
   const [note, setNote] = useState("");
   const [loading, setLoading] = useState(false);
   const {currentUser} = useAuthContext();
+  const nav = useNavigate();
 
   useEffect(() => {
     const fetchDoctor = async () => {
@@ -188,8 +191,27 @@ const HistoryForm = ({ inputs, title, visitData }) => {
       const response = await axios.post('http://localhost:8567/api/medicalHistories', formData);
       console.log('Response:', response.data);
       setLoading(false);
+      Swal.fire({
+        title: 'Success',
+        text: 'History saved!',
+        icon: 'success',
+        confirmButtonColor: '#3D96FF',
+        confirmButtonText: 'Done',
+        heightAuto: true,
+      }).then((result) => {
+        if (result.isConfirmed) {
+          nav('/mp-dashboard'); // Navigate to the dashboard
+        }
+      });
     } catch (error) {
       console.error('Error submitting form:', error);
+      Swal.fire({
+        title: 'Error!',
+        text: 'Error saving history!',
+        icon: 'error',
+        confirmButtonText: 'Retry',
+        confirmButtonColor: '#3d96ff',
+      })
       setLoading(false);
     }
     

@@ -9,6 +9,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import { ToastContainer, toast } from 'react-toastify';
+import { LoadingButton } from '@mui/lab';
 
 const API_ENDPOINT = "http://localhost:8567/api/patients/";
 
@@ -23,6 +24,7 @@ const PatientForm = () => {
   const [dateOfBirth, setDateOfBirth] = useState(null);
   const [phone, setPhone] = useState('');
   const [email, setEmail] = useState('');
+  const [loading, setLoading] = useState(false);
 
   const handleMUIDateChange = (date) => {
     setDateOfBirth(date.toDate().toISOString().split('T')[0]);
@@ -57,6 +59,7 @@ const PatientForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     // Create the JSON object
+    setLoading(true)
     const patientData = {
       firstName: firstName,
       lastName: lastName,
@@ -81,10 +84,12 @@ const PatientForm = () => {
           });
 
         setCurrentUser(response.data); // Update the currentUser in the context
+        setLoading(false)
         navigate('/patient-dashboard'); // Navigate to the patient dashboard
       }
     } catch (error) {
       console.error("Error adding patient:", error);
+      setLoading(false)
       Swal.fire({
         title: 'Error!',
         text: 'Email or phone already in use!',
@@ -176,15 +181,15 @@ const PatientForm = () => {
                 />
                 </FormControl>
             
-                <Button
-                type="submit"
-                fullWidth
-                variant="contained"
-                color="primary"
-                sx={{marginTop: '5px', backgroundColor:"#3d96ff"}}
+                <LoadingButton
+                  type="submit"
+                  variant="contained"
+                  size="large"
+                  loading={loading}
+                  sx={{ backgroundColor: '#3d96ff', '&:hover': { backgroundColor: '#2176ff' }, width: '100%', mt: 2 }}
                 >
-                Submit
-                </Button>
+                  Submit
+                </LoadingButton>
             
         </Form>
         </Container>

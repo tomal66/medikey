@@ -119,6 +119,7 @@ function App() {
           <Route path="/make-appointment" element={<MakeAppointment/>}/>
           <Route path="/unauthorized" element={<Unauthorized/>}/>
           <Route path="*" element={<ErrorPage/>}/>
+          <Route path="/change-password" element={<ChangePassword/>}/>
 
           {/* Admin Dashboard */}
           <Route element={<RequireAuth allowedRole={"ROLE_ADMIN"} />}>
@@ -137,14 +138,14 @@ function App() {
             <Route path = "/add-mp" element={<AddMP/>}/>
             <Route path = "/all-mp" element={<AllMPs/>}/>
             <Route path="/edit-staff/:id" element={<EditMP/>}/>
-            <Route path="/change-password" element={<ChangePassword/>}/>
+            {/* <Route path="/change-password" element={<ChangePassword/>}/> */}
           </Route>
 
           {/* Doctor Dashboard */}
           <Route element={<RequireAuth allowedRole={"ROLE_DOCTOR"} />}>
             <Route path = "/doctor-dashboard" element={<DoctorDashboard/>}/>
             <Route path = "/consult/:id/:code" element={<Consultation/>}/>
-            <Route path="/change-password" element={<ChangePassword/>}/>
+            {/* <Route path="/change-password" element={<ChangePassword/>}/> */}
             <Route path="/doctor-appointments" element={<AppointmentList/>}/>
           </Route>
 
@@ -152,7 +153,7 @@ function App() {
           <Route element={<RequireAuth allowedRole={"ROLE_PATIENT"} />}>
             <Route path = "/patient-dashboard" element={<PatientDashboard/>}/>
             <Route path = "/patient-form" element={<PatientForm/>}/>
-            <Route path="/change-password" element={<ChangePassword/>}/>
+            {/* <Route path="/change-password" element={<ChangePassword/>}/> */}
             <Route path="/my-history" element={<MyHistory/>}/>
             <Route path="/my-test" element={<MyTest/>}/>
             <Route path="/edit-profile" element={<EditProfile/>}/>
@@ -164,7 +165,7 @@ function App() {
             <Route path = "/take-history/:id/:code" element={<TakeHistory/>}/>
             <Route path = "/appointments" element={<Appointments/>}/>
             <Route path = "/add-test" element={<AddTest/>}/>
-            <Route path="/change-password" element={<ChangePassword/>}/>
+            {/* <Route path="/change-password" element={<ChangePassword/>}/> */}
           </Route>
           
         </Route>

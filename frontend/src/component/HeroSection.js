@@ -12,7 +12,7 @@ const HeroSection = ({ myData }) => {
             <p className="intro-data">Welcome to </p>
             <h1> {name} </h1>
             <p>
-              Connecting patients and healthcare simultaneously
+              One-stop platform for electronic healthcare system
             </p>
             <NavLink to="/register">
               <Button>Join Now</Button>
