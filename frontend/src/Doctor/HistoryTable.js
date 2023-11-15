@@ -113,6 +113,7 @@ const HistoryTable = ({ patientId }) => {
             <p>Symptoms: {selectedHistory.symptoms}</p>
             <p>Diagnosis: <strong>{selectedHistory.diagnosis}</strong></p>
             <p>Notes: {selectedHistory.notes}</p>
+            <p>Tests: {selectedHistory.tests}</p>
             <p>Medications:</p>
               {selectedHistory.medications.map(med => (
                 <MedicationInfo>
@@ -171,6 +172,7 @@ const ModalContainer = styled.div`
   max-width: 500px;
 
   h3 {
+    text-align: center;
     margin-bottom: 15px;
   }
 
@@ -190,13 +192,13 @@ const ModalContainer = styled.div`
 const MedicationInfo = styled.p`
   margin-left: 4px; /* Start 4 spaces from left */
   font-weight: normal; /* Default font weight */
-
+  text-align: center;
   .medication-name {
     font-weight: bold; /* Make medication name and dosage bold */
   }
 
   .spacing {
-    margin-left: 4px; /* Spacing between elements */
+    margin-left: 20px; /* Spacing between elements */
   }
 `;
 

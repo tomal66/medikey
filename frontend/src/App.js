@@ -41,7 +41,11 @@ import EditDoctor from './Hospital/EditDoctor.js';
 import EditMP from './Hospital/EditMP.js';
 import ChangePassword from './ChangePassword.js';
 import AppointmentList from './Doctor/AppointmentList.js';
-
+import MyHistory from './Patient/MyHistory.js';
+import MyTest from './Patient/MyTest.js';
+import EditProfile from './Patient/EditProfile.js';
+import Unauthorized from './Unauthorized.js';
+import RequireAuth from './RequireAuth.js';
 
 function App() {
   
@@ -113,67 +117,56 @@ function App() {
           <Route path="/login" element={<Login/>}/>
           <Route path="/register" element={<Register/>}/>
           <Route path="/make-appointment" element={<MakeAppointment/>}/>
+          <Route path="/unauthorized" element={<Unauthorized/>}/>
           <Route path="*" element={<ErrorPage/>}/>
 
           {/* Admin Dashboard */}
-          <Route path="/admin-dashboard" element={<AdminDashboard/>}/>
-          <Route path="/add-hospital" element={<AddHospital/>}/>
-          <Route path="/all-hospitals" element={<AllHospitals/>}/>
-          <Route path="/edit-hospital/:id" element={<EditHospital/>}/>
+          <Route element={<RequireAuth allowedRole={"ROLE_ADMIN"} />}>
+            <Route path="/admin-dashboard" element={<AdminDashboard/>}/>
+            <Route path="/add-hospital" element={<AddHospital/>}/>
+            <Route path="/all-hospitals" element={<AllHospitals/>}/>
+            <Route path="/edit-hospital/:id" element={<EditHospital/>}/>
+          </Route>
 
           {/* Hospital Dashboard */}
-          <Route path = "/hospital-dashboard" element={<HospitalDashboard/>}/>
-          <Route path = "/add-doctor" element={<AddDoctor/>}/>
-          <Route path = "/all-doctors" element={<AllDoctors/>}/>
-          <Route path="/edit-doctor/:id" element={<EditDoctor/>}/>
-          <Route path = "/add-mp" element={<AddMP/>}/>
-          <Route path = "/all-mp" element={<AllMPs/>}/>
-          <Route path="/edit-staff/:id" element={<EditMP/>}/>
-          <Route path="/change-password" element={<ChangePassword/>}/>
+          <Route element={<RequireAuth allowedRole={"ROLE_HOSPITAL"} />}>
+            <Route path = "/hospital-dashboard" element={<HospitalDashboard/>}/>
+            <Route path = "/add-doctor" element={<AddDoctor/>}/>
+            <Route path = "/all-doctors" element={<AllDoctors/>}/>
+            <Route path="/edit-doctor/:id" element={<EditDoctor/>}/>
+            <Route path = "/add-mp" element={<AddMP/>}/>
+            <Route path = "/all-mp" element={<AllMPs/>}/>
+            <Route path="/edit-staff/:id" element={<EditMP/>}/>
+            <Route path="/change-password" element={<ChangePassword/>}/>
+          </Route>
 
           {/* Doctor Dashboard */}
-          <Route path = "/doctor-dashboard" element={<DoctorDashboard/>}/>
-          <Route path = "/consult/:id/:code" element={<Consultation/>}/>
-          <Route path="/change-password" element={<ChangePassword/>}/>
-          <Route path="/doctor-appointments" element={<AppointmentList/>}/>
+          <Route element={<RequireAuth allowedRole={"ROLE_DOCTOR"} />}>
+            <Route path = "/doctor-dashboard" element={<DoctorDashboard/>}/>
+            <Route path = "/consult/:id/:code" element={<Consultation/>}/>
+            <Route path="/change-password" element={<ChangePassword/>}/>
+            <Route path="/doctor-appointments" element={<AppointmentList/>}/>
+          </Route>
 
           {/* Patient Dashboard */}
-          <Route path = "/patient-dashboard" element={<PatientDashboard/>}/>
-          <Route path = "/patient-form" element={<PatientForm/>}/>
-          <Route path="/change-password" element={<ChangePassword/>}/>
+          <Route element={<RequireAuth allowedRole={"ROLE_PATIENT"} />}>
+            <Route path = "/patient-dashboard" element={<PatientDashboard/>}/>
+            <Route path = "/patient-form" element={<PatientForm/>}/>
+            <Route path="/change-password" element={<ChangePassword/>}/>
+            <Route path="/my-history" element={<MyHistory/>}/>
+            <Route path="/my-test" element={<MyTest/>}/>
+            <Route path="/edit-profile" element={<EditProfile/>}/>
+          </Route>
 
           {/* Staff Dashboard */}
-          <Route path = "/mp-dashboard" element={<MPDashboard/>}/>
-          <Route path = "/take-history/:id/:code" element={<TakeHistory/>}/>
-          <Route path = "/appointments" element={<Appointments/>}/>
-          <Route path = "/add-test" element={<AddTest/>}/>
-          <Route path="/change-password" element={<ChangePassword/>}/>
-
-          {/* <Route element={<RequireAuth allowedRole={"ROLE_USER"} />}>
-            <Route path="/cart" element={<Cart/>}/>
-            <Route path="/checkout" element={<Checkout/>}/>
-            <Route path="/myOrders" element={<UserOrders/>}/>
-            <Route path="/edit-user-profile" element={<EditProfile/>}/>
-            <Route path="/edit-user-address" element={<EditAddress/>}/>
+          <Route element={<RequireAuth allowedRole={"ROLE_STAFF"} />}>
+            <Route path = "/mp-dashboard" element={<MPDashboard/>}/>
+            <Route path = "/take-history/:id/:code" element={<TakeHistory/>}/>
+            <Route path = "/appointments" element={<Appointments/>}/>
+            <Route path = "/add-test" element={<AddTest/>}/>
+            <Route path="/change-password" element={<ChangePassword/>}/>
           </Route>
-
-          <Route element={<RequireAuth allowedRole={"ROLE_SELLER"} />}>
-            <Route path="/seller-dashboard" element={<SellerDashboard />} />
-            <Route path="/my-products" element={<MyProducts />} />
-            <Route path="/add-products" element={<AddProduct />} />
-            <Route path="/edit-product/:id" element={<EditProduct />} />
-            <Route path="/orders" element={<Orders />} />
-            <Route path="/edit-seller-profile" element={<EditProfile/>}/>
-            <Route path="/edit-seller-address" element={<EditAddress/>}/>
-          </Route>
-
-          <Route element={<RequireAuth allowedRole={"ROLE_ADMIN"} />}>
-            <Route path="/admin-dashboard" element={<AdminDashboard />} />
-            <Route path="/users" element={<Users />} />
-            <Route path="/allProducts" element={<AllProducts />} />
-            <Route path="/allOrders" element={<AllOrders />} />
-          </Route> */}
-
+          
         </Route>
           
         </Routes>

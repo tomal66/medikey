@@ -10,6 +10,11 @@ import AppointmentCard from './AppointmentCard';
 import { useAuthContext } from '../context/auth_context';
 import LinearProgress from '@mui/material/LinearProgress';
 import Loading from '../style/Loading';
+import { NavLink } from "react-router-dom";
+import {FaUserDoctor, FaUserNurse} from "react-icons/fa6"
+import {BiSolidKey} from "react-icons/bi"
+import { FaHistory, FaFileMedicalAlt  } from "react-icons/fa";
+import { MdAccountCircle } from "react-icons/md";
 
 const PatientDashboard = () => {
   const [appointments, setAppointments] = useState([]);
@@ -34,13 +39,54 @@ const PatientDashboard = () => {
   return (
     <Wrapper>
       <div className="container">
-        <Grid container spacing={2}>
+        <Grid container spacing={4}>
           <Grid xs={8}>
-            {/* Content for the first column */}
-            <div className="services-1">
-              <HiUserAdd className="icon" />
-              <h3>Service 1</h3>
+          <div className="grid grid-two-column">
+
+            <div className="services-2">
+            <div className="services-colum-2">
+                <NavLink to="/my-history">
+                <div>
+                    <FaHistory className="icon" />
+                    <h3>Previous Appointments</h3>
+                </div>
+                </NavLink>
             </div>
+            </div>
+
+            <div className="services-2">
+            <div className="services-colum-2">
+                <NavLink to="/my-test">
+                <div>
+                    <FaFileMedicalAlt className="icon" />
+                    <h3>Test Reports</h3>
+                </div>
+                </NavLink>
+            </div>
+            </div>
+
+            <div className="services-2">
+            <div className="services-colum-2">
+                <NavLink to="/edit-profile">
+                <div>
+                <MdAccountCircle className="icon" />
+                <h3>Edit Profile</h3>
+                </div>
+                </NavLink>
+            </div>
+            </div> 
+
+            <div className="services-2">
+            <div className="services-colum-2">
+                <NavLink to="/change-password">
+                <div>
+                <BiSolidKey className="icon" />
+                <h3>Change Password</h3>
+                </div>
+                </NavLink>
+            </div>
+            </div>             
+          </div>
           </Grid>
           <Grid xs={4}>
             <Card sx={{ minWidth: 275, minHeight: 100, borderRadius: 3, boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.5)' }}>
