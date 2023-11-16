@@ -15,11 +15,72 @@ import {FaUserDoctor, FaUserNurse} from "react-icons/fa6"
 import {BiSolidKey} from "react-icons/bi"
 import { FaHistory, FaFileMedicalAlt  } from "react-icons/fa";
 import { MdAccountCircle } from "react-icons/md";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend,
+} from 'chart.js';
+import { Line } from 'react-chartjs-2';
+
+ChartJS.register(
+  CategoryScale,
+  LinearScale,
+  PointElement,
+  LineElement,
+  Title,
+  Tooltip,
+  Legend
+);
+
+const options = {
+  responsive: true,
+  plugins: {
+    legend: {
+      position: 'top',
+    },
+    title: {
+      display: false,
+      text: 'BMI Over Time',
+    },
+    tooltip: {
+      callbacks: {
+        afterLabel: ((tooltipItem, data) => {
+          console.log(tooltipItem.dataIndex);
+          const index = tooltipItem.dataIndex;
+          const resultArray = [];
+          resultArray.push(`Height: ${tooltipItem.dataset.heights[index]} cm`);
+          resultArray.push(`Weight: ${tooltipItem.dataset.weights[index]} kg`);
+          return resultArray
+        }),
+      }
+    }
+  },
+};
+
 
 const PatientDashboard = () => {
   const [appointments, setAppointments] = useState([]);
   const {currentUser} = useAuthContext();
   const [loading, setLoading] = useState(false);
+  const [chartData, setChartData] = useState({
+    labels: [],
+    datasets: [
+      {
+        label: 'BMI',
+        data: [],
+        borderColor: '#3d96ff',
+        backgroundColor: '#3d96ff',
+        heights: [],
+        weights: [],
+      },
+    ],
+  });
+
   useEffect(() => {
     const fetchAppointments = async () => {
       setLoading(true)
@@ -34,6 +95,33 @@ const PatientDashboard = () => {
     };
 
     fetchAppointments();
+  }, [currentUser.patientId]);
+
+  useEffect(() => {
+    // Replace with your API URL
+    axios.get(`http://localhost:8567/api/patients/bmi/${currentUser.patientId}`)
+      .then(response => {
+        const apiData = response.data;
+        const labels = apiData.map(item => item.date);
+        const data = apiData.map(item => item.bmi);
+        const heights = apiData.map(item => item.height);
+        const weights = apiData.map(item => item.weight);
+
+        setChartData({
+          labels: labels,
+          datasets: [
+            {
+              ...chartData.datasets[0],
+              data: data,
+              heights: heights,
+              weights: weights,
+            },
+          ],
+        });
+      })
+      .catch(error => {
+        console.error('Error fetching data: ', error);
+      });
   }, [currentUser.patientId]);
 
   return (
@@ -87,6 +175,16 @@ const PatientDashboard = () => {
             </div>
             </div>             
           </div>
+          <Card sx={{ minWidth: 275, minHeight: 100, borderRadius: 3, boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.5)', marginTop: 10 }}>
+            <CardContent>
+              <Typography sx={{ fontSize: 17 }} color="text.secondary" gutterBottom align='center'> 
+                  My BMI records
+                </Typography>
+              <Line options={options} data={chartData} />
+            </CardContent>
+          </Card>
+          
+
           </Grid>
           <Grid xs={4}>
             <Card sx={{ minWidth: 275, minHeight: 100, borderRadius: 3, boxShadow: '0px 0px 5px rgba(0, 0, 0, 0.5)' }}>

@@ -1,6 +1,7 @@
 package com.backend.medikey.service;
 
 import com.backend.medikey.dto.AppointmentDto;
+import com.backend.medikey.dto.BMIDto;
 import com.backend.medikey.dto.PatientDto;
 import com.backend.medikey.dto.PatientHistoryDto;
 import com.backend.medikey.model.Patient;
@@ -29,6 +30,7 @@ public interface PatientService {
     Patient save(Patient patient);
 
     Patient update(Long id, Patient patient);
+    List<BMIDto> getBmiData(Long patientId);
 
     void delete(Long id);
 }

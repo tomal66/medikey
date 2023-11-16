@@ -1,6 +1,7 @@
 package com.backend.medikey.controller;
 
 import com.backend.medikey.dto.AppointmentDto;
+import com.backend.medikey.dto.BMIDto;
 import com.backend.medikey.dto.PatientDto;
 import com.backend.medikey.dto.PatientHistoryDto;
 import com.backend.medikey.model.Patient;
@@ -74,6 +75,19 @@ public class PatientController {
             return ResponseEntity.ok(patientHistory);
         } catch (Exception e) {
             // Log the exception details
+            return ResponseEntity.internalServerError().build();
+        }
+    }
+
+    @GetMapping("/bmi/{patientId}")
+    public ResponseEntity<List<BMIDto>> getPatientBmi(@PathVariable Long patientId) {
+        try {
+            List<BMIDto> bmiData = patientService.getBmiData(patientId);
+            if (bmiData.isEmpty()) {
+                return ResponseEntity.noContent().build();
+            }
+            return ResponseEntity.ok(bmiData);
+        } catch (Exception e) {
             return ResponseEntity.internalServerError().build();
         }
     }

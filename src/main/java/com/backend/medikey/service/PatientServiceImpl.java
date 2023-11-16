@@ -1,9 +1,6 @@
 package com.backend.medikey.service;
 
-import com.backend.medikey.dto.AppointmentDto;
-import com.backend.medikey.dto.MedicationDto;
-import com.backend.medikey.dto.PatientDto;
-import com.backend.medikey.dto.PatientHistoryDto;
+import com.backend.medikey.dto.*;
 import com.backend.medikey.model.*;
 import com.backend.medikey.repository.*;
 import jakarta.transaction.Transactional;
@@ -191,6 +188,50 @@ public class PatientServiceImpl implements PatientService {
         patient.setPatientId(id);
         return patientRepository.save(patient);
     }
+
+    @Override
+    public List<BMIDto> getBmiData(Long patientId) {
+        List<PatientHistoryDto> historyDtos = getPatientHistoryById(patientId);
+        List<BMIDto> bmiData = new ArrayList<>();
+
+        for (PatientHistoryDto historyDto : historyDtos) {
+            double height = parseHeight(historyDto.getHeight());
+            double weight = parseWeight(historyDto.getWeight());
+            double bmi = calculateBMI(height, weight);
+
+            BMIDto bmiDto = new BMIDto();
+            bmiDto.setBmi(bmi);
+            bmiDto.setHeight(height*100);
+            bmiDto.setWeight(weight);
+            bmiDto.setDate(historyDto.getVisitDate());
+
+            bmiData.add(bmiDto);
+        }
+        return bmiData;
+    }
+
+    private static double parseHeight(String height) {
+        height = height.toLowerCase();
+        if (height.contains("cm")) {
+            return Double.parseDouble(height.replace("cm", "")) / 100;
+        } else if (height.contains("feet") || height.contains("inch")) {
+            String[] parts = height.split("(?<=\\D)(?=\\d)|(?<=\\d)(?=\\D)");
+            double feet = Double.parseDouble(parts[0]);
+            double inches = parts.length > 2 ? Double.parseDouble(parts[2]) : 0;
+            return (feet * 0.3048) + (inches * 0.0254);
+        }
+        throw new IllegalArgumentException("Invalid height format");
+    }
+
+    private static double parseWeight(String weight) {
+        weight = weight.toLowerCase().replaceAll("[^\\d.]", "");
+        return Double.parseDouble(weight);
+    }
+
+    private static double calculateBMI(double height, double weight) {
+        return weight / (height * height);
+    }
+
 
     @Override
     public void delete(Long id) {
