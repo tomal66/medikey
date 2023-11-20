@@ -25,18 +25,12 @@ public class PatientServiceImpl implements PatientService {
     private PatientRepository patientRepository;
     @Autowired
     private UserRepository userRepository;
-    @Autowired
-    private HospitalRepository hospitalRepository;
+
     @Autowired
     private VisitRepository visitRepository;
     @Autowired
     private MedicationService medicationService;
-    @Autowired
-    private MedicalHistoryRepository medicalHistoryRepository;
-    @Autowired
-    private TestRepository testRepository;
-    @Autowired
-    private MedicationRepository medicationRepository;
+
 
 
     @Override

@@ -8,6 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { DataGrid } from '@mui/x-data-grid';
 import { TextField } from '@mui/material';
+import { useAuthContext } from '../context/auth_context';
 
 const AllMPsTable = () => {
 
@@ -15,9 +16,10 @@ const AllMPsTable = () => {
   const [mps, setMps] = useState([]);
 
   const [search, setSearch] = useState("");
+  const {currentUser} = useAuthContext();
 
   useEffect(() => {
-      axios.get('http://localhost:8567/api/medicalProfessionals/hospital/1')
+      axios.get(`http://localhost:8567/api/medicalProfessionals/hospital/${currentUser.hospitalId}`)
         .then(response => {
           const fetchedMPs = response.data.map(mp => ({
             ...mp,

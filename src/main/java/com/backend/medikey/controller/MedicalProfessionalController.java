@@ -22,8 +22,6 @@ public class MedicalProfessionalController {
     @Autowired
     private MedicalProfessionalService medicalProfessionalService;
 
-    @Autowired
-    private UserService userService;  // Assuming you have a UserService to fetch User entities
 
     // Get All Medical Professionals
     @GetMapping

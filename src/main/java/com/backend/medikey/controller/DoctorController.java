@@ -23,15 +23,6 @@ public class DoctorController {
     @Autowired
     private DoctorService doctorService;
 
-    /*@GetMapping("/")
-    public ResponseEntity<List<DoctorDto>> getAllDoctors() {
-        List<DoctorDto> doctors = doctorService.getAllDoctors();
-        List<DoctorDto> doctorDtos = doctors.stream()
-                .map(this::convertToDto)
-                .collect(Collectors.toList());
-        return new ResponseEntity<>(doctorDtos, HttpStatus.OK);
-    }
-*/
     @GetMapping("/all")
     public ResponseEntity<List<DoctorDto>> getAllDoctors() {
         List<DoctorDto> doctorDtos = doctorService.getAllDoctors();

@@ -1,7 +1,6 @@
 package com.backend.medikey.service;
 
 import com.backend.medikey.dto.DoctorDto;
-import com.backend.medikey.dto.TimeSlotDto;
 import com.backend.medikey.model.Doctor;
 import com.backend.medikey.repository.DoctorRepository;
 import com.backend.medikey.repository.HospitalRepository;
@@ -10,7 +9,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service

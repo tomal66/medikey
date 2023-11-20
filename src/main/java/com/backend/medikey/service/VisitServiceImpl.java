@@ -25,8 +25,7 @@ public class VisitServiceImpl implements VisitService {
     private PatientRepository patientRepository;
     @Autowired
     private MedicalHistoryRepository medicalHistoryRepository;
-    @Autowired
-    private HospitalRepository hospitalRepository;
+
     @Autowired
     private MedicationRepository medicationRepository;
 
